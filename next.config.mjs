@@ -1,9 +1,9 @@
 import { createMdxtsPlugin } from "mdxts/next";
 
 const withMdxts = createMdxtsPlugin({
-  gitSource: "https://github.com/souporserious/mdxts",
-  siteUrl: "http://localhost:4000",
-  theme: "nord",
+  gitSource: "https://github.com/fluid-design-io/portfolio-v2",
+  siteUrl: process.env.NEXT_PUBLIC_URL,
+  theme: "github-dark",
 });
 
 /** @type {import('next').NextConfig} */

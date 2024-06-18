@@ -20,7 +20,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
-    "fast-glob": "^3.3.2",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.395.0",
     "mdxts": "^1.5.0",

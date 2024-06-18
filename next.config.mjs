@@ -11,6 +11,7 @@ const nextConfig = {
   experimental: {
     // ppr: true,
     reactCompiler: true,
+    scrollRestoration: true,
   },
   images: {
     remotePatterns: [

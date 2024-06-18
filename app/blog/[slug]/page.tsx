@@ -7,8 +7,7 @@ import { allBlog } from "../../../data";
 
 export function generateStaticParams() {
   return allBlog.paths().map((pathname) => {
-    const slug = pathname.join("/").replace(/\/page$/, "");
-    console.log(`Generating static page for ${slug}`);
+    const slug = pathname[1];
     return { slug };
   });
 }

@@ -1,0 +1,15 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g transform="translate(-161.871)">
+    <g id="Artboard2" transform="translate(161.871) scale(2.28571)">
+      <path style="fill:none;" d="M0 0h28v28H0z"/>
+      <clipPath id="_clip1">
+        <path d="M0 0h28v28H0z"/>
+      </clipPath>
+      <g clip-path="url(#_clip1)">
+        <circle cx="14" cy="14" r="14" style="fill:rgb(233,121,25);"/>
+        <text x="170.877" y="33.583" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:16.957px;fill:white;" transform="translate(-70.959 2.376) scale(.4375)">Card</text>
+        <text x="209.511" y="29.583" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:16.957px;fill:white;" transform="translate(-70.959 2.376) scale(.4375)">+</text>
+      </g>
+    </g>
+  </g>
+</svg>

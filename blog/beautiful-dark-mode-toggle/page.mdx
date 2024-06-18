@@ -1,0 +1,195 @@
+---
+author: Oliver Pan
+date: "2023-03-05"
+title: Beautiful dark mode tooggle
+description: Designing a dark mode tooggle with framer motion and tailwindcss with elegant animations.
+tags:
+  [framer motion, tailwindcss, dark mode, microinteractions, codesandbox, react]
+---
+
+Websites nowadays are using dark mode as a default theme. It is a trend that is here to stay.
+Not only does it look cool, it also helps reduce eye strain and battery consumption.
+Also, having the ability to switch between dark and light mode is a great way to add user experience to your website.
+This article will show you my approach to creating a beautiful dark mode tooggle with framer motion and tailwindcss.
+
+![Dark mode tooggle](/assets/blog/beautiful-dark-mode-toggle/preview.gif)
+
+## Setup
+
+I used codesandbox to create this project. It is a great tool for quickly prototyping and sharing ideas.
+Also, you can find the
+[Next 13 + TailwindCSS + Framer Motion + Fluid UI template](https://codesandbox.io/p/sandbox/next-13-app-dir-tailwind-framer-starter-1d99zf)
+I used for this project.
+
+## Design
+
+The design is pretty simple. We have a circle with a moon and a sun inside.
+I used the icons from material design icons and extracted into svg files.
+As of the colors, I used `bg-gray-600` for the moon and `bg-gray-100` for the sun.
+
+For the `button` component, I used [@fluid-design/fluid-ui's](https://www.npmjs.com/package/@fluid-design/fluid-ui) `Button` component as it'll give us a11y features and hover/active/focus states out of the box.
+
+Here's an example of the `Button` component:
+
+```tsx filename="components/Button.tsx" allowErrors
+<Button
+  key="light-toggle"
+  onClick={toggleMode}
+  aria-label="Toggle dark mode"
+  whileTap="tap"
+  color="gray"
+  weight="clear"
+  iconOnly
+>
+  {mode === "light" ? (
+    <MoonIcon className="h-6 w-6" />
+  ) : (
+    <SunIcon className="h-6 w-6" />
+  )}
+</Button>
+```
+
+## Animation
+
+Most of the website I've seen rarely animate the dark mode tooggle.
+If they do, they usually just fade the icon in and out.
+
+That is absolutely fine, however, I think there's a lot of room for improvement.
+
+![Tailwind CSS dark mode tooggle](/assets/blog/beautiful-dark-mode-toggle/switch-mode.gif)
+
+As you can see from TailwindCSS's website, there's no animation when switching between dark and light mode.
+In addition, the sudden change in color is a bit jarring. (I will provide potential solutions at the end of this article)
+
+And here comes [framer motion](https://www.framer.com/motion/) to the rescue.
+It is one of the most popular animation libraries for React.
+
+We can turn any component into a motion component by wrapping it with `motion`, and it requires a few props to **animate** it.
+
+### Motion
+
+The `motion` component is the core of framer motion.
+
+- `initial`: The initial state of the component.
+- `animate`: The state of the component when it is **animated**.
+- `exit`: The state of the component when it is **exited**.
+- `transition`: The transition of the component when it is **animated**.
+
+### Button animation strategy
+
+We actually are using two buttons to toggle between dark and light mode.
+After user clicks on the button, we will change the `mode` state to the opposite value.
+Then, we will animate the button to the opposite state.
+
+In between, the button wiill **exit** the current state, and the other button will **animate** into the current state.
+
+Here's the code for the `Button` component:
+
+```tsx filename="components/Switch.tsx" allowErrors
+<AnimatePresence mode="popLayout" initial={false}>
+  <Button
+    as={motion.button}
+    animate="animate"
+    exit="exit"
+    initial="initial"
+    key="light-toggle"
+    onClick={toggleMode}
+    variants={buttonVariants}
+    aria-label="Toggle dark mode"
+    whileTap="tap"
+    color="gray"
+    weight="clear"
+    iconOnly
+  >
+    {mode === "dark" && (
+      <motion.div
+        variants={iconVariants}
+        transition={{
+          type: "spring",
+          stiffness: 150,
+          damping: 15,
+          mass: 0.2,
+        }}
+      >
+        <SunIcon className={clsx("h-4 w-4 fill-gray-100")} />
+      </motion.div>
+    )}
+    {mode === "light" && (
+      <motion.div
+        variants={iconVariants}
+        transition={{
+          type: "spring",
+          stiffness: 150,
+          damping: 15,
+          mass: 0.2,
+        }}
+      >
+        <MoonIcon className={clsx("h-4 w-4 fill-gray-600 transition-colors")} />
+      </motion.div>
+    )}
+  </Button>
+</AnimatePresence>
+// ...
+```
+
+### Button variants
+
+The `variants` prop is an object that contains the states of the component.
+
+```tsx filename="components/Switch.tsx"
+// ...
+
+const buttonVariants = {
+  initial: {},
+  animate: {},
+  exit: {},
+  tap: {
+    scale: 0.9,
+  },
+};
+const iconVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.3,
+    rotate: -120,
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+  },
+  exit: {
+    scale: 0.5,
+    rotate: 90,
+    opacity: 0,
+  },
+  tap: {
+    rotate: 30,
+  },
+};
+```
+
+### Microinteractions
+
+The logic behind the _spin_ animation is a way to replicate the feeling of sun and moon orbiting around the earth.
+
+As the user **tap** the button, the sun and moon will first rotate 30 degrees, giving the user a sense of _push_ feedback.
+And if the user decides to release the button, the sun and moon will rotate & fade (scale in/out), as a way to indicate that the button is **tapped**.
+
+## Preview
+
+The code for this article is available on [codesandbox](https://codesandbox.io/p/sandbox/framer-motion-light-dark-mode-toggle-gvn70t).
+
+<iframe
+  src="https://codesandbox.io/p/sandbox/framer-motion-light-dark-mode-toggle-gvn70t?fontsize=14&hidenavigation=1&hidedevtools=1&codemirror=1&previewwindow=browser&view=preview&runonclick=1"
+  title="framer-motion-light-dark-mode-toggle"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+/>
+
+## Conclusion
+
+We learned how to animate a dark mode tooggle with framer motion.
+We also learned how to use `AnimatePresence` to animate the component when it is **exited**.
+Keep in mind that having the dark mode toggle isn't enough, we will be covering what makes a good **dark mode** experience in the upcoming articles.
+
+![Dark mode tooggle](/assets/blog/beautiful-dark-mode-toggle/cover.jpg)

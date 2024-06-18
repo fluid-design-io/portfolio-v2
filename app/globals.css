@@ -2,20 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+
+    --radius: 0.25rem;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-synthesis: none;
+@layer base {
+  * {
+    @apply border-border/75;
+  }
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    @apply max-w-full overflow-x-hidden bg-background text-foreground;
+  }
+  html {
+    @apply font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-kaisei font-bold;
+  }
+}
+
+@layer components {
+  .dashed-border {
+    height: 1px;
+    z-index: -1;
+    content: "";
+    background: repeating-linear-gradient(
+      90deg,
+      hsl(var(--border)),
+      hsl(var(--border)) 4px,
+      transparent 4px,
+      transparent 10px
+    );
+  }
+  .dashed-border::before,
+  .dashed-border::after {
+    content: "";
+    width: 4rem;
+    position: absolute;
+    height: 1px;
+    z-index: 1;
+  }
+  .dashed-border::before {
+    left: 0;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--background)) 0,
+      transparent 100%
+    );
+  }
+  .dashed-border::after {
+    right: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--background)) 100%
+    );
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  }
+  .text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+  .text-shadow-md {
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  .text-shadow-lg {
+    text-shadow: 0 10px 15px rgba(0, 0, 0, 0.38);
+  }
+
+  article iframe {
+    @apply h-96 w-full overflow-hidden rounded-md border-0 md:h-[32rem];
+  }
+  article img {
+    @apply h-auto w-full rounded-md;
+  }
 }

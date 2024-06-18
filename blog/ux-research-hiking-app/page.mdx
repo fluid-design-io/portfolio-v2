@@ -1,0 +1,115 @@
+---
+author: Oliver Pan
+date: "2023-01-28"
+title: UX Research Hiking App
+description: "A UX research project for hikers who are sightseers to explore and find awesome trails for their adventures. The functionalities include find trails, save them to user's plans, monitor the weather, get real-time alerts and routes for upcoming forks."
+tags: ["UX Research", "UX Design", "Mobile App", "Ionic", "React", "Figma"]
+---
+
+import { InteractionSketchCards } from "@/components/blog/ux-research-hiking-app/InteractionSketches";
+
+At the beginning of a hike, users search and compare information on multiple locations to plan where to go on the trip. While hiking, the website
+can display real-time data based on the user's geographic location. Users can send or receive real-time alerts and can get an overview of different
+routes to decide where to go next.
+
+![Hiking app](/assets/blog/ux-research-hiking-app/cover.jpg)
+
+The main design philosophy is the centralized bottom sheet, where most features can be accessed one-handed within the user's thumb area.
+The interface includes two home screens (explore mode and hiking mode), detail, search, plans, and compare screens. There are two main ways to
+navigate different screens: the bottom sheet and buttons in the header/footer. Most UX matches native iOS styles, making it easier for users to use the app.
+
+[Demo Website](https://project-ecoist.vercel.app/home)
+
+## Introduction
+
+This website is for hikers who are sightseers to explore and find awesome trails for their adventures. The functionalities include find trails,
+save them to user’s plans, monitor the weather, get real-time alerts and routes for upcoming forks. Users can also enable location to enable features
+like real-time hiking status and nearby alerts.
+
+<video title="Hiking App Demo" controls>
+  <source
+    src="https://user-images.githubusercontent.com/13263720/176124796-4f9cf91e-77d3-47cf-9752-415bc3e59587.mp4"
+    type="video/mp4"
+  />
+  Your browser does not support the video tag.
+</video>
+
+## Moodboard
+
+The moodboard is a collection of images, colors, and textures that inspire the design of the app. It is a great way to get a sense of the overall
+feel of the app.
+
+![Moodboard](/assets/blog/ux-research-hiking-app/moodboard.webp)
+
+## Interaction Sketches
+
+<InteractionSketchCards />
+
+## Hand-Drawn Wireframes
+
+![Wireframe](/assets/blog/ux-research-hiking-app/wireframe.webp)
+
+## Feedbacks
+
+### Feedback 1
+
+- Compelling: The simple up-front design makes users interact with needed content immediately, without searching around this fork feature
+- Idea: I believe it is also important to display how far this trail is compared to the user, and this information would be helpful at the main fork page. And a sort feature could improve the functionality as well.
+- Confusing: For the comparison part, I'm not sure if user needs to tap into each location in order to get the detail info, as this would make users confused on which one has which features after a while.
+- Keep: The search bar is a good element to keep and also for other pages to make it universal element.
+
+### Feedback 2
+
+- Compelling: I like the graphical charts about the trail details, it provides useful information and makes them easy to understand
+- Idea: I think despite the useful information displayed to users, it might be good to add a segment button to categorize the types of information, for example, weather, health, trail...
+- Confusing: I am not sure if sketch #2's graph can be used for other cases, as not all trails have similar features or geological relations. While it is good to display in such a format, having a standard UI might help users easier to understand the information.
+- Keep: The pie chart in sketch 1 can be kept and used for other types of info as well.
+
+### Feedback 3
+
+- Compelling: The footer is very useful for app navigation and makes easy for users to switch tabs based on functionality.
+- Idea: I like the idea of adding constraints on the search queries, however, why not add some popular tags as prefixes to the constraints? For example, ratings > 4, dog friendly, has bathroom...
+- Confusing: For the sketch 2, I'm not sure having two search icons makes sense for the user, as they look like the same button but in fact they have different functionalities, my suggestion is to either use one search button for the entire app, or make a modal popup as the second search page.
+- Keep: The picture and map side-by-side screen is a great idea, and I like to see it on the final product
+
+## STU (Situation, Task, User) Analysis
+
+At the beginning of a hike, users search and compare information on multiple locations to plan where to go on the trip.
+While hiking, the website can display real-time data based on the user's geographic location. Users can send or receive real-time
+alerts and can get an overview of different routes to decide where to go next.
+
+## Alignment
+
+For the detail panel, I used left-aligned and right-aligned text blocks as they provide more powerful alignment cues. The overall content is placed within a common edge 16px from the device edge.
+
+## Iconic Representation
+
+For the Features section, I choose to represent each feature using only icons. I used similar icons for accessibility; example icon for parking, symbolic icon for water, and arbitrary icon for dog friendly. I also used two icons for the footer, an arbitrary icon for “more”, and an example icon for driving.
+
+## Conclusion
+
+It is evident from the research that the website is intended to serve hikers who are looking for trails and wish to organize their trip in advance. Because of the website's concentrated bottom sheet design, visitors may access the majority of the functionality with just one hand and their thumb. Users can send or receive real-time notifications using the website, which also offers real-time data based on the user's location.
+
+Users' feedback suggested adding more features, such as showing how far the trail is from the user's position, categorizing data, and prefixing search queries with well-known keywords. However, consumers loved the side-by-side screen display of images and maps and found the search bar and footer to be helpful.
+
+The design philosophy used in the website aligns with native iOS styles, making it easier for users to use the app. The iconic representation of features using icons is a good idea as it provides a quick visual representation of the feature.
+
+In conclusion, the UX research has provided valuable insights into the design of a hiking app. The centralized bottom sheet design, real-time data based on the user's geographic location, and real-time alerts make the app a useful tool for hikers. The feedback received from users can be used to improve the functionality and user experience of the app, making it a more valuable resource for hikers.
+
+### Github Repo
+
+[Ionic React Hiking App](https://github.com/fluid-design-io/cs160-pj1-explore)
+
+## References
+
+- Icons from Ionicons, React icons and Icons8
+- PDF Icons from Iconduck
+- iPhone frame from Apple Design Resources
+- Photo by Ronan Furuta on Unsplash
+- Photo by Cristina Anne Costello on Unsplash
+- Photo by Cristina Anne Costello on Unsplash
+- Photo by Steven Joseph on ebparks.org
+- Photo by Russ Cary on yosemitehikes.org
+- Photo by Oliver D. on hikingtheworld.blog
+- Photo by Cory on aspiringwild.com
+- Photo by Jake on hike734.com

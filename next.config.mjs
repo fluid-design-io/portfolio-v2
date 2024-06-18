@@ -3,7 +3,7 @@ import { createMdxtsPlugin } from "mdxts/next";
 const withMdxts = createMdxtsPlugin({
   gitSource: "https://github.com/fluid-design-io/portfolio-v2",
   siteUrl: process.env.NEXT_PUBLIC_URL,
-  theme: "github-dark",
+  theme: "aurora-x",
 });
 
 /** @type {import('next').NextConfig} */

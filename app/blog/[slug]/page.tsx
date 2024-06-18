@@ -50,7 +50,7 @@ interface PageProps {
 }
 
 async function BlogPage({ params }: PageProps) {
-  const page = await allBlog.get(["blog", params.slug, "page"]);
+  const page = await allBlog.get([params.slug, "page"]);
   if (!page) {
     notFound();
   }

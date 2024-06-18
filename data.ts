@@ -1,6 +1,7 @@
 import { createSource } from "mdxts";
 
 export const allBlog = createSource("**/*.mdx", {
-  basePathname: "/",
+  baseDirectory: "blog",
+  basePathname: "/blog",
   sort: (a, b) => b.frontMatter.date.localeCompare(a.frontMatter.date),
 });

@@ -33,6 +33,14 @@ const oss = [
     name: "Framer Motion",
   },
   {
+    description: "The Content & Documentation SDK for React",
+    name: "MDXTS",
+  },
+  {
+    description: "Making code snippets pretty.",
+    name: "shikiji",
+  },
+  {
     description: "The glue for classnames.",
     name: "clsx",
   },

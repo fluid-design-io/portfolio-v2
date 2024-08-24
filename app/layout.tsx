@@ -8,6 +8,7 @@ import localFont from "next/font/local";
 
 import CanvasListener from "./canvas-listener";
 import "./globals.css";
+import RootSkipNavContent from "./root-skip-nav-content";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -62,11 +63,13 @@ export default function RootLayout({
       <body
         className={`${kaisei_tokumin.variable} ${geistSans.variable} ${geistMono.variable} font-sans`}
       >
+        <div id="skip-nav" aria-hidden="true" />
         <CanvasListener />
         <Guidelines />
         <Header />
         {children}
         <Footer />
+        <RootSkipNavContent />
       </body>
     </html>
   );

@@ -13,9 +13,14 @@ const OuterContainer = forwardRef(function OuterContainer(
   ref: React.Ref<HTMLDivElement>,
 ) {
   return (
-    <div className={cn("px-6 sm:px-8", className)} ref={ref} {...props}>
+    <main
+      id="main"
+      className={cn("px-6 sm:px-8", className)}
+      ref={ref}
+      {...props}
+    >
       <div className="mx-auto max-w-7xl lg:px-8">{children}</div>
-    </div>
+    </main>
   );
 });
 

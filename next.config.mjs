@@ -1,4 +1,5 @@
 import { createMdxtsPlugin } from "mdxts/next";
+import path from "path";
 
 const withMdxts = createMdxtsPlugin({
   gitSource: "https://github.com/fluid-design-io/portfolio-v2",
@@ -9,6 +10,7 @@ const withMdxts = createMdxtsPlugin({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    outputFileTracingRoot: path.join(process.cwd(), "../"),
     // ppr: true,
     reactCompiler: true,
     scrollRestoration: true,

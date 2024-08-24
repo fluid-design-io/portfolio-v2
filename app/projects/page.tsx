@@ -5,9 +5,12 @@ import logoCodeArtist from "@/public/assets/images/code-artist.webp";
 import logoFluidColors from "@/public/assets/images/fluid-colors.webp";
 import logoFluidDesign from "@/public/assets/images/fluid-design.svg";
 import logoPixeldisplay from "@/public/assets/images/pixeldisplay.webp";
+import logoCardware from "@/public/assets/images/cardware.svg";
+import scanLine from "@/public/assets/images/scanline-dark.png";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const projects = [
   {
@@ -47,6 +50,16 @@ const projects = [
     logo: logoPixeldisplay,
     name: "Pixel Display",
   },
+  {
+    description:
+      "A Tokenization-as-a-Service platform that eliminates fraud and gives you full control over your card.",
+    link: {
+      href: "https://cardware.com/",
+      label: "cardware.com",
+    },
+    logo: logoCardware,
+    name: "Cardware",
+  },
 ];
 
 export const metadata: Metadata = {
@@ -75,7 +88,7 @@ export default function Projects() {
           <div className="absolute inset-y-0 hidden h-full border-l lg:left-2/3 lg:block" />
           <ul className="grid grid-cols-1 divide-y divide-border sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-3">
             {projects.map((project) => (
-              <div
+              <li
                 className="group relative -mx-4 flex flex-col justify-end px-8 py-8 sm:mx-auto sm:aspect-square sm:p-6"
                 key={project.name}
                 role="listitem"
@@ -124,8 +137,23 @@ export default function Projects() {
                     <span className="ml-1.5">{project.link.label}</span>
                   </Text>
                 </div>
-              </div>
+              </li>
             ))}
+            <li aria-hidden="true" className="relative bg-white/[0.03]">
+              <div
+                className={cn(
+                  "absolute inset-0 z-0",
+                  "h-full w-full",
+                  "bg-repeat",
+                  "opacity-[0.5]",
+                  "z-0",
+                )}
+                style={{
+                  content: "",
+                  backgroundImage: `url(${scanLine.src})`,
+                }}
+              />
+            </li>
           </ul>
         </div>
       </Layout>

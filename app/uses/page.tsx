@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+import { InView } from "@/components/core/in-view";
 import Layout from "@/components/layout/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Section, SectionProps } from "@/components/ui/section";
@@ -25,14 +26,31 @@ function Tool({
   title: string;
 }) {
   return (
-    <Card className="border-none bg-transparent">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Text className="max-w-lg">{children}</Text>
-      </CardContent>
-    </Card>
+    <InView
+      variants={{
+        hidden: {
+          opacity: 0,
+          y: 10,
+          scale: 0.98,
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+        },
+      }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      viewOptions={{ once: true, margin: "0px 0px -150px 0px" }}
+    >
+      <Card className="border-none bg-transparent">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Text className="max-w-lg">{children}</Text>
+        </CardContent>
+      </Card>
+    </InView>
   );
 }
 
@@ -78,9 +96,8 @@ function Uses() {
           </Tool>
         </ToolsSection>
         <ToolsSection title="Development tools">
-          <Tool title="VS Code Studio">
-            It's all about the extensions. I use a few of them, and I'm used to
-            the interface, so it's a good fit for me.
+          <Tool title="Cursor">
+            A better VS Code with neat autocomplete features.
           </Tool>
         </ToolsSection>
         <ToolsSection title="Design">
@@ -90,16 +107,17 @@ function Uses() {
             the collaboration features to be the real hook.
           </Tool>
           <Tool title="Photoshop">
-            It's the first tool I learned, and I still use it for some things.
-            But nowaday, there's a lot of alternatives. So I don't use it as
-            much as I used to.
+            It's the first tool I learned. I rarely use it now, only for
+            advanced image editing.
           </Tool>
         </ToolsSection>
         <ToolsSection title="Productivity">
-          <Tool title="Paste">
+          <Tool title="Arc">
+            A next-gen web browser with clutter-free interface.
+          </Tool>
+          <Tool title="Paste Now">
             I always come back to some code block I wrote a few months ago and I
-            know I can find it in Paste2. It's a great tool for keeping snippets
-            of code and other things I want to remember.
+            know I can find it in Paste Now. Plus, it is one-time purchase.
           </Tool>
           <Tool title="Yoink">
             Drag and drop files can be a pain, but Yoink makes it easy to manage
@@ -113,11 +131,6 @@ function Uses() {
           <Tool title="Raycast">
             Power user's launcher. I especially love the key-binding feature. I
             get to clean my dock and still have access to all the tools I need.
-          </Tool>
-          <Tool title="Arc">
-            An elegant next-gen web browser with clutter-free interface. Lots of
-            attention to detail. Intergrates with gmail, spotify with built-in
-            UI features.
           </Tool>
         </ToolsSection>
       </div>

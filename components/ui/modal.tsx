@@ -42,7 +42,10 @@ function Modal({
     return (
       <Dialog onOpenChange={onOpenChange} open={open}>
         <DialogContent
-          className={cn("px-0 pb-0 sm:max-w-[520px]", desktopClassName)}
+          className={cn(
+            "px-0 pb-0 sm:w-full sm:max-w-[640px]",
+            desktopClassName,
+          )}
         >
           <DialogHeader className="px-4">
             {typeof title === "string" ? (

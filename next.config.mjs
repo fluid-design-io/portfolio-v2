@@ -10,11 +10,11 @@ const withMdxts = createMdxtsPlugin({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    outputFileTracingRoot: path.join(process.cwd(), "../"),
-    // ppr: true,
+    ppr: true,
     reactCompiler: true,
     scrollRestoration: true,
   },
+  outputFileTracingRoot: path.join(process.cwd(), "../"),
   images: {
     remotePatterns: [
       {

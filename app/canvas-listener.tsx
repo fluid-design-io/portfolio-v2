@@ -38,7 +38,7 @@ function CanvasListener() {
       className="fixed inset-0 isolate z-[-1] !h-[100lvh] !w-[100lvw]"
       id="bg-canvas"
       onLoad={(e) => onLoad(e)}
-      scene="https://prod.spline.design/4XwQXD0j54nU8fc4/scene.splinecode"
+      scene="https://prod.spline.design/WS9wKdGWIZIxlAV2/scene.splinecode"
     />
   );
 }

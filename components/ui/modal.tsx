@@ -19,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { Button } from "./button";
 
 export interface ModalProps {
   children: React.ReactNode;
@@ -67,20 +68,25 @@ function Modal({
   }
 
   return (
-    <Drawer onOpenChange={onOpenChange} open={open}>
+    <Drawer onOpenChange={onOpenChange} open={open} shouldScaleBackground>
       <DrawerContent className="max-h-[calc(100svh-4rem)]">
         <DrawerHeader className="*:text-center">
           <DrawerTitle className="subtitle text-4xl">{title}</DrawerTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}
         </DrawerHeader>
-        <ScrollArea className="overflow-y-auto pb-6">
-          {children}
-          <div className="mt-8 flex w-full justify-center">
-            <DrawerClose asChild>
-              <button className="min-w-48">Close</button>
-            </DrawerClose>
-          </div>
-        </ScrollArea>
+        <ScrollArea className="overflow-y-auto pb-6">{children}</ScrollArea>
+        <div className="my-4 flex w-full justify-center">
+          <DrawerClose asChild>
+            <Button
+              className="min-w-48"
+              variant="outline"
+              size="sm"
+              type="button"
+            >
+              <span className="opacity-75">Dismiss</span>
+            </Button>
+          </DrawerClose>
+        </div>
       </DrawerContent>
     </Drawer>
   );

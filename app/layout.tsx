@@ -61,15 +61,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${kaisei_tokumin.variable} ${geistSans.variable} ${geistMono.variable} font-sans`}
+        className={`${kaisei_tokumin.variable} ${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <div id="skip-nav" aria-hidden="true" />
-        <CanvasListener />
-        <Guidelines />
-        <Header />
-        {children}
-        <Footer />
-        <RootSkipNavContent />
+        <div vaul-drawer-wrapper="" className="min-h-[100vh]">
+          <CanvasListener />
+          <Guidelines />
+          <Header />
+          {children}
+          <Footer />
+          <RootSkipNavContent />
+        </div>
       </body>
     </html>
   );

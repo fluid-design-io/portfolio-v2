@@ -1,10 +1,8 @@
 "use client";
 
-import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 
 import { Button } from "../ui/button";
-import { DialogFooter } from "../ui/dialog";
 import Modal from "../ui/modal";
 
 function ServerModal({
@@ -36,11 +34,6 @@ function ServerModal({
         title={title}
       >
         {children}
-        <DialogFooter className="gap-6 px-6">
-          <DialogClose className="font-mono text-xs hover:opacity-50">
-            Close
-          </DialogClose>
-        </DialogFooter>
       </Modal>
     </>
   );

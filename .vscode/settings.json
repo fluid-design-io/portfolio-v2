@@ -1,4 +1,9 @@
 {
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.tsx": "${dirname) - page.tsx",
+    "**/app/**/page.mdx": "${dirname) - page.mdx",
+    "**/app/**/layout.tsx": "${dirname} - layout.tsx"
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {

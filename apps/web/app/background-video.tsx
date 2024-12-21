@@ -7,8 +7,8 @@ import React, { useEffect, useRef } from 'react'
 const VIDEO_CONSTANTS = {
     FPS: 24,
     FRAME_DURATION: 1 / 24 / 10,
-    FOREGROUND_TIME: 6.5,    // Time when foreground content appears
-    TRANSITION_TIME: 6.5,    // Time for route transition animations
+    FOREGROUND_TIME: 7,    // Time when foreground content appears
+    TRANSITION_TIME: 7,    // Time for route transition animations
     END_TIME: 16,         // Final frame of the video
 } as const
 
@@ -76,13 +76,17 @@ function BackgroundVideo() {
     }, [pathname])
 
     return (
+        <div className="fixed inset-0 z-[-1] flex items-center justify-center w-full h-dvh bg-black">
+
         <video
             ref={videoRef}
             src="https://utfs.io/f/WKXGgxQVQnWkA0WCYFsuPTbE04ZksNL3ci6rFQoICadqUXen"
             autoPlay
             muted
             playsInline
-        />
+            className='w-full object-cover max-w-[750px] max-h-[512px] aspect-[750/512]'
+            />
+            </div>
     )
 }
 

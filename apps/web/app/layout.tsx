@@ -1,9 +1,14 @@
 import { Geist, Geist_Mono, Kaisei_Tokumin } from "next/font/google";
 
 import "@workspace/ui/globals.css";
+import "./styles.css";
 import { Providers } from "@/components/providers";
 import BackgroundVideo from "./background-video";
 import { Metadata, Viewport } from "next";
+import Guidelines from "@/components/layout/guidelines";
+import { Header } from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
+import RootSkipNavContent from "@/components/layout/root-skip-nav-content";
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -60,8 +65,13 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} ${fontKaisei.variable} font-sans antialiased `}
       >
+        <div id='skip-nav' aria-hidden='true' />
+        <Guidelines />
+        <Header />
         <Providers>{children}</Providers>
         <BackgroundVideo />
+        <Footer />
+        <RootSkipNavContent />
       </body>
     </html>
   );

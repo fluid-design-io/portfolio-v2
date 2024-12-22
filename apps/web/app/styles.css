@@ -1,0 +1,69 @@
+.dashed-border {
+  height: 1px;
+  z-index: -1;
+  content: "";
+  background: repeating-linear-gradient(
+    90deg,
+    hsl(var(--border)),
+    hsl(var(--border)) 4px,
+    transparent 4px,
+    transparent 10px
+  );
+}
+.dashed-border::before,
+.dashed-border::after {
+  content: "";
+  width: 4rem;
+  position: absolute;
+  height: 1px;
+  z-index: 1;
+}
+.dashed-border::before {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--background)) 0,
+    transparent 100%
+  );
+}
+.dashed-border::after {
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--background)) 100%
+  );
+}
+
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.text-shadow-md {
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+.text-shadow-lg {
+  text-shadow: 0 10px 15px rgba(0, 0, 0, 0.38);
+}
+
+article iframe {
+  @apply h-96 w-full overflow-hidden rounded-md border-0 md:h-[32rem];
+}
+article img {
+  @apply h-auto w-full rounded-md;
+}
+
+.skip-main-wrap {
+  /* @apply absolute left-[-999px] top-auto z-[-999] h-1 w-1 overflow-hidden; */
+  @apply absolute inset-x-0 z-[-999] h-1 w-1 overflow-hidden opacity-0 transition-opacity duration-500;
+}
+.skip-main-wrap:focus,
+.skip-main-wrap:focus-visible,
+.skip-main-wrap:focus-within {
+  @apply top-4 z-[999] mx-auto h-auto w-full max-w-lg overflow-visible opacity-100 outline-none;
+}
+.skip-main-wrap .skip-main {
+  @apply w-full rounded-lg border-4 border-border bg-background px-2 py-4 text-foreground shadow-lg shadow-primary/40 outline-none;
+}

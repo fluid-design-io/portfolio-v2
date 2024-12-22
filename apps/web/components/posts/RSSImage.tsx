@@ -11,7 +11,7 @@ export const RssImage = ({
 }) => {
   const baseURL = process.env.NEXT_PUBLIC_URL;
   if (typeof window === "undefined") {
-    let srcString =
+    const srcString =
       typeof src === "string" ? `${baseURL}${src}` : `${baseURL}${src.src}`;
     return <img alt={alt} src={srcString} {...props} />;
   } else {

@@ -143,18 +143,18 @@ export const ThreeRowImageCardSlide = ({
                 />
                 {hasNext && (
                   <ImageCard
-                    alt={images[index + 1].alt}
+                    alt={images[index + 1]?.alt ?? ""}
                     className={cn("min-w-[12.75rem]", imageClassName)}
-                    description={images[index + 1].description}
-                    src={images[index + 1].src}
+                    description={images[index + 1]?.description ?? ""}
+                    src={images[index + 1]?.src ?? ""}
                   />
                 )}
                 {hasNextNext && (
                   <ImageCard
-                    alt={images[index + 2].alt}
+                    alt={images[index + 2]?.alt ?? ""}
                     className={cn("min-w-[12.75rem]", imageClassName)}
-                    description={images[index + 2].description}
-                    src={images[index + 2].src}
+                    description={images[index + 2]?.description ?? ""}
+                    src={images[index + 2]?.src ?? ""}
                   />
                 )}
               </div>

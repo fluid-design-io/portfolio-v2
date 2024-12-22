@@ -19,7 +19,7 @@ import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { cn } from "@workspace/ui/lib/utils";
 import React from "react";
 import { Button } from "@workspace/ui/components/button";
-import { useMediaQuery } from "../hooks/use-media-query.js";
+import { useMediaQuery } from "../hooks/use-media-query";
 
 export interface ModalProps {
   children: React.ReactNode;

@@ -37,24 +37,24 @@ export const RssThreeRowImageCardList = ({
               {hasNext && (
                 <figure>
                   <img
-                    alt={images[index + 1].alt}
-                    src={getSrc(images[index + 1].src)}
+                    alt={images[index + 1]?.alt ?? ""}
+                    src={getSrc(images[index + 1]?.src ?? "")}
                     style={{ height: "auto", width: "100%" }}
                   />
-                  {images[index + 1].description && (
-                    <figcaption>{images[index + 1].description}</figcaption>
+                  {images[index + 1]?.description && (
+                    <figcaption>{images[index + 1]?.description}</figcaption>
                   )}
                 </figure>
               )}
               {hasNextNext && (
                 <figure>
                   <img
-                    alt={images[index + 2].alt}
-                    src={getSrc(images[index + 2].src)}
+                    alt={images[index + 2]?.alt ?? ""}
+                    src={getSrc(images[index + 2]?.src ?? "")}
                     style={{ height: "auto", width: "100%" }}
                   />
-                  {images[index + 2].description && (
-                    <figcaption>{images[index + 2].description}</figcaption>
+                  {images[index + 2]?.description && (
+                    <figcaption>{images[index + 2]?.description}</figcaption>
                   )}
                 </figure>
               )}

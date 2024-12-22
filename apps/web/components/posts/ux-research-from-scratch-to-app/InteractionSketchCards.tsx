@@ -1,4 +1,4 @@
-import { ImageCardSlide, ImageCardType } from "@/components/blog/ImageCard";
+import { ImageCardSlide, ImageCardType } from "@/components/posts/ImageCard";
 import imageInteraction1 from "@/public/assets/blog/ux-research-from-scratch-to-app/interaction-1.webp";
 import imageInteraction2 from "@/public/assets/blog/ux-research-from-scratch-to-app/interaction-2.webp";
 import imageInteraction3 from "@/public/assets/blog/ux-research-from-scratch-to-app/interaction-3.webp";

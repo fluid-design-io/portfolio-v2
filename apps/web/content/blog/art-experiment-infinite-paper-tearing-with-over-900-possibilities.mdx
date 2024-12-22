@@ -1,0 +1,102 @@
+---
+author: Oliver Pan
+date: "2022-04-17"
+title: Art experiment - Infinite paper tearing with over 900+ possibilities.
+description: A video experiment + Next.JS to create an infinite paper tearing effect with over 900+ possibilities.
+tags: [art, javascript, paper tearing, video, css, next.js]
+---
+
+import IframeEmbed from "@/components/posts/Iframe";
+
+Have you ever wondered what it would be like to watch a video that never ends, constantly surprising you with new content? That's the core idea behind Inception, an art experiment I created to explore the concept of infinite, unpredictable video streams.
+
+## The Idea and Motivation
+
+Traditional videos are static, pre-recorded content that play the same way every time. But what if we could create a video experience that's dynamic, ever-changing, and unique for each viewer? This question led me to develop Inception.
+The project seamlessly merges two video streams randomly, creating a loop that can continue indefinitely. Coupled with dynamically chosen audio, it produces an immersive experience where the viewer can't predict what will happen next or if the video will ever truly end.
+My motivation stemmed from the limitations of pre-recorded videos. I wanted to push the boundaries of what's possible with video content, creating an experience that adapts and evolves, potentially even reflecting the viewer's emotions or external factors.
+
+## Experience Inception
+
+You can experience Inception right here or [here](https://inception-loop.vercel.app/).
+
+<IframeEmbed src='https://inception-loop.vercel.app/' title='Inception' />
+
+## How It Works
+
+The core of Inception is built on React and Next.js. Here's a simplified look at some key parts of the code:
+
+```jsx allowErrors
+function VideoPlaylist() {
+  const videos = Array.from({ length: 15 }, (_, i) => `/videos/v-${i}.mov`);
+  const audios = Array.from({ length: 2 }, (_, i) => `/audios/a-${i}.mp3`);
+  const randomVideo = () => Math.floor(Math.random() * videos.length);
+
+  const [videoStream_1, setVideoStream_1] = useState(initVideoProgress);
+  const [videoStream_2, setVideoStream_2] = useState(initVideoProgress);
+  const [video_1_zIndex, setVideo_1_zIndex] = useState(1);
+  const [video_2_zIndex, setVideo_2_zIndex] = useState(0);
+
+  // ... other state and refs
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isStarted) {
+        if (video_1_zIndex === 1) {
+          playVideo(videoStream_2, setVideoStream_2);
+          setTimeout(() => {
+            setVideo_1_zIndex(0);
+            setVideo_2_zIndex(1);
+          }, 200);
+        } else {
+          playVideo(videoStream_1, setVideoStream_1);
+          setTimeout(() => {
+            setVideo_1_zIndex(1);
+            setVideo_2_zIndex(0);
+          }, 200);
+        }
+      } else {
+        clearInterval(interval);
+      }
+    }, transitionSeconds * 1000);
+    return () => clearInterval(interval);
+  }, [video_1_zIndex, video_2_zIndex, isStarted]);
+
+  // ... rest of the component
+}
+```
+
+This code manages two video streams, alternating between them to create a seamless transition. The playVideo function randomly selects the next video, ensuring a unique experience each time.
+The visual effect of paper tearing is achieved through careful CSS transitions and z-index manipulation:
+
+```jsx allowErrors
+<div
+  className={`duration-[7.5s] ease-out-duplex absolute inset-0 z-[1] flex w-full items-center justify-center mix-blend-lighten transition-opacity ${
+    video_1_zIndex === 1 ? "opacity-100" : "opacity-0"
+  }`}
+>
+  {showVideo && videoStream_1.find((v) => v.playing) && (
+    <VideoPlayer
+      video={videoStream_1.find((v) => v.playing).video}
+      playing={videoStream_1.find((v) => v.playing).playing}
+      onProgress={(e) => {
+        // console.log(`video 1: ${e.playedSeconds}`);
+      }}
+    />
+  )}
+</div>
+```
+
+## The Outcome and Future Possibilities
+
+Inception successfully creates an infinite video experience with over 900 possibilities, thanks to the combination of multiple video and audio streams. The result is a mesmerizing, ever-changing visual journey that challenges our perception of traditional video content.
+Looking to the future, there are exciting possibilities to expand on this concept:
+
+- Environmental Adaptation: The video's rhythm could change based on factors like temperature, time of day, or even global events.
+- Emotional Responsiveness: Using AI and facial recognition, the video could adapt to the viewer's mood, creating a truly personalized experience.
+- Data-Driven Content: The video could incorporate real-time data, such as pollution levels or wildlife populations, to create an artistic representation of our changing world.
+- AI-Generated Content: Future iterations could use AI to generate new video segments on the fly, exponentially increasing the possible combinations.
+- Interactive Elements: Adding user interaction could allow viewers to influence the direction of the video, creating a more engaging experience.
+
+Inception is just the beginning. As technology advances, the line between pre-recorded and dynamically generated content will continue to blur, opening up new possibilities for artistic expression and viewer engagement.
+What do you think about the future of video art? How would you like to see projects like Inception evolve? Let me know in the comments below!

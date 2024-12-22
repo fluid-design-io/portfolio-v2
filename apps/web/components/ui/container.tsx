@@ -6,9 +6,15 @@ const GrainFilter = () => {
     <svg
       id='svgfilters'
       aria-hidden='true'
-      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
+      style={{
+        position: "absolute",
+        width: 0,
+        height: 0,
+        overflow: "hidden",
+      }}
       version='1.1'
       xmlns='http://www.w3.org/2000/svg'
+      className='pointer-events-none'
     >
       <defs>
         <filter id='grain'>
@@ -16,7 +22,7 @@ const GrainFilter = () => {
           <feColorMatrix
             in='colorNoise'
             type='matrix'
-            values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 1 0'
+            values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0.3 0'
           />
           <feComposite operator='in' in2='SourceGraphic' result='monoNoise' />
           <feBlend in='SourceGraphic' in2='monoNoise' mode='multiply' />

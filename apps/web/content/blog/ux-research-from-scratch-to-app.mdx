@@ -1,0 +1,207 @@
+---
+author: Oliver Pan
+date: "2023-02-28"
+title: Ecoist App - UX Research from Scratch to App
+description: "A UX research project on the Ecoist app, a mobile app that helps users to reduce their carbon footprint."
+tags: ["UX Research", "UX Design", "Mobile App"]
+---
+
+import { BrainstormingIdeaCards } from "@/components/posts/ux-research-from-scratch-to-app/BrainstormingIdeaCards";
+import { InteractionSketchCards } from "@/components/posts/ux-research-from-scratch-to-app/InteractionSketchCards";
+import { UserPersonaCards } from "@/components/posts/ux-research-from-scratch-to-app/UserPersonaCards";
+import { HeuristicEvaluation } from "@/components/posts/ux-research-from-scratch-to-app/HeuristicEvaluation";
+import { AppDevelopment } from "@/components/posts/ux-research-from-scratch-to-app/AppDevelopment";
+import {
+  QAndAParticipant1,
+  QAndAParticipant2,
+} from "@/components/posts/ux-research-from-scratch-to-app/QAndASection";
+
+A lot of waste is produced from to-go drink containers and straws.
+Reducing waste and choosing responsibly sourced materials and goods are both a collective and individual effort from consumers and businesses.
+Ecoist is an app dedicated to develop and spread the practice of being eco-friendly.
+
+![Ecoist app](/assets/blog/ux-research-from-scratch-to-app/cover.jpg)
+
+[Demo Website](https://project-ecoist.vercel.app/home)
+
+Ecoist is an app dedicated to developing and spreading the practice of being eco-friendly.
+We are focused on informing consumers and promoting businesses that provide the most eco-friendly packaging.
+There are millions of waste produced from drink containers and straws.
+It can take hundreds of years to decompose and is harmful to our health and environment.
+We believe the 3 main agents of change are Inform, Action from Businesses, and Action from Consumers.
+
+Reducing waste and choosing responsibly sourced materials and goods are both consistent and individual efforts needed from businesses and consumers.
+Changes in our daily lives can collectively have an impact.
+What can we do to help reduce waste and be accountable to the environment and to our health? Use Ecoist!
+
+## Introduction
+
+Plastics are almost inseparable from our lives. Almost all the products we buy at stores, restaurants, and cafes are packaged in plastics.
+It is pretty much a known fact that single-use plastics are detrimental to the environment and harming the environment hurts us in the long run.
+However, it is true that packaging is needed for hygiene and other purposes.
+As the United States has been reported as one of the biggest contributors to plastic pollution,
+how can we continue our daily lives without polluting the environment or at least lessening the damages done?
+
+As we were surfing through the plastics issue, the first thing that popped into our heads was all the boba and coffee shops that Berkeley had.
+From Feng Cha Tea House to Blue Bottle, we drink a lot of coffee and boba daily.
+Apparently, they create a lot of plastic waste with cups, straws, and dessert packaging.
+This inspired us to aim to hold people accountable for what their daily consumption of drinkables causes.
+We also wanted to hold people accountable to create a safer and cleaner environment.
+We believe that these can be done only if efforts are put from both individuals and store owners, consistently and collectively.
+Our application aims to inform people about single-use plastics and their impacts, encourage users to participate in and contribute to the process daily,
+publicize eco-friendliness, and motivate users to continue being part of the eco-friendly community.
+
+<video title='Ecoist App Demo' controls>
+  <source
+    src='https://github.com/fluid-design-io/assets/assets/13263720/8d883e2a-a67b-48a6-97ed-b8b6d9899bc4'
+    type='video/mp4'
+  />
+  Your browser does not support the video tag.
+</video>
+
+## Brainstorming with Sketches
+
+Our design process began with a few brainstorming sessions in which we agreed upon a general project direction,
+then generated over twenty ideas regarding potential tasks, users, and situations. Initially, we generated a list of
+project ideas we felt were in line with the designated theme, accountability. After some discussion, we were all in agreement
+that we wanted to make an application that had something to do with environmentally friendly coffee and boba shops,
+as it seemed the most unique from the list we created.
+
+In the beginning, we debated over two primary user groups that we were interested in designing the project around,
+using our agreed-upon idea. The core cause of this debate was the designated theme for the project, accountability.
+Although we had agreed on a general direction for the project, we struggled to agree on how accountability related to the project idea.
+This led us down two paths; on one hand, we considered designing the project with the coffee and boba shop owners as our target users,
+and on the other hand, we considered the consumers themselves as our target users.
+
+In the end, we decided that we would target the consumers themselves as we felt there was a stronger sense of accountability in doing so.
+Namely, that each individual is accountable for helping to keep the environment clean, and that we could implement a feature in
+which consumers could report companies for non-compliance with the practices they claimed they used. Having settled on a target user we
+generated a short list of ideas surrounding this target user group, comprised of tasks and the like, which led to the following list of ideas and sketches;
+
+<BrainstormingIdeaCards />
+
+## Task Analysis
+
+After brainstorming, we narrowed down our target users to people who are eco-conscious. When we say eco-conscious,
+we’re describing people who acknowledge the existence of issues caused by single-use plastics, show concern for the
+environment, and understand the need for a change. Now that we set the target users, we wanted to draw out situations
+and tasks that they would realistically be in and do.
+
+We set the initial trigger as grabbing a boba or coffee at a store. This would also be the users’ final goal. We came
+up with four big different situations and tasks. They are: getting information about eco-friendly, searching eco-friendly cafes,
+ordering from eco-friendly cafes, and calling to action (for a change).
+
+![Task Analysis](/assets/blog/ux-research-from-scratch-to-app/task-analysis.webp)
+
+## Interaction Sketch
+
+With the target user group selected and the tasks we wanted to implement detailed,
+we created some sketches to determine how we wanted these tasks to be completed.
+
+<InteractionSketchCards />
+
+## Observational Studies and Interviews
+
+With the basic foundation for our project completed, we interviewed two target users,
+Amber and Jim, so we could better focus our design process. Both users drank coffee and boba.
+Amber was already actively involved in helping to reduce waste and often brought her own cup wherever she could.
+Jim was interested in how he could help reduce waste and wanted to learn more about different materials used in packaging.
+
+Target Users: 18+ humans who are environmentally conscious and obsessed with drinking coffee or boba,
+especially at cafes and boba shops. They wish to reduce, recycle, and reuse any way they can.
+They don’t feel that drinking coffee and boba should be sacrificed so they’re interested in finding cafes
+and boba shops that serve drinks in sustainable packaging materials.
+
+The questions were based on ten ideas we came up with during our brainstorming with sketches session:
+
+- Idea 1: Find a coffee or boba shop near you that is environmentally friendly.
+- Idea 2: Scan a product to check its impact on the environment
+- Idea 3: Have symbols to show the different types of green initiatives a company practices.
+- Idea 4: Leave a review for a company
+- Idea 5: Report a business for non-compliance with their reported practices.
+- Idea 6: Create an account to earn rewards for shopping at environmentally friendly shops.
+- Idea 7: Order from the App.
+- Idea 8: Learn more about a green initiative a company has.
+- Idea 9: Research and learn about a type of packaging or how it is made.
+- Idea 10: Business owners can request to register their company with the app.
+
+Our results found that our users want convenience and incentives, and they love simplicity.
+
+1. Users want convenience: Users won’t typically go out of their way to order from a greener place,
+   and most don’t notice the packaging of their drinks. User engagement is suspected to improve when the
+   process of reducing, reusing, and recycling is uncomplicated and requires little effort on the part of the user.
+
+2. Users love incentives: Users expressed that they were interested in receiving compensation in some
+   form for acting on their part to reduce waste. It is suspected that user engagement would be improved.
+
+3. Users like simplicity: Users expressed that they like to be informed about the packaging but also
+   expressed that they like it to be done in a concise way. Possibly have a rating for how eco-friendly the
+   packaging is using symbols or rating charts.
+
+## User Personas and Scenarios
+
+Having conducted the observational studies, we created two user personas along with textual scenarios for each,
+to be used for later testing, based on the characteristics of the individuals interviewed.
+
+<UserPersonaCards />
+
+## Wireframe
+
+We then created a wireframe in Figma to help us visualize our app’s layout.
+Our primary goal was to complete the core functionalities of the app such as home, search, reward, order,
+share, and report. We also created components that are reusable for different pages, making the overall user
+experience more cohesive which lowers the learning curve.
+
+![Wireframe](/assets/blog/ux-research-from-scratch-to-app/wireframe.webp)
+
+## Heuristic Evaluation
+
+Having developed the wireframes for our application, we conducted a heuristic evaluation on them,
+yielding the following synthesized results.
+
+<HeuristicEvaluation />
+
+## Prototype
+
+Having evaluated the wireframes via heuristic evaluation, we modified our design and developed the following prototype.
+
+![Prototype](/assets/blog/ux-research-from-scratch-to-app/prototype.webp)
+
+## App Development
+
+Using the prototype we developed, we began developing the application using _HTML_, _CSS_, _Javascript_, _React_, and _Ionic Framework_.
+The below images are the final results. The app supports mobile screen size and light & dark modes.
+
+<AppDevelopment />
+
+## User Evaluation
+
+Using the application we developed, we ran a final usability test to determine how effective our design was and if any pain points existed.
+
+<QAndAParticipant1 />
+
+<QAndAParticipant2 />
+
+## Synthesis of User Evaluation
+
+Both users find the layout to be easy to read and intuitive. Both can navigate the app and Wiki page easily. They both weren’t too sure about the icons used to represent biodegradable and compostable but at the same time, not really sure what the standard would be.
+Perhaps images, search bar, and list names in the Main Wiki would be helpful in the future.
+Home page was pretty clear on where to navigate to find more information on packaging materials. The Wiki Detail page was informative and insightful.
+User 2 suggested a search bar atop the wiki list screen, as it may be harder to find specific material by just scrolling the page if there are a large number of materials.
+Icons are not universal, there are no standards to what they look like for “wasted management''? So it is really subjective when deciding upon these icons. In the next interaction, we would like to interview more users and do more research into what the proper icons should look like.
+
+## Conclusion
+
+Throughout the course of the design process our underlying idea for the project remained unchanged; we wanted to create an app that served as a union between the ideas of accountability and an environmentally friendly coffee/boba cafe searcher.
+
+We would argue the final result achieves this union. The app allows users to find environmentally friendly coffee and boba shop stores and to report companies that are not following the practices they claimed they did (along with other tasks). Therefore, the user is accountable for helping to keep the environment clean, by shopping at green stores and keeping business owners accountable by reporting them for non-compliance with practices they claimed to use.
+
+The design process was not completely smooth, however. We did encounter some challenges, for instance, deciding how users can report a store not being eco-friendly. We initially thought any users can report the store by tapping into the store details, but we decided users should not be able to report stores if they have not ordered drinks from the store. As a result, we moved the reporting functionality to the past orders page, so the users could only report stores after they have ordered from them.
+
+If we were to develop this application further in the future we would build off the final usability test we conducted. We would add a search bar to the wiki page and change the icons used in the application; after more testing with users to determine what icons are intuitive.
+
+To wrap up, thank you for your interest in our project and for taking the time to read through our work.
+
+### Project Team
+
+Arthur Utnehmer, Catherine Wong, Eunice Lee, Nathaniel Reynolds, Oliver Pan, and Rebecca Chery

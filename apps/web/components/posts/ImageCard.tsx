@@ -2,8 +2,9 @@
 
 import { cn } from "@workspace/ui/lib/utils";
 import { motion, useScroll, useTransform } from "motion/react";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import { Fragment, useId, useRef } from "react";
+import { ImageZoom } from "fumadocs-ui/components/image-zoom";
 
 export type ImageCardType = {
   alt: string;
@@ -21,7 +22,7 @@ export const ImageCard = ({
   return (
     <div className='card-border snap-center rounded bg-card/50 p-2'>
       <div className='relative [&_img]:!my-0'>
-        <Image
+        <ImageZoom
           alt={alt}
           className={cn("shrink-0 rounded object-cover", className)}
           src={src}

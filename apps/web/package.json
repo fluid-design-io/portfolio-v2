@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "postinstall": "fumadocs-mdx",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -12,15 +13,19 @@
   "dependencies": {
     "@types/mdx": "^2.0.13",
     "@workspace/ui": "workspace:*",
-    "fumadocs-core": "^14.6.2",
-    "fumadocs-mdx": "^11.1.2",
+    "babel-plugin-react-compiler": "19.0.0-beta-df7b47d-20241124",
+    "date-fns": "^4.1.0",
+    "fumadocs-core": "^14.6.3",
+    "fumadocs-mdx": "^11.2.0",
+    "fumadocs-ui": "^14.6.3",
     "jotai": "^2.10.4",
     "lucide-react": "0.456.0",
     "motion": "^11.15.0",
-    "next": "^15.1.0",
+    "next": "^15.1.2",
     "next-themes": "^0.4.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zod": "3.24.1"
   },
   "devDependencies": {
     "@types/node": "^20",

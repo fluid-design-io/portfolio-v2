@@ -1,7 +1,7 @@
 import {
   ImageCardType,
   ThreeRowImageCardSlide,
-} from "@/components/blog/ImageCard";
+} from "@/components/posts/ImageCard";
 import screenshot1 from "@/public/assets/blog/ux-research-from-scratch-to-app/screenshot-1.webp";
 import screenshot2 from "@/public/assets/blog/ux-research-from-scratch-to-app/screenshot-2.webp";
 import screenshot3 from "@/public/assets/blog/ux-research-from-scratch-to-app/screenshot-3.webp";
@@ -56,7 +56,7 @@ export const AppDevelopment = () => {
   return (
     <div>
       <ThreeRowImageCardSlide
-        imageClassName="max-h-screen"
+        imageClassName='max-h-screen'
         images={appScreenshots}
       />
     </div>

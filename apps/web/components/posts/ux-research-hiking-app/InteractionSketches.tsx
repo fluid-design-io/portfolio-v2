@@ -1,7 +1,7 @@
 import {
   ImageCardType,
   ThreeRowImageCardSlide,
-} from "@/components/blog/ImageCard";
+} from "@/components/posts/ImageCard";
 import imageInteractionSketch1 from "@/public/assets/blog/ux-research-hiking-app/interaction-sketch-1.webp";
 import imageInteractionSketch2 from "@/public/assets/blog/ux-research-hiking-app/interaction-sketch-2.webp";
 import imageInteractionSketch3 from "@/public/assets/blog/ux-research-hiking-app/interaction-sketch-3.webp";
@@ -46,6 +46,6 @@ export const InteractionSketchCards = () => {
     },
   ];
   return (
-    <ThreeRowImageCardSlide imageClassName="max-h-[14rem]" images={images} />
+    <ThreeRowImageCardSlide imageClassName='max-h-[14rem]' images={images} />
   );
 };

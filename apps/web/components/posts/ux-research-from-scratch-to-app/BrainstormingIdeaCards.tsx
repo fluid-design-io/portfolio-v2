@@ -1,7 +1,7 @@
 import {
   ImageCardType,
   ThreeRowImageCardSlide,
-} from "@/components/blog/ImageCard";
+} from "@/components/posts/ImageCard";
 import imageBrainstorm1 from "@/public/assets/blog/ux-research-from-scratch-to-app/brainstorm-1.webp";
 import imageBrainstorm2 from "@/public/assets/blog/ux-research-from-scratch-to-app/brainstorm-2.webp";
 import imageBrainstorm3 from "@/public/assets/blog/ux-research-from-scratch-to-app/brainstorm-3.webp";
@@ -151,6 +151,6 @@ export const BrainstormingIdeaCards = () => {
     },
   ];
   return (
-    <ThreeRowImageCardSlide imageClassName="max-h-[14rem]" images={images} />
+    <ThreeRowImageCardSlide imageClassName='max-h-[14rem]' images={images} />
   );
 };

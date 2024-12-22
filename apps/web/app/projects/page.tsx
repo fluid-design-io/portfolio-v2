@@ -7,12 +7,20 @@ import logoFluidDesign from "@/public/assets/images/fluid-design.svg";
 import logoPixeldisplay from "@/public/assets/images/pixeldisplay.webp";
 import logoCardware from "@/public/assets/images/cardware.svg";
 import scanLine from "@/public/assets/images/scanline-dark.png";
+import logoUing from "@/public/assets/images/uing.svg";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@workspace/ui/lib/utils";
 
 const projects = [
+  {
+    description:
+      "Vision UI is a collection of components that follow the VisionOS design language.",
+    link: { href: "https://vision.uing.dev/", label: "vision.uing.dev" },
+    logo: logoUing,
+    name: "Vision UI",
+  },
   {
     description:
       "Beautiful React UI that are responsive, supports dark mode and a11y with elegant transitions.",

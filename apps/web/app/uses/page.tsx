@@ -23,7 +23,6 @@ function ToolsSection({ children, ...props }: SectionProps) {
 
 function Tool({
   children,
-  href,
   title,
 }: {
   children: React.ReactNode;

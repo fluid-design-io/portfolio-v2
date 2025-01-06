@@ -76,7 +76,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
     runOverlayCycle();
 
     // Repeat every 6 seconds
-    const interval = setInterval(runOverlayCycle, 6000);
+    const interval = setInterval(runOverlayCycle, 7000);
 
     // Cleanup
     return () => {

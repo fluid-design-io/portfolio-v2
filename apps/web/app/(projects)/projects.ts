@@ -6,13 +6,13 @@ import logoCardware from "@/public/assets/images/cardware.svg";
 import logoUing from "@/public/assets/images/uing.svg";
 import logoImageVision from "@/public/assets/images/image-vision.jpg";
 
-import cardwareScreenshot from "./cardware.avif";
-import codeArtistScreenshot from "./code-artist.avif";
-import fluidColorsScreenshot from "./fluid-colors.avif";
-import fluidUIScreenshot from "./fluid-ui.avif";
-import pixeldisplayScreenshot from "./pixeldisplay.avif";
-import visionUingScreenshot from "./vision-ui.avif";
-import imageVisionScreenshot from "./image-vision.avif";
+import cardwareScreenshot from "./screenshots/cardware.avif";
+import codeArtistScreenshot from "./screenshots/code-artist.avif";
+import fluidColorsScreenshot from "./screenshots/fluid-colors.avif";
+import fluidUIScreenshot from "./screenshots/fluid-ui.avif";
+import pixeldisplayScreenshot from "./screenshots/pixeldisplay.avif";
+import visionUingScreenshot from "./screenshots/vision-ui.avif";
+import imageVisionScreenshot from "./screenshots/image-vision.avif";
 
 export const projects = [
   {

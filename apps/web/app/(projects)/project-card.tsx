@@ -7,14 +7,9 @@ import { Text } from "@workspace/ui/components/text";
 import { cn } from "@workspace/ui/lib/utils";
 import { Project } from "./projects";
 import { useMediaQuery } from "@workspace/ui/hooks/use-media-query";
-import { useInView } from "motion/react";
+import { useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { motion } from "motion/react";
-
-const defaultVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
 
 function ProjectCard({
   project,
@@ -26,6 +21,21 @@ function ProjectCard({
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { margin: "0px 0px -400px 0px" });
+  const isReduceMotion = useReducedMotion();
+  const defaultVariants = {
+    hidden: {
+      opacity: 0,
+      scale: isReduceMotion ? 1 : 0.95,
+      filter: isReduceMotion ? undefined : isDesktop ? "blur(10px)" : undefined, // Optimize for mobile
+      transition: { duration: 1, type: "spring", bounce: 0 },
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      filter: isDesktop ? "blur(0px)" : undefined,
+      transition: { duration: 1.75, type: "spring", bounce: 0.08 },
+    },
+  };
   return (
     <li
       className='group relative -mx-4 flex flex-col justify-end px-8 py-8 sm:mx-auto sm:aspect-square sm:p-6'
@@ -34,17 +44,18 @@ function ProjectCard({
     >
       <motion.div
         ref={ref}
-        variants={isDesktop ? undefined : defaultVariants}
-        animate={isDesktop ? undefined : isInView ? "hidden" : "visible"}
-        transition={{ duration: isDesktop ? undefined : 0.75 }}
-        className={cn(
-          "absolute inset-[0.5px] z-[11] bg-background pointer-events-none",
-          "md:transition-opacity md:duration-300 md:ease-in-out",
+        variants={defaultVariants}
+        animate={
           isDesktop
             ? isActive
-              ? "!opacity-100 scale-100"
-              : "!opacity-0 scale-95"
-            : ""
+              ? "visible"
+              : "hidden"
+            : isInView
+              ? "hidden"
+              : "visible"
+        }
+        className={cn(
+          "absolute inset-[0.75px] z-[11] bg-background pointer-events-none"
         )}
       >
         <Image
@@ -56,7 +67,24 @@ function ProjectCard({
       </motion.div>
 
       {/* Normal project listing content */}
-      <div>
+      <motion.div
+        variants={{
+          ...defaultVariants,
+          hidden: {
+            ...defaultVariants.hidden,
+            scale: isReduceMotion ? 1 : 1.05,
+          },
+        }}
+        animate={
+          isDesktop
+            ? isActive
+              ? "hidden"
+              : "visible"
+            : isInView
+              ? "visible"
+              : "hidden"
+        }
+      >
         <div className='relative z-10 mb-2 flex size-12 items-center justify-center rounded-full border border-border/50 bg-background/40'>
           <Image
             alt=''
@@ -97,7 +125,7 @@ function ProjectCard({
           </svg>
           <span className='ml-1.5'>{project.link.label}</span>
         </Text>
-      </div>
+      </motion.div>
     </li>
   );
 }

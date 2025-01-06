@@ -18,7 +18,9 @@ export function NavItem({
   href: string;
 }) {
   const pathname = usePathname();
-  const isActive = pathname.startsWith(href) && href !== "/";
+  const isActive =
+    (pathname.startsWith(href) && href !== "/") ||
+    (href === "/" && pathname === "/");
   const Component = as;
   return (
     <Component>

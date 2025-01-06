@@ -3,16 +3,24 @@
 import { SVGProps } from "react";
 import { NavItem } from "./nav-item";
 import { TextEffect } from "../core/text-effects";
+import Link from "next/link";
+import { cn } from "@workspace/ui/lib/utils";
 
 export const Header = () => {
   return (
     <header className='mx-auto max-w-7xl px-6 sm:px-8'>
       <nav className='flex w-full flex-row justify-between border-b px-0 py-4 font-mono sm:px-8'>
         <div>
-          <NavItem as='div' className='justify-start' href='/'>
+          <Link
+            href='/'
+            className={cn(
+              "relative block px-0 py-2 text-xs text-foreground/75 transition sm:px-3 md:text-sm",
+              "flex min-w-16 items-center justify-start sm:min-w-20"
+            )}
+          >
             <span className='sr-only sm:not-sr-only'>
               <TextEffect per='char' preset='fade'>
-                Home
+                [OP]
               </TextEffect>
             </span>
             <svg
@@ -23,7 +31,7 @@ export const Header = () => {
             >
               <path d='M8.543 2.232a.75.75 0 0 0-1.085 0l-5.25 5.5A.75.75 0 0 0 2.75 9H4v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V9h1.25a.75.75 0 0 0 .543-1.268l-5.25-5.5Z' />
             </svg>
-          </NavItem>
+          </Link>
         </div>
         <ul className='flex justify-center gap-2.5'>
           <NavItem href='/blog'>
@@ -31,7 +39,7 @@ export const Header = () => {
               Blog
             </TextEffect>
           </NavItem>
-          <NavItem href='/projects'>
+          <NavItem href='/'>
             <TextEffect per='char' preset='fade'>
               Projects
             </TextEffect>

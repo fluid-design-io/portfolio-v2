@@ -22,7 +22,7 @@ const fontMono = Geist_Mono({
 
 const fontKaisei = Kaisei_Tokumin({
   subsets: ["latin"],
-  variable: "--font-kaisei-tokumin",
+  variable: "--font-kaisei",
   weight: ["400", "700"],
 });
 

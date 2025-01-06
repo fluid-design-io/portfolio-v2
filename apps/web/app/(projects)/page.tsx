@@ -13,7 +13,7 @@ export default function Projects() {
   return (
     <>
       <Layout
-        description='I’ve worked on tons of little projects over the years but these are the ones that I’m most proud of. Many of them are open-source, so if you see something that piques your interest, check it out.'
+        description='I’ve worked on tons of little projects over the years but these are the ones that I’m most proud of. Many of them are open-source.'
         title='Things I’ve made trying to put my dent in the universe.'
       >
         <div className='absolute inset-0 h-full w-full sm:px-8 lg:px-12'>

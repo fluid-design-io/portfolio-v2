@@ -25,7 +25,7 @@ function ProjectCard({
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { margin: "-300px 0px -400px 0px" });
+  const isInView = useInView(ref, { margin: "0px 0px -400px 0px" });
   return (
     <li
       className='group relative -mx-4 flex flex-col justify-end px-8 py-8 sm:mx-auto sm:aspect-square sm:p-6'
@@ -36,10 +36,15 @@ function ProjectCard({
         ref={ref}
         variants={isDesktop ? undefined : defaultVariants}
         animate={isDesktop ? undefined : isInView ? "hidden" : "visible"}
+        transition={{ duration: isDesktop ? undefined : 0.75 }}
         className={cn(
-          "absolute inset-0 z-[11] bg-background",
-          "transition-opacity duration-700 md:duration-300 pointer-events-none",
-          isDesktop ? (isActive ? "!opacity-100" : "!opacity-0") : ""
+          "absolute inset-[0.5px] z-[11] bg-background pointer-events-none",
+          "md:transition-opacity md:duration-300 md:ease-in-out",
+          isDesktop
+            ? isActive
+              ? "!opacity-100 scale-100"
+              : "!opacity-0 scale-95"
+            : ""
         )}
       >
         <Image

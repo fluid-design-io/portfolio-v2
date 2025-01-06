@@ -61,7 +61,7 @@ function Tool({
 function Uses() {
   return (
     <Layout
-      description='I get asked a lot about the things I use to build software and stay productive, or buy to fool myself into thinking I’m being productive when I’m really just procrastinating. Here’s a full list of all of my favorite stuff.'
+      description='I’m often asked which tools I use to build software and stay productive (or to fool myself when I’m actually procrastinating). Here’s a rundown of my favorites.'
       title='Software I use, gadgets I love, and other things I recommend.'
     >
       <div className='absolute inset-0 h-full w-full sm:px-8 lg:px-12'>

@@ -4,6 +4,7 @@ import logoFluidDesign from "@/public/assets/images/fluid-design.svg";
 import logoPixeldisplay from "@/public/assets/images/pixeldisplay.webp";
 import logoCardware from "@/public/assets/images/cardware.svg";
 import logoUing from "@/public/assets/images/uing.svg";
+import logoImageVision from "@/public/assets/images/image-vision.jpg";
 
 import cardwareScreenshot from "./cardware.avif";
 import codeArtistScreenshot from "./code-artist.avif";
@@ -11,6 +12,7 @@ import fluidColorsScreenshot from "./fluid-colors.avif";
 import fluidUIScreenshot from "./fluid-ui.avif";
 import pixeldisplayScreenshot from "./pixeldisplay.avif";
 import visionUingScreenshot from "./vision-ui.avif";
+import imageVisionScreenshot from "./image-vision.avif";
 
 export const projects = [
   {
@@ -50,6 +52,17 @@ export const projects = [
     logo: logoCodeArtist,
     name: "Code Artist",
     screenshot: codeArtistScreenshot,
+  },
+  {
+    description:
+      "Oliver's Wedding Photography Website, blazing fast and beautiful.",
+    link: {
+      href: "https://image-vision.co",
+      label: "image-vision.co",
+    },
+    logo: logoImageVision,
+    name: "ImageVision",
+    screenshot: imageVisionScreenshot,
   },
   {
     description:

@@ -24,7 +24,6 @@ export default function Projects() {
         </div>
         <div className='relative w-full'>
           <div className='absolute inset-x-0 top-0 hidden w-full border-b sm:block' />
-          <div className='absolute inset-x-0 top-1/2 hidden w-full border-b sm:block' />
           <div className='absolute inset-x-0 top-full hidden w-full border-b sm:block' />
           <div className='absolute inset-y-0 left-1/2 hidden h-full border-l sm:block lg:left-1/3' />
           <div className='absolute inset-y-0 hidden h-full border-l lg:left-2/3 lg:block' />

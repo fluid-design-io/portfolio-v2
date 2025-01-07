@@ -1,5 +1,10 @@
 // source.config.ts
-import { defineCollections, frontmatterSchema } from "fumadocs-mdx/config";
+import {
+  defineCollections,
+  frontmatterSchema,
+  getDefaultMDXOptions
+} from "fumadocs-mdx/config";
+import { remarkInstall } from "fumadocs-docgen";
 import { z } from "zod";
 var blog = defineCollections({
   type: "doc",
@@ -11,6 +16,18 @@ var blog = defineCollections({
     description: z.string().optional(),
     tags: z.array(z.string()).optional(),
     title: z.string()
+  }),
+  mdxOptions: getDefaultMDXOptions({
+    remarkPlugins: [
+      [
+        remarkInstall,
+        {
+          persist: {
+            id: "install-script-plugin"
+          }
+        }
+      ]
+    ]
   })
 });
 export {

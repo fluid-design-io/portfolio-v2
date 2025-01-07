@@ -47,10 +47,6 @@ function ArrowLeftIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-interface PageProps {
-  params: { slug: string };
-}
-
 async function BlogPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const page = blog.getPage([params.slug]);

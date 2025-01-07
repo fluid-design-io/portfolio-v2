@@ -5,7 +5,7 @@ import type { InferPageType } from "fumadocs-core/source";
 
 export const blog = loader({
   baseUrl: "/blog",
-  source: createMDXSource(blogPosts, []),
+  source: createMDXSource(blogPosts),
 });
 
 export type Blog = InferPageType<typeof blog>;

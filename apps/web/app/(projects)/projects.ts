@@ -5,6 +5,7 @@ import logoPixeldisplay from "@/public/assets/images/pixeldisplay.webp";
 import logoCardware from "@/public/assets/images/cardware.svg";
 import logoUing from "@/public/assets/images/uing.svg";
 import logoImageVision from "@/public/assets/images/image-vision.jpg";
+import logoImageConverter from "@/public/assets/images/image-converter.png";
 
 import cardwareScreenshot from "./screenshots/cardware.avif";
 import codeArtistScreenshot from "./screenshots/code-artist.avif";
@@ -13,6 +14,7 @@ import fluidUIScreenshot from "./screenshots/fluid-ui.avif";
 import pixeldisplayScreenshot from "./screenshots/pixeldisplay.avif";
 import visionUingScreenshot from "./screenshots/vision-ui.avif";
 import imageVisionScreenshot from "./screenshots/image-vision.avif";
+import imageConverterScreenshot from "./screenshots/image-converter.avif";
 
 export const projects = [
   {
@@ -41,6 +43,17 @@ export const projects = [
     logo: logoFluidColors,
     name: "Fluid Color",
     screenshot: fluidColorsScreenshot,
+  },
+  {
+    description:
+      "An open source MacOS app to convert images to different formats and sizes.",
+    link: {
+      href: "https://github.com/fluid-design-io/image-converter",
+      label: "github.com",
+    },
+    logo: logoImageConverter,
+    name: "Image Converter",
+    screenshot: imageConverterScreenshot,
   },
   {
     description:

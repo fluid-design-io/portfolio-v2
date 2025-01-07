@@ -1,3 +1,9 @@
+h1,
+h2,
+h3 {
+  @apply font-kaisei;
+}
+
 .dashed-border {
   height: 1px;
   z-index: -1;

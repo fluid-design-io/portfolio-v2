@@ -44,6 +44,7 @@ function ProjectCard({
     >
       <motion.div
         ref={ref}
+        initial='hidden'
         variants={defaultVariants}
         animate={
           isDesktop
@@ -72,7 +73,7 @@ function ProjectCard({
           ...defaultVariants,
           hidden: {
             ...defaultVariants.hidden,
-            scale: isReduceMotion ? 1 : 1.05,
+            scale: isReduceMotion ? 1 : 1.12,
           },
         }}
         animate={

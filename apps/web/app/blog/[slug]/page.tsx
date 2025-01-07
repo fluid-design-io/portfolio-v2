@@ -5,6 +5,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { format } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 export function generateStaticParams(): { slug: string }[] {
   return (
@@ -81,6 +82,8 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
           components={{
             ...defaultMdxComponents,
             img: (props) => <ImageZoom {...(props as any)} />,
+            Tab,
+            Tabs,
           }}
         />
       </article>

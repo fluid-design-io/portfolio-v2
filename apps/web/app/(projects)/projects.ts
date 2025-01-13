@@ -46,7 +46,7 @@ export const projects = [
   },
   {
     description:
-      "An open source MacOS app to convert images to different formats and sizes.",
+      "Modern image processing tools built with TypeScript and Sharp, Mac & VSCode.",
     link: {
       href: "https://github.com/fluid-design-io/image-converter",
       label: "github.com",

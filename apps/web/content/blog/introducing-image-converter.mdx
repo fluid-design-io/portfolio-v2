@@ -1,0 +1,138 @@
+---
+author: Oliver Pan
+date: "2024-04-25"
+title: "Introducing ImageConverter: A Modern Image Processing Tool"
+description: "Building a custom image processor and VS Code extension to streamline the designer and developer workflow."
+tags: ["image-conversion", "mdx", "sharp", "vscode-extension", "electron"]
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+import { Steps, Step } from "fumadocs-ui/components/steps";
+import IframeEmbed from "@/components/posts/Iframe";
+
+When working with large, high-resolution images—either for print or the web—the process of downsizing, optimizing, and properly placing them can be quite tedious. For designers who also write documentation in `.mdx`, the overhead grows exponentially: You typically need both light and dark variants, optimized for different use cases. Online converters are loaded with ads, subscriptions, or limited functionality, and native apps often don't fit the Mac experience or feature set that some of us expect.
+
+**Enter [ImageConverter](https://github.com/fluid-design-io/image-converter)—a modern tool I built with TypeScript and [Sharp](https://github.com/lovell/sharp) to tackle these challenges head-on.**
+
+<IframeEmbed
+  src='https://www.youtube.com/embed/KefDiMNQFhg'
+  title='ImageConverter in Action'
+/>
+
+<Callout type='info'>
+  ImageConverter consists of two parts: 1. An **Electron Desktop App** for batch
+  processing images on macOS (and other platforms). 2. A **VS Code Extension**
+  for seamless `.mdx` documentation workflows.
+</Callout>
+
+## Why Another Image Conversion Tool?
+
+As a designer and developer, I often found myself jumping through hoops just to optimize images. For `.mdx`-based documentation, the process of creating separate light and dark images is especially painful:
+
+<Steps>
+  <Step>Create/generate two variants of each image (light and dark).</Step>
+  <Step>Go to an online image optimizer.</Step>
+  <Step>
+    Drop the files in, configure formats (AVIF, WebP), maximum width, etc.
+  </Step>
+  <Step>
+    Download the processed files (pray the service doesn’t limit you).
+  </Step>
+  <Step>Unzip, rename them. Delete the zip file.</Step>
+  <Step>
+    Move them to the appropriate folders (e.g., `./src/images/light/` or
+    `./src/images/dark/`).
+  </Step>
+  <Step>
+    Finally, manually import and reference both images in the MDX file.
+  </Step>
+</Steps>
+
+This was not only time-consuming, but also prone to human error. Whether you’re missing a file or incorrectly referencing a path, mistakes happen easily in repetitive tasks.
+
+## Building a Better Workflow
+
+I decided to build my own solution using:
+
+- **TypeScript** for type safety and tooling
+- **Sharp** as the image processing workhorse
+- **Electron** + **React** for a modern desktop application
+- **VS Code Extension API** for integrating directly into my editor
+
+### The Electron Desktop App
+
+[Electron](https://www.electronjs.org/) allows you to create cross-platform desktop apps using web technologies. In this case, I built a **React** UI for batch-processing images. You can drag and drop images, choose various settings like format, resolution, and quality, and then let `sharp` handle the heavy lifting.
+
+Key Features:
+
+- **Batch image processing**: Resize or convert a whole folder at once.
+- **Preset management**: Save your frequently used settings (e.g., for web, mobile, or print).
+- **Multiple export formats**: PNG, JPEG, WebP, AVIF, etc.
+- **Dark mode**: A must-have for any modern application.
+
+<Callout type='info'>
+  Why Electron? It offers a native desktop experience, combined with the
+  flexibility of web technologies. With React, it’s easy to build, iterate, and
+  deploy a cross-platform app quickly.
+</Callout>
+
+### The VS Code Extension
+
+For those writing `.mdx` (or any web documentation) in VS Code, manually handling light and dark images can be soul-crushing. That’s why I built the **Dynamic Image Processor**.
+
+Instead of:
+
+<Steps>
+  <Step>Creating the images (light/dark) manually in a separate tool</Step>
+  <Step>Renaming, moving, unzipping, etc.</Step>
+  <Step>Manually writing imports and references in the MDX file</Step>
+</Steps>
+
+With the extension, you simply:
+
+<Steps>
+  <Step>
+    Place your two un-optimized files for light and dark in their respective
+    folders (e.g., `./src/images/light/` and `./src/images/dark/`).
+  </Step>
+  <Step>
+    Press <code>Cmd+Shift+P</code> (<code>Ctrl+Shift+P</code> on Windows/Linux)
+    to open the Command Palette.
+  </Step>
+  <Step>Select *Insert Dynamic Image*.</Step>
+  <Step>Type the name of the image you want to convert and insert.</Step>
+</Steps>
+
+The extension will optimize both images (light and dark) to AVIF or your desired format, then automatically insert the correct snippet in your `.mdx` file with the correct paths. Mistakes are minimized, and you never have to switch to a web browser or unzip files again.
+
+#### Sample VS Code Settings
+
+You can further customize your paths and output format in VS Code’s settings:
+
+```json
+{
+  "dynamicImage.defaultPathPrefix": "/public",
+  "dynamicImage.lightSubfolder": "light",
+  "dynamicImage.darkSubfolder": "dark",
+  "dynamicImage.defaultImageExtension": "png",
+  "dynamicImage.cleanupOriginal": false
+}
+```
+
+## Under the Hood: Sharp
+
+A huge shoutout goes to the [sharp library](https://github.com/lovell/sharp). It handles all the image manipulation—resizing, format conversion, and more. Without it, building both the desktop app and the VS Code extension would have been significantly more complex.
+
+## Closing Thoughts
+
+<Callout type='info'>
+  Sometimes the best tools come directly from the minds of the creators who
+  experience the pain points. By fusing design thinking and development skills,
+  we can tailor a workflow that truly meets our needs.
+</Callout>
+
+This project is a testament to that idea. If you find yourself in a similar situation—juggling multiple images for documentation or working with large assets for web or print—ImageConverter might just save you a ton of time.
+
+Feel free to explore, star, or contribute to the project over on [GitHub](https://github.com/fluid-design-io/image-converter). I’m always looking for ways to improve it further or add new features.
+
+Thanks for reading, and I hope ImageConverter helps streamline your workflow as much as it has mine!

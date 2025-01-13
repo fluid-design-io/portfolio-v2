@@ -52,7 +52,7 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
   const page = blog.getPage([params.slug]);
 
   if (!page) notFound();
-  const { body: Mdx, toc } = await page.data.load();
+  const { body: Mdx } = await page.data.load();
   return (
     <Layout
       description={page.data.description}
@@ -77,7 +77,7 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
         <Mdx
           components={{
             ...defaultMdxComponents,
-            img: (props) => <ImageZoom {...(props as any)} />,
+            img: (props) => <ImageZoom {...props} />,
             Tab,
             Tabs,
           }}

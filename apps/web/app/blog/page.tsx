@@ -15,18 +15,22 @@ const ArticleTitle = ({
 }) => {
   return (
     <div>
-      <div
-        className={cn(
-          "absolute -inset-x-8 -inset-y-8 z-0 scale-95 bg-muted/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-6",
-          "contrast-more:ring-1 contrast-more:ring-zinc-400 contrast-more:ring-zinc-400/40"
-        )}
-      />
-      <Link href={href}>
+      <Link href={href} className='focus:outline-none peer'>
         <span className='absolute -inset-x-8 -inset-y-8 z-20 sm:-inset-6' />
-        <Heading className='text-shadow-md relative z-10 text-pretty' level={3}>
+        <Heading
+          className={cn("text-shadow-md relative z-10 text-pretty")}
+          level={3}
+        >
           {children}
         </Heading>
       </Link>
+      <div
+        className={cn(
+          "absolute -inset-x-8 -inset-y-8 z-0 scale-[0.93] bg-muted/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-6",
+          "contrast-more:ring-1 contrast-more:ring-zinc-400 contrast-more:ring-zinc-400/40",
+          "peer-focus:opacity-100 peer-focus:scale-100 peer-focus:ring-2 peer-focus:ring-zinc-400 peer-focus:ring-zinc-400/40"
+        )}
+      />
     </div>
   );
 };

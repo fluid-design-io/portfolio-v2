@@ -4,12 +4,11 @@ import {
   frontmatterSchema,
   getDefaultMDXOptions
 } from "fumadocs-mdx/config";
-import { remarkInstall } from "fumadocs-docgen";
+import { remarkInstall, fileGenerator, remarkDocGen } from "fumadocs-docgen";
 import { z } from "zod";
 var blog = defineCollections({
   type: "doc",
   dir: "content/blog",
-  async: true,
   schema: frontmatterSchema.extend({
     author: z.string(),
     date: z.string().date().or(z.date()),
@@ -26,7 +25,8 @@ var blog = defineCollections({
             id: "install-script-plugin"
           }
         }
-      ]
+      ],
+      [remarkDocGen, { generators: [fileGenerator()] }]
     ]
   })
 });

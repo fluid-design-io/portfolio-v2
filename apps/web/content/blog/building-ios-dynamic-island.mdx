@@ -1,0 +1,167 @@
+---
+author: Oliver Pan
+date: "2023-03-11"
+title: "Building an iOS Dynamic Island Clone with React & Framer Motion"
+description: "A deep dive into recreating Apple's Dynamic Island using React, Framer Motion, and pure CSS - exploring fluid animations, SVG morphing, and responsive design."
+tags: ["react", "framer-motion", "animation", "ios", "typescript", "svg"]
+---
+
+import { Frame } from "@/components/posts/building-ios-dynamic-island/Frame";
+import IframeEmbed from "@/components/posts/Iframe";
+
+The Dynamic Island is one of Apple's most innovative UI elements in recent years, seamlessly blending hardware constraints with software elegance. In this post, I'll walk you through how I recreated this interactive UI component using React, Framer Motion, and pure CSS.
+
+<IframeEmbed
+  src='https://www.youtube.com/embed/uJ6Bt0X3FjE'
+  title='Fluid Color Palettes Website in Action'
+/>
+
+## The iPhone Frame
+
+First, let's look at how I built the iPhone frame using pure CSS and React. The frame consists of multiple layers that create a realistic iPhone 14 Pro appearance:
+
+<Tabs items={["Preview", "Frame", "StatusBar"]}>
+
+<Tab value='Preview' data-vision-os-ui>
+  <Frame />
+</Tab>
+
+<Tab value="Frame">
+
+```json doc-gen:file
+{
+  "file": "./components/posts/building-ios-dynamic-island/Frame.tsx",
+  "codeblock": true
+}
+```
+
+</Tab>
+<Tab value="StatusBar">
+
+```json doc-gen:file
+{
+  "file": "./components/posts/building-ios-dynamic-island/StatusBar.tsx",
+  "codeblock": true
+}
+```
+
+</Tab>
+</Tabs>
+
+And yes, even the buttons, speaker and camera are written in CSS 🔥
+
+## The Dynamic Island Types
+
+The implementation supports multiple island types:
+
+1. **Pill**: The default compact state
+2. **Capsule**: A wider variant for notifications
+3. **Split**: A unique state where the island splits into two parts
+4. **Full**: An expanded state for detailed information
+
+Each type is managed through an enum:
+
+```typescript
+enum ExpandType {
+  None,
+  Pill,
+  Capsule,
+  Split,
+  Full,
+}
+```
+
+## The Circle Island Animation
+
+The most interesting part is the fluid animation when the island splits into two parts. This is achieved using SVG path morphing and Framer Motion:
+
+```typescript
+export const CircleIsland = () => {
+  const morph = useSpring(0, {
+    stiffness: isSplitted ? 180 : 120,
+    damping: isSplitted ? 30 : 50,
+    mass: 2,
+  });
+
+  const d = useMotionTemplate`M8 0C${bezierStrength} ${morphValue} ${leftEdge} ${upperMidpoint} ${leftEdgeCenter} 8C${leftEdge} ${lowerMidpoint} ${bezierStrength} ${morphOppo} 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0Z`;
+
+  useEffect(() => {
+    if (expand === ExpandType.Split) {
+      setIsSplitted(true);
+      morph.set(8);
+      setTimeout(() => {
+        leftSideWidth.set(62);
+      }, 100);
+    } else {
+      setIsSplitted(false);
+      morph.set(0);
+      leftSideWidth.set(32);
+    }
+  }, [expand]);
+};
+```
+
+The fluid effect is created by carefully controlling the SVG path's bezier curves and morphing between different states. The `morph` spring animation provides the natural, physics-based movement that makes the animation feel organic.
+
+## Interactive Situations
+
+The Dynamic Island supports various interactive situations:
+
+1. **Music and Counter**: Shows music controls and a counter
+2. **Call**: Displays incoming call information with accept/reject buttons
+3. **Flight**: Shows flight tracking information
+
+Each situation has its own component and animation states:
+
+```typescript
+Call.InComingCapsule = () => {
+  return (
+    <Island.Capsule>
+      <motion.div
+        className='flex justify-between w-full gap-3 items-center'
+        initial={{ opacity: 0, WebkitFilter: "blur(8px)" }}
+        animate={{
+          opacity: 1,
+          WebkitFilter: "blur(0px)",
+          transition: { delay: switchDuration / 1000 + 0.14 },
+        }}
+        exit={{ opacity: 0, WebkitFilter: "blur(8px)" }}
+      >
+        {/* Call content */}
+      </motion.div>
+    </Island.Capsule>
+  );
+};
+```
+
+## Status Bar Integration
+
+The status bar dynamically responds to the Dynamic Island's state changes:
+
+```typescript
+export const StatusBar = () => {
+  const { expand, isAnimating, islandDimensions } = useIsland();
+
+  return (
+    <motion.div
+      className='absolute top-0 inset-x-0 px-2.5 py-3 gap-0 flex justify-between items-center'
+      animate={{
+        WebkitFilter: !shouldInteractWithIsland ? "blur(3px)" : "blur(0px)",
+        opacity: !shouldInteractWithIsland ? 0.6 : 1,
+      }}
+    >
+      {/* Status bar content */}
+    </motion.div>
+  );
+};
+```
+
+## Conclusion
+
+Building this Dynamic Island clone was an exciting challenge that pushed the boundaries of what's possible with React and CSS. The key to achieving the fluid, natural-feeling animations was the combination of SVG morphing, spring physics, and careful attention to timing and easing.
+
+The complete implementation demonstrates how modern web technologies can recreate even the most sophisticated native UI elements. While this is just a demonstration, it shows the potential for web-based interfaces to deliver experiences that rival native applications.
+
+You can find the complete source code on GitHub and try out the live demo to experience the animations firsthand.
+
+Lastly, check out the [GitHub Repo](https://github.com/fluid-design-io/ios-dynamic-island) for the complete implementation.

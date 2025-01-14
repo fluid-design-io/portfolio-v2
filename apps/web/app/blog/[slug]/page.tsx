@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { findNeighbour } from "fumadocs-core/server";
+import { Footer } from "./blog-footer";
 
 export function generateStaticParams(): { slug: string }[] {
   return (
@@ -52,7 +54,12 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
   const page = blog.getPage([params.slug]);
 
   if (!page) notFound();
-  const { body: Mdx } = await page.data.load();
+  const { body: Mdx } = page.data;
+  const sorted = blog.pageTree.children.sort((a, b) => {
+    // @ts-expect-error injected date to pageTree's attachFile function
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+  const neighbours = findNeighbour({ name: "", children: sorted }, page.url);
   return (
     <Layout
       description={page.data.description}
@@ -83,6 +90,9 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
           }}
         />
       </article>
+      <div className='mt-16 mx-auto max-w-[65ch]'>
+        <Footer next={neighbours.next} previous={neighbours.previous} />
+      </div>
     </Layout>
   );
 }

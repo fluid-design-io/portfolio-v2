@@ -33,12 +33,8 @@ const oss = [
     name: "Framer Motion",
   },
   {
-    description: "The Content & Documentation SDK for React",
-    name: "MDXTS",
-  },
-  {
-    description: "Making code snippets pretty.",
-    name: "shikiji",
+    description: "Next.js MDX solution for documentation.",
+    name: "Fumadocs",
   },
   {
     description: "The glue for classnames.",
@@ -51,10 +47,12 @@ const oss = [
 ];
 
 function FooterCopyright() {
+  const year = new Date().getFullYear();
+  const copyright = `© ${year} Oliver Pan`;
   return (
     <ServerModal
       description='the following libraries and tools were used to build this website.'
-      label='&copy; 2024 Oliver Pan'
+      label={copyright}
       title='Thanks to...'
     >
       <DescriptionList className='px-6'>

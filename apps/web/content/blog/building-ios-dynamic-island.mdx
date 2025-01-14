@@ -20,7 +20,7 @@ The Dynamic Island is one of Apple's most innovative UI elements in recent years
 
 First, let's look at how I built the iPhone frame using pure CSS and React. The frame consists of multiple layers that create a realistic iPhone 14 Pro appearance:
 
-<Tabs items={["Preview", "Frame", "StatusBar"]}>
+<Tabs items={["Preview", "Frame", "Components"]}>
 
 <Tab value='Preview' data-vision-os-ui>
   <Frame />
@@ -36,11 +36,11 @@ First, let's look at how I built the iPhone frame using pure CSS and React. The 
 ```
 
 </Tab>
-<Tab value="StatusBar">
+<Tab value="Components">
 
 ```json doc-gen:file
 {
-  "file": "./components/posts/building-ios-dynamic-island/StatusBar.tsx",
+  "file": "./components/posts/building-ios-dynamic-island/Components.tsx",
   "codeblock": true
 }
 ```
@@ -139,7 +139,7 @@ Call.InComingCapsule = () => {
 The status bar dynamically responds to the Dynamic Island's state changes:
 
 ```typescript
-export const StatusBar = () => {
+export const Components = () => {
   const { expand, isAnimating, islandDimensions } = useIsland();
 
   return (

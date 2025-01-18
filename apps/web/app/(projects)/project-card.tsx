@@ -33,7 +33,7 @@ function ProjectCard({
       opacity: 1,
       scale: 1,
       filter: isDesktop ? "blur(0px)" : undefined,
-      transition: { duration: 1.75, type: "spring", bounce: 0.08 },
+      transition: { duration: 1.75, type: "spring", bounce: 0 },
     },
   };
   return (

@@ -17,10 +17,7 @@ const ArticleTitle = ({
     <div>
       <Link href={href} className='focus:outline-none peer'>
         <span className='absolute -inset-x-8 -inset-y-8 z-20 sm:-inset-6' />
-        <Heading
-          className={cn("text-shadow-md relative z-10 text-pretty")}
-          level={3}
-        >
+        <Heading className='text-shadow-md relative z-10 text-pretty' level={3}>
           {children}
         </Heading>
       </Link>

@@ -1,3 +1,12 @@
+@import "@workspace/ui/globals.css";
+
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/* relative to the CSS file, make sure it's correct for your app */
+@source "../node_modules/fumadocs-ui/dist/**/*.js";
+@source "../../../packages/ui/src/components/**/*.tsx";
+
 h1,
 h2,
 h3 {

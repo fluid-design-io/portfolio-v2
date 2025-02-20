@@ -82,14 +82,14 @@ function BackgroundVideo() {
   }, [pathname]);
 
   return (
-    <div className='fixed inset-0 z-[-1] flex items-center justify-center w-full h-dvh bg-black'>
+    <div className="fixed inset-0 z-[-1] flex items-center justify-center w-full h-dvh bg-black">
       <video
         ref={videoRef}
-        src='https://utfs.io/f/WKXGgxQVQnWkA0WCYFsuPTbE04ZksNL3ci6rFQoICadqUXen'
+        src="https://utfs.io/f/WKXGgxQVQnWkA0WCYFsuPTbE04ZksNL3ci6rFQoICadqUXen"
         autoPlay
         muted
         playsInline
-        className='w-full object-cover max-w-[750px] max-h-[512px] aspect-[750/512]'
+        className="w-full object-cover max-w-[750px] max-h-[512px] aspect-[750/512]"
       />
     </div>
   );

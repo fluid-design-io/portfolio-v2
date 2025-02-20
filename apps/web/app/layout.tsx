@@ -61,11 +61,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${fontSans.variable} ${fontMono.variable} ${fontKaisei.variable} font-sans antialiased `}
       >
-        <div id='skip-nav' aria-hidden='true' />
+        <div id="skip-nav" aria-hidden="true" />
         <Guidelines />
         <Header />
         <Providers>{children}</Providers>

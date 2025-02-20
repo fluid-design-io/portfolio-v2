@@ -26,13 +26,13 @@ export const Button = forwardRef(
       href?: string;
       variant?: "primary" | "secondary";
     },
-    ref: any
+    ref: any,
   ) => {
     className = cn(
       "inline-flex items-center gap-2 justify-center rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none",
       variantStyles[variant],
       "contrast-more:ring-1 contrast-more:ring-zinc-400 contrast-more:dark:ring-zinc-400/40",
-      className
+      className,
     );
     const Component = as;
 
@@ -41,7 +41,7 @@ export const Button = forwardRef(
     ) : (
       <Component className={className} ref={ref} {...props} />
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

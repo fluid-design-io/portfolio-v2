@@ -6,6 +6,15 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   transpilePackages: ["@workspace/ui"],
+  images: {
+    remotePatterns: [
+      {
+        hostname: "github.com",
+        protocol: "https",
+        pathname: "/fluid-design-io/**",
+      },
+    ],
+  },
   experimental: {
     reactCompiler: true,
   },

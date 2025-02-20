@@ -51,11 +51,11 @@ function FooterCopyright() {
   const copyright = `© ${year} Oliver Pan`;
   return (
     <ServerModal
-      description='the following libraries and tools were used to build this website.'
+      description="the following libraries and tools were used to build this website."
       label={copyright}
-      title='Thanks to...'
+      title="Thanks to..."
     >
-      <DescriptionList className='px-6'>
+      <DescriptionList className="px-6">
         {oss.map((item) => (
           <Fragment key={item.name}>
             <DescriptionTerm>{item.name}</DescriptionTerm>

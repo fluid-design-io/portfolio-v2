@@ -46,6 +46,6 @@ export const InteractionSketchCards = () => {
     },
   ];
   return (
-    <ThreeRowImageCardSlide imageClassName='max-h-[14rem]' images={images} />
+    <ThreeRowImageCardSlide imageClassName="max-h-[14rem]" images={images} />
   );
 };

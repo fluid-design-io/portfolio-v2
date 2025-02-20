@@ -6,7 +6,7 @@ export function Text({
 }: React.ComponentPropsWithoutRef<"p">) {
   return (
     <p
-      data-slot='text'
+      data-slot="text"
       {...props}
       className={cn("text-base/6 text-foreground/70 sm:text-sm/6", className)}
     />
@@ -34,7 +34,7 @@ export function Code({
       {...props}
       className={cn(
         "rounded border border-foreground/10 bg-foreground/[2.5%] px-0.5 text-sm font-medium text-foreground sm:text-[0.8125rem]",
-        className
+        className,
       )}
     />
   );

@@ -86,7 +86,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
   }, [isHovered, isDesktop, projects]);
   return (
     <ul
-      className='grid grid-cols-1 divide-y divide-border sm:grid-cols-2 lg:grid-cols-3'
+      className="grid grid-cols-1 divide-y divide-border sm:grid-cols-2 lg:grid-cols-3"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -97,14 +97,14 @@ function ProjectList({ projects }: { projects: Project[] }) {
           isActive={activeOverlays.includes(index)}
         />
       ))}
-      <li aria-hidden='true' className='relative bg-white/[0.03]'>
+      <li aria-hidden="true" className="relative bg-white/[0.03]">
         <div
           className={cn(
             "absolute inset-0 z-0",
             "h-full w-full",
             "bg-repeat",
             "opacity-[0.5]",
-            "z-0"
+            "z-0",
           )}
           style={{
             content: "",
@@ -112,14 +112,14 @@ function ProjectList({ projects }: { projects: Project[] }) {
           }}
         />
       </li>
-      <li aria-hidden='true' className='relative bg-white/[0.03]'>
+      <li aria-hidden="true" className="relative bg-white/[0.03]">
         <div
           className={cn(
             "absolute inset-0 z-0",
             "h-full w-full",
             "bg-repeat",
             "opacity-[0.5]",
-            "z-0"
+            "z-0",
           )}
           style={{
             content: "",

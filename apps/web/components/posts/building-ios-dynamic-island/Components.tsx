@@ -10,7 +10,7 @@ export const Wallpaper = () => {
           background:
             "radial-gradient(circle at center, rgba(210,21,217,0.8) 0%, rgba(243,146,247,0.3) 50%)",
         }}
-        className='absolute inset-x-[-50%] top-[-45%] mix-blend-hard-light'
+        className="absolute inset-x-[-50%] top-[-45%] mix-blend-hard-light"
       />
       <div
         style={{
@@ -19,10 +19,10 @@ export const Wallpaper = () => {
           background:
             "radial-gradient(circle at center, rgba(9,2,46,0.2) 0%, rgba(197,104,212,0.25) 30%)",
         }}
-        className='absolute inset-x-[-100%] bottom-[-130%] mix-blend-hard-light'
+        className="absolute inset-x-[-100%] bottom-[-130%] mix-blend-hard-light"
       />
       <div
-        className='absolute inset-0'
+        className="absolute inset-0"
         style={{
           WebkitMask:
             "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 70%)",
@@ -35,7 +35,7 @@ export const Wallpaper = () => {
             background:
               "radial-gradient(circle at center, rgba(31,2,72,0.9) 0%, rgba(210,21,217,0) 50%)",
           }}
-          className='absolute -inset-x-1/2 bottom-[-100%] mix-blend-multiply'
+          className="absolute -inset-x-1/2 bottom-[-100%] mix-blend-multiply"
         />
       </div>
       <div
@@ -45,7 +45,7 @@ export const Wallpaper = () => {
           background:
             "linear-gradient(0deg, rgba(9,2,46,.5) 0%, rgba(167,74,192,0.25) 100%)",
         }}
-        className='absolute -inset-x-0 bottom-0 mix-blend-color-screen'
+        className="absolute -inset-x-0 bottom-0 mix-blend-color-screen"
       />
     </>
   );
@@ -63,14 +63,14 @@ export const Antannas = () => {
       <div
         className={cn(
           antannaBandClassName,
-          "h-0.5 right-[4.5rem] -top-0.5 w-2"
+          "h-0.5 right-[4.5rem] -top-0.5 w-2",
         )}
       />
       {/* Right */}
       <div
         className={cn(
           antannaBandClassName,
-          "h-2 top-[4.5rem] -right-0.5 w-0.5"
+          "h-2 top-[4.5rem] -right-0.5 w-0.5",
         )}
       />
     </>
@@ -108,7 +108,7 @@ export const Speaker = () => {
     <div
       className={cn(
         "absolute w-16 top-1 h-0.5 bg-zinc-200/5 inset-x-0 mx-auto",
-        "rounded-b-full border-[0.5px] border-t-0 border-white/5"
+        "rounded-b-full border-[0.5px] border-t-0 border-white/5",
       )}
     >
       <div
@@ -117,7 +117,7 @@ export const Speaker = () => {
             "radial-gradient(circle at 1px 1px,rgba(0, 0, 0, 0.3) 0.5px,rgba(0, 0, 0, 0) 0)",
           backgroundSize: "2px 2px",
         }}
-        className='absolute inset-0 w-full h-full'
+        className="absolute inset-0 w-full h-full"
       />
     </div>
   );
@@ -125,15 +125,15 @@ export const Speaker = () => {
 
 export const Camera = () => {
   return (
-    <div className='absolute h-7 w-7 flex justify-center items-center top-[1px] right-0 rounded-full'>
-      <div className='relative h-6 w-6'>
-        <div className='absolute inset-0 bg-gradient-to-r from-zinc-900 to-transparent rounded-full'></div>
-        <div className='absolute inset-0.5 bg-zinc-900 rounded-full'></div>
-        <div className='absolute inset-1 rounded-full bg-stone-800'></div>
-        <div className='absolute inset-1.5 rounded-full bg-gradient-to-br from-neutral-800 to-zinc-900'></div>
-        <div className='absolute inset-2 rounded-full bg-gradient-to-br from-blue-700 via-black to-blue-900'></div>
-        <div className='absolute rounded-full bg-white w-0.5 h-0.5 blur-[1px] left-[9.5px] top-[9px]' />
-        <div className='absolute rounded-full bg-blue-200/50 w-0.5 h-0.5 blur-[1px] left-[11.5px] bottom-[8.5px]' />
+    <div className="absolute h-7 w-7 flex justify-center items-center top-[1px] right-0 rounded-full">
+      <div className="relative h-6 w-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 to-transparent rounded-full"></div>
+        <div className="absolute inset-0.5 bg-zinc-900 rounded-full"></div>
+        <div className="absolute inset-1 rounded-full bg-stone-800"></div>
+        <div className="absolute inset-1.5 rounded-full bg-gradient-to-br from-neutral-800 to-zinc-900"></div>
+        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-blue-700 via-black to-blue-900"></div>
+        <div className="absolute rounded-full bg-white w-0.5 h-0.5 blur-[1px] left-[9.5px] top-[9px]" />
+        <div className="absolute rounded-full bg-blue-200/50 w-0.5 h-0.5 blur-[1px] left-[11.5px] bottom-[8.5px]" />
       </div>
     </div>
   );

@@ -10,15 +10,15 @@ const RootSkipNavContent = () => {
   }, []);
   if (!mounted) return null;
   return createPortal(
-    <div className='skip-main-wrap'>
-      <div className='skip-main flex flex-col gap-1'>
-        <a className='skip-btn' href='#main'>
+    <div className="skip-main-wrap">
+      <div className="skip-main flex flex-col gap-1">
+        <a className="skip-btn" href="#main">
           Skip to Content
         </a>
       </div>
     </div>,
     // #skip-nav
-    document.getElementById("skip-nav")!
+    document.getElementById("skip-nav")!,
   );
 };
 

@@ -12,7 +12,7 @@ export function Heading({ className, level = 1, ...props }: HeadingProps) {
       {...props}
       className={cn(
         "text-2xl/8 font-semibold text-foreground/95 sm:text-xl/8",
-        className
+        className,
       )}
     />
   );
@@ -26,7 +26,7 @@ export function Subheading({ className, level = 2, ...props }: HeadingProps) {
       {...props}
       className={cn(
         "text-base/7 font-semibold text-foreground sm:text-sm/6",
-        className
+        className,
       )}
     />
   );

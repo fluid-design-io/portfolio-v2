@@ -38,12 +38,12 @@ export const generateMetadata = async (props: {
 
 function ArrowLeftIcon(props: React.ComponentProps<"svg">) {
   return (
-    <svg aria-hidden='true' fill='none' viewBox='0 0 16 16' {...props}>
+    <svg aria-hidden="true" fill="none" viewBox="0 0 16 16" {...props}>
       <path
-        d='M7.25 11.25 3.75 8m0 0 3.5-3.25M3.75 8h8.5'
-        strokeLinecap='round'
-        strokeLinejoin='round'
-        strokeWidth='1.5'
+        d="M7.25 11.25 3.75 8m0 0 3.5-3.25M3.75 8h8.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
       />
     </svg>
   );
@@ -65,18 +65,18 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
       description={page.data.description}
       title={parseTitle(page.data.title)}
     >
-      <div className='relative mx-auto max-w-5xl'>
+      <div className="relative mx-auto max-w-5xl">
         <Link
-          aria-label='Go back to blog'
-          className='group mb-8 flex h-10 w-10 items-center justify-center rounded-full border border-border/50 bg-muted ring-0 ring-white/10 transition hover:border-zinc-700 hover:ring-white/20 lg:absolute lg:left-4 lg:-mt-2 lg:mb-0'
-          href='/blog'
+          aria-label="Go back to blog"
+          className="group mb-8 flex h-10 w-10 items-center justify-center rounded-full border border-border/50 bg-muted ring-0 ring-white/10 transition hover:border-zinc-700 hover:ring-white/20 lg:absolute lg:left-4 lg:-mt-2 lg:mb-0"
+          href="/blog"
         >
-          <ArrowLeftIcon className='h-4 w-4 stroke-zinc-500 transition group-hover:stroke-zinc-400' />
+          <ArrowLeftIcon className="h-4 w-4 stroke-zinc-500 transition group-hover:stroke-zinc-400" />
         </Link>
       </div>
-      <article className='mx-auto max-w-[65ch] prose prose-invert'>
+      <article className="mx-auto max-w-[65ch] prose prose-invert">
         <time
-          className='relative z-10 border-l border-muted-foreground pl-2 text-xs text-muted-foreground'
+          className="relative z-10 border-l border-muted-foreground pl-2 text-xs text-muted-foreground"
           dateTime={format(page.data.date, "yyyy-MM-dd")}
         >
           {format(page.data.date, "LLLL d, yyyy")}
@@ -90,7 +90,7 @@ async function BlogPage(props: { params: Promise<{ slug: string }> }) {
           }}
         />
       </article>
-      <div className='mt-16 mx-auto max-w-[65ch]'>
+      <div className="mt-16 mx-auto max-w-[65ch]">
         <Footer next={neighbours.next} previous={neighbours.previous} />
       </div>
     </Layout>

@@ -20,8 +20,8 @@ export const ImageCard = ({
   src,
 }: ImageCardType) => {
   return (
-    <div className='card-border snap-center rounded bg-card/50 p-2'>
-      <div className='relative [&_img]:!my-0'>
+    <div className="card-border snap-center rounded bg-card/50 p-2">
+      <div className="relative [&_img]:!my-0">
         <ImageZoom
           alt={alt}
           className={cn("shrink-0 rounded object-cover", className)}
@@ -29,7 +29,7 @@ export const ImageCard = ({
         />
       </div>
       {description && (
-        <p className='mb-2 mt-0 text-sm leading-5'>{description}</p>
+        <p className="mb-2 mt-0 text-sm leading-5">{description}</p>
       )}
     </div>
   );
@@ -47,7 +47,7 @@ const SideGradients = ({
       <motion.div
         className={cn(
           "pointer-events-none absolute -right-0.5 bottom-0 top-0 z-[3] h-full w-12 [mask-image:linear-gradient(270deg,rgba(255,255,255,1)_0.125rem,rgba(255,255,255,0))]",
-          "bg-background"
+          "bg-background",
         )}
         style={{
           opacity: endGradientOpacity,
@@ -57,7 +57,7 @@ const SideGradients = ({
         className={cn(
           "pointer-events-none absolute -left-0.5 bottom-0 top-0 z-[3] h-full w-12 [mask-image:linear-gradient(90deg,rgba(255,255,255,1)_0.125rem,rgba(255,255,255,0))]",
           "bg-background",
-          "transition-opacity duration-500"
+          "transition-opacity duration-500",
         )}
         style={{
           opacity: startGradientOpacity,
@@ -75,20 +75,20 @@ export const ImageCardSlide = ({ images }: { images: ImageCardType[] }) => {
   const startGradientOpacity = useTransform(scrollXProgress, [0, 0.02], [0, 1]);
 
   return (
-    <div className='relative'>
+    <div className="relative">
       <SideGradients
         endGradientOpacity={endGradientOpacity}
         startGradientOpacity={startGradientOpacity}
       />
       <motion.div
-        className='scrollbar relative flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-none'
+        className="scrollbar relative flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-none"
         layoutScroll
         ref={containerRef}
       >
         {images.map((image, index) => (
           <ImageCard
             alt={image.alt}
-            className='min-w-[16rem]'
+            className="min-w-[16rem]"
             description={image.description}
             key={`${image.alt}-${index}`}
             src={image.src}
@@ -115,13 +115,13 @@ export const ThreeRowImageCardSlide = ({
   const key = useId();
 
   return (
-    <div className='relative'>
+    <div className="relative">
       <SideGradients
         endGradientOpacity={endGradientOpacity}
         startGradientOpacity={startGradientOpacity}
       />
       <motion.div
-        className='scrollbar relative flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-none'
+        className="scrollbar relative flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-none"
         layoutScroll
         ref={containerRef}
       >
@@ -132,7 +132,7 @@ export const ThreeRowImageCardSlide = ({
             const hasNextNext = index < images.length - 2;
             return (
               <div
-                className='grid grid-rows-3 place-content-evenly gap-6'
+                className="grid grid-rows-3 place-content-evenly gap-6"
                 key={`${key}-${index}`}
               >
                 <ImageCard

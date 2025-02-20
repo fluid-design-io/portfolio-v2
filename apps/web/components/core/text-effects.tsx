@@ -82,9 +82,9 @@ const AnimationComponent: React.FC<{
   if (per === "word") {
     return (
       <motion.span
-        aria-hidden='true'
+        aria-hidden="true"
         variants={variants}
-        className='inline-block whitespace-pre'
+        className="inline-block whitespace-pre"
       >
         {word}
       </motion.span>
@@ -92,13 +92,13 @@ const AnimationComponent: React.FC<{
   }
 
   return (
-    <span className='inline-block whitespace-pre'>
+    <span className="inline-block whitespace-pre">
       {word.split("").map((char, charIndex) => (
         <motion.span
           key={`char-${charIndex}`}
-          aria-hidden='true'
+          aria-hidden="true"
           variants={variants}
-          className='inline-block whitespace-pre'
+          className="inline-block whitespace-pre"
         >
           {char}
         </motion.span>
@@ -127,8 +127,8 @@ export function TextEffect({
 
   return (
     <MotionTag
-      initial='hidden'
-      animate='visible'
+      initial="hidden"
+      animate="visible"
       aria-label={children}
       variants={containerVariants}
       className={className}

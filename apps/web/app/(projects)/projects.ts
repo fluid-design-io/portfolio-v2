@@ -1,6 +1,7 @@
 import logoCodeArtist from "@/public/assets/images/code-artist.webp";
 import logoFluidColors from "@/public/assets/images/fluid-colors.webp";
 import logoFluidDesign from "@/public/assets/images/fluid-design.svg";
+import logoDragNConvert from "@/public/assets/images/drag-n-convert.svg";
 import logoPixeldisplay from "@/public/assets/images/pixeldisplay.webp";
 import logoCardware from "@/public/assets/images/cardware.svg";
 import logoUing from "@/public/assets/images/uing.svg";
@@ -15,6 +16,7 @@ import pixeldisplayScreenshot from "./screenshots/pixeldisplay.avif";
 import visionUingScreenshot from "./screenshots/vision-ui.avif";
 import imageVisionScreenshot from "./screenshots/image-vision.avif";
 import imageConverterScreenshot from "./screenshots/image-converter.avif";
+import dragNConvertScreenshot from "./screenshots/drag-n-convert.webp";
 
 export const projects = [
   {
@@ -27,8 +29,19 @@ export const projects = [
   },
   {
     description:
+      "An elegant and fast image converter for macOS, natively built with SwiftUI.",
+    link: {
+      href: "https://drag-n-convert.vercel.app",
+      label: "drag-n-convert.vercel.app",
+    },
+    logo: logoDragNConvert,
+    name: "Drag-N-Convert",
+    screenshot: dragNConvertScreenshot,
+  },
+  {
+    description:
       "Beautiful React UI that are responsive, supports dark mode and a11y with elegant transitions.",
-    link: { href: "https://fluid-design.io/", label: "fluid-design.io" },
+    link: { href: "https://fluid-design.io", label: "fluid-design.io" },
     logo: logoFluidDesign,
     name: "Fluid UI",
     screenshot: fluidUIScreenshot,
@@ -37,7 +50,7 @@ export const projects = [
     description:
       "A scientific approach to color palettes that are accessible, beautiful and easy to use.",
     link: {
-      href: "https://fluid-colors.vercel.app/",
+      href: "https://fluid-colors.vercel.app",
       label: "fluid-colors.vercel.app",
     },
     logo: logoFluidColors,

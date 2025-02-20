@@ -35,7 +35,7 @@ export function InView({
   return (
     <motion.div
       ref={ref}
-      initial='hidden'
+      initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={variants}
       transition={transition}

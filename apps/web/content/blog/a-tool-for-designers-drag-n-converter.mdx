@@ -1,0 +1,282 @@
+---
+author: Oliver Pan
+date: "2025-02-20"
+title: A tool for designers - Drag-N-Converter
+description: A blazingly fast, native macOS image converter built with SwiftUI that makes batch image conversion a breeze.
+tags: [design, tool, image converter, SwiftUI, macOS]
+---
+
+<video
+  src='https://raw.githubusercontent.com/fluid-design-io/Drag-N-Convert/main/assets/DNCDemo.mp4'
+  muted
+  controls
+  className='object-cover size-full sm:size-[672px] rounded-2xl overflow-hidden'
+  style={{ aspectRatio: "1/1" }}
+/>
+
+> TLDR: My deep dive into native macOS development with SwiftUI. Check out [Drag-N-Convert](https://drag-n-convert.vercel.app) - where drag-and-drop meets blazing-fast image conversion! 🚀
+
+## Why Drag-N-Converter?
+
+As a designer-developer hybrid, I found myself constantly juggling between different image formats. While there are countless online converters out there, they often come with frustrating limitations - rate limits that kick in just when you need them most, aggressive ads that play hide-and-seek with the download button, or interfaces that feel like they're stuck in 2005.
+
+My [first attempt](/blog/introducing-image-converter) at solving this was an Electron-based app. While it got the job done, the perfectionist in me wasn't satisfied. I wanted something more elegant, more native, and most importantly - faster!
+
+## Designer's Dilemma
+
+Let's dive into what "converting images" really means in a designer's workflow. Here are some real-world scenarios that drove the development of Drag-N-Converter:
+
+### 1. Figma Export Conundrum
+
+While Figma is amazing at what it does, it's still living in the PNG/JPG era when it comes to exports. Want to export directly to WebP or AVIF? This forces designers into a two-step dance: export from Figma, then convert to modern formats. Not exactly a smooth workflow, right?
+
+### 2. Web Performance Puzzle
+
+Modern web frameworks like [Next.js](https://nextjs.org) are fantastic with their built-in image optimization using [next/image](https://nextjs.org/docs/app/api-reference/components/image) and [sharp](https://github.com/lovell/sharp). But here's the catch - those original high-res PNGs are still sitting in your repo, taking up precious space. When your project grows from a few dozen images to hundreds, you're suddenly looking at significant storage bloat.
+
+### 3. Context-Switching Chaos
+
+Opening a converter app -> importing images -> waiting for conversion -> saving files - it's death by a thousand clicks! What if the converter could just... appear when you need it and vanish when you're done? 🪄
+
+## "Aha!" Moment
+
+Enter [Yoink](https://eternalstorms.at/yoink/mac) - a brilliant piece of macOS software that revolutionized file management. Its genius lies in its contextual presence - it's there when you need it, invisible when you don't. This sparked an idea: what if we could bring this same magical UX to image conversion?
+
+## Technical Canvas
+
+### Native SwiftUI Magic
+
+![Drag-n-Converter UI](/assets/blog/a-tool-for-designers-drag-n-converter/drag-n-converter-ui.webp)
+
+SwiftUI isn't just a framework - it's a canvas that brings native macOS aesthetics to life. The magic happens with just a few lines of code:
+
+```swift title="DropZoneView"
+struct DropZoneView: View {
+  @EnvironmentObject private var viewModel: AppViewModel
+
+  var body: some View {
+    VStack(spacing: 6) {
+      // ...
+    }
+    .padding(6)
+    .frame(width: 420)
+    .background(.regularMaterial)
+    .clipShape(.rect(cornerRadius: 36, style: .continuous))
+  }
+}
+```
+
+### The Art of the Drop Zone
+
+The PresetDropZoneView is where the magic happens. It's not just a rectangle - it's an interactive canvas that responds to your every move:
+
+```swift title="PresetDropZoneView"
+struct PresetDropZoneView: View {
+  let preset: ConversionPreset
+  let isHovered: Bool
+
+  let columns = [
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+  ]
+
+  var body: some View {
+    HStack {
+      VStack(alignment: .leading, spacing: 6) {
+        Text(preset.nickname)
+          .font(.system(.subheadline, design: .rounded, weight: .medium))
+          .lineLimit(1)
+
+        LazyVGrid(columns: columns, alignment: .leading, spacing: 6) {
+          PresetInfoRow(title: "F", value: "\(preset.format.rawValue.uppercased())")
+          PresetInfoRow(title: "W", value: "\(Int(preset.maxWidth))")
+          PresetInfoRow(title: "H", value: "\(Int(preset.maxHeight))")
+          PresetInfoRow(title: "Q", value: "\(Int(preset.quality))")
+        }
+        if preset.outputPath != nil {
+          PresetInfoRow(title: "L", value: "\(preset.outputPath!)")
+        } else {
+          PresetInfoRow(title: "L", value: "Current Path")
+        }
+      }
+      Spacer()
+    }
+    .padding(20)
+    .frame(minWidth: 132, maxWidth: .infinity)
+    .background {
+      RoundedRectangle(cornerRadius: 30, style: .continuous)
+        .fill(
+          LinearGradient(
+            gradient: Gradient(colors: [
+              isHovered
+                ? .accentColor.opacity(0.04)
+                : Color.secondary.opacity(0.04),
+              isHovered
+                ? .accentColor.opacity(0.12)
+                : Color.secondary.opacity(0.12),
+            ]),
+            startPoint: .top,
+            endPoint: .bottom
+          )
+        )
+
+    }
+    .overlay {
+      ZStack {
+        RoundedRectangle(cornerRadius: 30, style: .continuous)
+          .strokeBorder(
+            isHovered ? Color.accentColor : .secondary.opacity(0.1),
+            lineWidth: isHovered ? 2 : 0.5
+          )
+      }
+    }
+    .animation(.easeInOut(duration: 0.15), value: isHovered)
+    .onChange(of: isHovered) { oldValue, newValue in
+      if newValue {
+        NSHapticFeedbackManager.defaultPerformer.perform(
+          .alignment, performanceTime: .default)
+      }
+    }
+  }
+}
+```
+
+### Global Drag Listener
+
+Since the app is MacOS native, registering a global drag listener for image files is possible (not the easiest task, but definitely easier than bridging to Electron).
+
+```swift title="DragMonitor"
+import Cocoa
+import UniformTypeIdentifiers
+
+@MainActor
+final class DragMonitor: ObservableObject {
+  @Published private(set) var isDraggingImages = false
+  private var monitor: Any?
+  private var lastChangeCount: Int = 0
+  private let dragPasteboard = NSPasteboard(name: .drag)
+
+  private static let fileOptions: [NSPasteboard.ReadingOptionKey: Any] = [
+    .urlReadingFileURLsOnly: true,
+    .urlReadingContentsConformToTypes: [UTType.image.identifier],
+    NSPasteboard.ReadingOptionKey(rawValue: "NSPasteboardURLReadingSecurityScopedFileURLsKey"):
+      kCFBooleanTrue as Any,
+  ]
+
+  init() {
+    lastChangeCount = dragPasteboard.changeCount
+    setupMonitor()
+  }
+
+  deinit {
+    if let monitor = monitor {
+      NSEvent.removeMonitor(monitor)
+    }
+  }
+
+  private func setupMonitor() {
+    monitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDragged, .leftMouseUp]) {
+      [weak self] event in
+      Task { @MainActor [weak self] in
+        guard let self = self else { return }
+
+        switch event.type {
+        case .leftMouseDragged:
+          if !self.isDraggingImages {
+            let changeCount = self.dragPasteboard.changeCount
+            if changeCount != self.lastChangeCount {
+              self.lastChangeCount = changeCount
+              self.checkForImageFiles()
+            }
+          }
+
+        case .leftMouseUp:
+          self.isDraggingImages = false
+          self.lastChangeCount = self.dragPasteboard.changeCount
+
+        default:
+          break
+        }
+      }
+    }
+  }
+
+  private func checkForImageFiles() {
+    if dragPasteboard.canReadObject(forClasses: [NSURL.self], options: Self.fileOptions),
+      let urls = dragPasteboard.readObjects(forClasses: [NSURL.self], options: Self.fileOptions)
+        as? [URL],
+      !urls.isEmpty
+    {
+      isDraggingImages = true
+    }
+  }
+
+  func getImageURLs() -> [URL]? {
+    guard isDraggingImages,
+      dragPasteboard.canReadObject(forClasses: [NSURL.self], options: Self.fileOptions),
+      let urls = dragPasteboard.readObjects(forClasses: [NSURL.self], options: Self.fileOptions)
+        as? [URL],
+      !urls.isEmpty
+    else {
+      return nil
+    }
+    return urls
+  }
+}
+```
+
+## Presets: Your Conversion Time Machine
+
+Think of presets as your personal conversion time machines. They remember your perfect settings so you don't have to! The preset system supports:
+
+![Presets](/assets/blog/a-tool-for-designers-drag-n-converter/presets.webp)
+
+- **Format Flexibility**: PNG, JPEG, WebP, HEIF (with AVIF coming soon!)
+- **Smart Sizing**: Intelligent dimension constraints
+- **Quality Control**: Fine-tuned compression settings
+- **Custom Destinations**: Personalized output paths
+
+## Native Advantage
+
+### Accessibility That Just Works
+
+SwiftUI's native components come with built-in accessibility support. VoiceOver, keyboard navigation - it's all there out of the box. No ARIA attributes to wrestle with!
+
+### Localization on Autopilot
+
+The new String Catalog in SwiftUI is mind-blowing! 🤯 Forget managing translation files manually - SwiftUI automatically extracts localizable strings and handles complex pluralization rules. It's like having a mini localization team built into Xcode!
+
+![String Catalog](/assets/blog/a-tool-for-designers-drag-n-converter/xcode-string-catalog.webp)
+
+### Butter-Smooth Animations
+
+SwiftUI's animation system makes everything feel alive:
+
+```swift
+withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+    // Magic happens here
+}
+```
+
+## The Icon Easter Egg
+
+I may have spent an unreasonable amount of time on the app icon (we're talking days, not hours). There's a hidden easter egg in there - can you spot it? Hint: does the picture look familiar? 👀
+
+<div className='flex justify-center max-w-64 w-full mx-auto'>
+  ![Drag-N-Converter
+  Logo](https://github.com/fluid-design-io/Drag-N-Convert/blob/main/apps/macos/Drag-N-Convert/Assets.xcassets/AppIcon.appiconset/AppIcon.png?raw=true)
+</div>
+
+## Road Ahead
+
+The journey doesn't end here! Here's what's cooking in the lab:
+
+- [ ] Multi-dimension export wizardry
+- [ ] Yoink-style drag-out functionality
+- [ ] AVIF support for next-gen compression
+- [ ] Mind-bending state transitions
+- [ ] And many more surprises! 🎁
+
+Want to see what's brewing? Star the [GitHub repository](https://github.com/fluid-design-io/Drag-N-Convert) for updates!
+
+P.S. If you've read this far, you're awesome! Drop a ⭐️ on GitHub if you found this useful!

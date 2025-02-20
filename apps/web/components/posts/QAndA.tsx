@@ -13,7 +13,7 @@ export const QAndARow = ({
 }) => {
   return (
     <>
-      <DescriptionList className='not-porse'>
+      <DescriptionList className="not-porse">
         <DescriptionTerm>{question}</DescriptionTerm>
         <DescriptionDetails>{answer}</DescriptionDetails>
       </DescriptionList>
@@ -30,17 +30,17 @@ export const QAndASection = ({
 }) => {
   return (
     <fieldset
-      className='rounded-md border border-border/50 bg-card/50 px-4'
+      className="rounded-md border border-border/50 bg-card/50 px-4"
       id={`q-a-${title}`}
     >
       <legend
-        className='mt-0 px-4 text-sm font-bold uppercase text-muted-foreground'
+        className="mt-0 px-4 text-sm font-bold uppercase text-muted-foreground"
         /* @ts-ignore */
         htmlFor={`q-a-${title}`}
       >
         {title}
       </legend>
-      <div className='divide-y divide-border/50'>
+      <div className="divide-y divide-border/50">
         {questions.map(({ answer, question }) => (
           <QAndARow
             answer={answer}

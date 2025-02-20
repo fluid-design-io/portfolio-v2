@@ -56,7 +56,7 @@ export const AppDevelopment = () => {
   return (
     <div>
       <ThreeRowImageCardSlide
-        imageClassName='max-h-screen'
+        imageClassName="max-h-screen"
         images={appScreenshots}
       />
     </div>

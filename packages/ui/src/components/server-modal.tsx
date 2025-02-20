@@ -20,10 +20,10 @@ function ServerModal({
   return (
     <>
       <Button
-        className='relative z-10 font-mono text-muted-foreground/50 hover:text-muted-foreground focus-visible:text-muted-foreground contrast-more:text-muted-foreground'
+        className="relative z-10 font-mono text-muted-foreground/50 hover:text-muted-foreground focus-visible:text-muted-foreground contrast-more:text-muted-foreground"
         onClick={() => setOpen(true)}
-        size='sm'
-        variant='link'
+        size="sm"
+        variant="link"
       >
         {label}
       </Button>

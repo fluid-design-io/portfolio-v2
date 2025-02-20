@@ -151,6 +151,6 @@ export const BrainstormingIdeaCards = () => {
     },
   ];
   return (
-    <ThreeRowImageCardSlide imageClassName='max-h-[14rem]' images={images} />
+    <ThreeRowImageCardSlide imageClassName="max-h-[14rem]" images={images} />
   );
 };

@@ -1,24 +1,35 @@
+import logoNWUI from "@/public/assets/images/nwui.webp";
 import logoCodeArtist from "@/public/assets/images/code-artist.webp";
 import logoFluidColors from "@/public/assets/images/fluid-colors.webp";
 import logoFluidDesign from "@/public/assets/images/fluid-design.svg";
 import logoDragNConvert from "@/public/assets/images/drag-n-convert.svg";
-import logoPixeldisplay from "@/public/assets/images/pixeldisplay.webp";
 import logoCardware from "@/public/assets/images/cardware.svg";
 import logoUing from "@/public/assets/images/uing.svg";
 import logoImageVision from "@/public/assets/images/image-vision.jpg";
 import logoImageConverter from "@/public/assets/images/image-converter.png";
 
+import nwuiThemeGenScreenshot from "./screenshots/nwui-theme-gen.avif";
 import cardwareScreenshot from "./screenshots/cardware.avif";
 import codeArtistScreenshot from "./screenshots/code-artist.avif";
 import fluidColorsScreenshot from "./screenshots/fluid-colors.avif";
 import fluidUIScreenshot from "./screenshots/fluid-ui.avif";
-import pixeldisplayScreenshot from "./screenshots/pixeldisplay.avif";
 import visionUingScreenshot from "./screenshots/vision-ui.avif";
 import imageVisionScreenshot from "./screenshots/image-vision.avif";
 import imageConverterScreenshot from "./screenshots/image-converter.avif";
 import dragNConvertScreenshot from "./screenshots/drag-n-convert.webp";
 
 export const projects = [
+  {
+    description:
+      "Create, preview, and share themes for your iOS, Android, and web apps, with Figma integration.",
+    link: {
+      href: "https://theme.nativewindui.com/",
+      label: "theme.nativewindui.com",
+    },
+    logo: logoNWUI,
+    name: "NativeWindUI Theme Generator",
+    screenshot: nwuiThemeGenScreenshot,
+  },
   {
     description:
       "Vision UI is a collection of components that follow the VisionOS design language.",
@@ -89,17 +100,6 @@ export const projects = [
     logo: logoImageVision,
     name: "ImageVision",
     screenshot: imageVisionScreenshot,
-  },
-  {
-    description:
-      "A technology company that focuses on building safe displays for the future.",
-    link: {
-      href: "https://pixeldisplay.com/",
-      label: "pixeldisplay.com",
-    },
-    logo: logoPixeldisplay,
-    name: "Pixel Display",
-    screenshot: pixeldisplayScreenshot,
   },
   {
     description:

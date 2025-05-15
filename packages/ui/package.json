@@ -7,9 +7,9 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.6",
-    "@radix-ui/react-scroll-area": "^1.2.3",
-    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-dialog": "^1.1.13",
+    "@radix-ui/react-scroll-area": "^1.2.8",
+    "@radix-ui/react-slot": "^1.2.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "catalog:lucide-react",
@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwindcss",
-    "@turbo/gen": "^2.5.0",
-    "@types/node": "^22.14.0",
+    "@turbo/gen": "^2.5.3",
+    "@types/node": "^22.15.18",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "@workspace/eslint-config": "workspace:*",

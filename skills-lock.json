@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "react-composition-structure": {
+      "source": "fluid-design-io/react-composition-structure",
+      "sourceType": "github",
+      "skillPath": "skills/react-composition-structure/SKILL.md",
+      "computedHash": "cfab951d0cd755aa1a1dd777bb4625ee312b63ef016f2ad3bdeba6dd5b3aca9e"
+    }
+  }
+}

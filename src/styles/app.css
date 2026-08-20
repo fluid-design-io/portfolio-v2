@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Dark only. No light theme, no next-themes toggle — see map.md. */
+@theme {
+  --color-background: hsl(240 10% 3.9%);
+  --color-foreground: hsl(0 0% 98%);
+  --color-muted-foreground: hsl(240 3.8% 46.1%);
+  --color-border: hsl(240 3.7% 15.9%);
+
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply border-border bg-background text-foreground;
+  }
+}

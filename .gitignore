@@ -39,3 +39,9 @@ old/
 
 # wayfinder / local issue tracker
 .scratch/
+
+# TanStack Start / Nitro / Vite
+.tanstack
+.nitro
+.output
+*.timestamp-*.mjs

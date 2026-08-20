@@ -1,17 +1,14 @@
 {
   "workbench.editor.customLabels.patterns": {
-    "**/page.tsx": "${dirname} - page.tsx",
     "**/index.ts": "${dirname} - index.ts",
-    "**/route.ts": "${dirname} - route.ts",
     "**/index.tsx": "${dirname} - index.tsx",
-    "**/layout.tsx": "${dirname} - layout.tsx",
-    "**/_layout.tsx": "${dirname} - _layout.tsx"
+    "**/route.tsx": "${dirname} - route.tsx",
+    "**/__root.tsx": "${dirname} - __root.tsx"
   },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.removeUnusedImports": "explicit"
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
   "typescript.tsdk": "node_modules/typescript/lib"
 }

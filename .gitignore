@@ -36,3 +36,6 @@ npm-debug.log*
 *.pem
 
 old/
+
+# wayfinder / local issue tracker
+.scratch/

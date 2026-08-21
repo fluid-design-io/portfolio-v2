@@ -10,24 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as BundleprobeRouteImport } from './routes/bundleprobe'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as UsesRouteImport } from './routes/uses'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BundleprobeRoute = BundleprobeRouteImport.update({
-  id: '/bundleprobe',
-  path: '/bundleprobe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResumeRoute = ResumeRouteImport.update({
@@ -40,43 +30,53 @@ const UsesRoute = UsesRouteImport.update({
   path: '/uses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
-  '/bundleprobe': typeof BundleprobeRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
-  '/bundleprobe': typeof BundleprobeRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
-  '/bundleprobe': typeof BundleprobeRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blog' | '/bundleprobe' | '/resume' | '/uses'
+  fullPaths: '/' | '/resume' | '/uses' | '/blog/$slug' | '/blog/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blog' | '/bundleprobe' | '/resume' | '/uses'
-  id: '__root__' | '/' | '/blog' | '/bundleprobe' | '/resume' | '/uses'
+  to: '/' | '/resume' | '/uses' | '/blog/$slug' | '/blog'
+  id: '__root__' | '/' | '/resume' | '/uses' | '/blog/$slug' | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BlogRoute: typeof BlogRoute
-  BundleprobeRoute: typeof BundleprobeRoute
   ResumeRoute: typeof ResumeRoute
   UsesRoute: typeof UsesRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,20 +86,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bundleprobe': {
-      id: '/bundleprobe'
-      path: '/bundleprobe'
-      fullPath: '/bundleprobe'
-      preLoaderRoute: typeof BundleprobeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resume': {
@@ -116,15 +102,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BlogRoute: BlogRoute,
-  BundleprobeRoute: BundleprobeRoute,
   ResumeRoute: ResumeRoute,
   UsesRoute: UsesRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

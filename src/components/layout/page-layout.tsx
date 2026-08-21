@@ -6,7 +6,9 @@ import { Text } from "@/components/ui/text";
 
 type PageLayoutProps = {
   children: ReactNode;
-  description: string;
+  // Optional because a post's frontmatter `description` is optional in
+  // fumadocs' pageSchema, and blog.$slug passes it straight through.
+  description?: string;
   title: string;
 };
 
@@ -40,9 +42,11 @@ export function PageLayout({ children, description, title }: PageLayoutProps) {
                   {title}
                 </Heading>
                 <div className="dashed-border inset-x-0 -mx-48 -translate-y-[9.5px] animate-fade-in motion-reduce:animate-none md:-translate-y-[13px]" />
-                <Text className="mt-6 w-5/6 max-w-2xl text-pretty text-shadow-md">
-                  {description}
-                </Text>
+                {description ? (
+                  <Text className="mt-6 w-5/6 max-w-2xl text-pretty text-shadow-md">
+                    {description}
+                  </Text>
+                ) : null}
               </header>
             </div>
             <SharpPlus className="absolute -bottom-3 -left-3 z-[2] size-6 text-muted-foreground" />

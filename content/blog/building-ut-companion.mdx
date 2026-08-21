@@ -1,9 +1,11 @@
 ---
 author: Oliver Pan
-date: "2026-02-24"
+date: "2026-05-24"
 title: Building UT Companion
 description: "A campus companion for UT Austin that started in UX Prototyping, went in front of the MyUT team, and is still getting features after class ended."
-tags: ["expo", "react-native", "ios-widgets", "ux-research", "search", "ut-austin"]
+image: /assets/blog/building-ut-companion/opengraph-image.png
+tags:
+  ["expo", "react-native", "ios-widgets", "ux-research", "search", "ut-austin"]
 ---
 
 UT students bounce out of MyUT and into Google when campus information feels scattered. Finding the academic calendar, a faculty office, or a tuition link should not require three browser tabs and a lucky search query. In UX Prototyping, Hao, Taek, and I treated that as a product problem rather than a homework brief. We talked to the people who own student apps at UT, shipped a working app, and put it on the App Store.
@@ -130,10 +132,10 @@ So every node in the service directory can carry a controlled vocabulary of the 
 /** Search alias paired with an optional canonical name (e.g. pcl → Perry-Castaneda Library). */
 export type ControlledVocabularyEntry = {
   /** Abbreviation, acronym, or alias users may search. */
-  term: string
+  term: string;
   /** Optional full phrase also indexed for matching. */
-  professionalName?: string
-}
+  professionalName?: string;
+};
 ```
 
 The library entry then declares both the loose phrases students actually type and the controlled terms:
@@ -157,7 +159,7 @@ campusServicesCatalog.item({
 export const LIBRARY_CONTROLLED_VOCABULARY = LIBRARY_BRANCHES.map((branch) => ({
   term: branch.abbreviation,
   professionalName: branch.name,
-}))
+}));
 ```
 
 One table generates the branch UI, the campus address, the map link, and the synonyms. PCL leads to Perry-Castañeda for free, and so does every other branch, forever, without anyone maintaining a second list.
@@ -189,12 +191,12 @@ Perry-Castañeda has an ñ in it. Nobody types the ñ. Both the index and the qu
 function normalizeText(input: string) {
   return input
     .toLowerCase()
-    .replace(/&/g, ' and ')
-    .normalize('NFKD')
-    .replace(/\p{M}+/gu, '')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/&/g, " and ")
+    .normalize("NFKD")
+    .replace(/\p{M}+/gu, "")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim()
-    .replace(/\s+/g, ' ')
+    .replace(/\s+/g, " ");
 }
 ```
 
@@ -206,24 +208,24 @@ The scorer walks a ladder of match quality. An exact hit beats a full prefix, wh
 
 ```ts title="src/lib/search/query-suggest.ts"
 if (term === query.normalized) {
-  return 260 - term.length
+  return 260 - term.length;
 }
 
 if (term.startsWith(query.normalized)) {
-  return 220 - term.length
+  return 220 - term.length;
 }
 
-const words = term.split(' ')
+const words = term.split(" ");
 const hasTokenPrefixes =
   query.tokens.length > 1 &&
-  query.tokens.every((token) => words.some((word) => word.startsWith(token)))
+  query.tokens.every((token) => words.some((word) => word.startsWith(token)));
 if (hasTokenPrefixes) {
-  return 180 - words.length
+  return 180 - words.length;
 }
 
-const contiguousIndex = term.indexOf(query.normalized)
+const contiguousIndex = term.indexOf(query.normalized);
 if (contiguousIndex !== -1) {
-  return 150 - contiguousIndex
+  return 150 - contiguousIndex;
 }
 ```
 
@@ -232,12 +234,13 @@ Shorter terms win ties, since `260 - term.length` rewards the tighter match.
 The version I shipped first added the field weight straight onto that score. Titles are weighted 420 and descriptions 80, so a weak title match beat a strong description match every time, and results were sorted by which field matched instead of how well it matched. The fix was to scale match quality up and squash field weight down into a bounded tie-break:
 
 ```ts title="src/lib/search/query-suggest.ts"
-const MATCH_QUALITY_SCALE = 100
+const MATCH_QUALITY_SCALE = 100;
 /** Field weight contributes at most this many points of tie-bias. */
-const MAX_FIELD_BIAS = 40
-const ITEM_BIAS = 50
+const MAX_FIELD_BIAS = 40;
+const ITEM_BIAS = 50;
 
-const weightedScore = score * MATCH_QUALITY_SCALE + fieldWeightBias(field.weight) + itemBias
+const weightedScore =
+  score * MATCH_QUALITY_SCALE + fieldWeightBias(field.weight) + itemBias;
 ```
 
 Field weight and item-versus-page now only break ties between matches of equal quality. Aliases sit at 400, just under titles at 420, so a student's shorthand is treated as almost as authoritative as the official name.
@@ -253,19 +256,32 @@ for (const page of pages) {
   const pageControlledVocabulary: ControlledVocabularyEntry[] = [
     ...ancestorControlledVocabulary,
     ...(page.controlledVocabulary ?? []),
-  ]
+  ];
 
-  documents.push(buildDocument(page, ancestorTitles, ancestorControlledVocabulary, locale))
+  documents.push(
+    buildDocument(page, ancestorTitles, ancestorControlledVocabulary, locale),
+  );
 
   for (const child of page.children) {
-    if (child.kind === 'page') {
-      visitPages([child], [...ancestorTitles, page.title], pageControlledVocabulary, documents, locale)
-      continue
+    if (child.kind === "page") {
+      visitPages(
+        [child],
+        [...ancestorTitles, page.title],
+        pageControlledVocabulary,
+        documents,
+        locale,
+      );
+      continue;
     }
 
     documents.push(
-      buildDocument(child, [...ancestorTitles, page.title], pageControlledVocabulary, locale),
-    )
+      buildDocument(
+        child,
+        [...ancestorTitles, page.title],
+        pageControlledVocabulary,
+        locale,
+      ),
+    );
   }
 }
 ```
@@ -273,9 +289,9 @@ for (const page of pages) {
 Inheritance is the whole point. "UHS" is declared once on the health page, so typing it reaches a nested Appointments item whose own text contains nothing resembling the query. There is a test pinning exactly that:
 
 ```ts title="src/lib/search/query-suggest.test.ts"
-const index = buildServiceDirectorySearchIndex([parentPage])
-const matches = findServiceDirectoryMatches({ query: 'uhs', index, limit: 6 })
-expect(matches.map((m) => m.id)).toContain('test/parent/child')
+const index = buildServiceDirectorySearchIndex([parentPage]);
+const matches = findServiceDirectoryMatches({ query: "uhs", index, limit: 6 });
+expect(matches.map((m) => m.id)).toContain("test/parent/child");
 ```
 
 Node ids double as routes, so a result is directly openable. `campus-life/career-services/twelve-twenty-events` becomes `/d/campus-life/career-services/twelve-twenty-events` through a catch-all route, and selecting a result either pushes a screen, opens an in-app embed, or hands off to the browser depending on the action the registry declared.
@@ -289,12 +305,13 @@ The detail I like is the duplicate rule. "underground" and "Texas Union Undergro
 ```ts title="src/lib/search/query-suggest.ts"
 function areSemanticallyDuplicateSuggestions(left: string, right: string) {
   if (left === right) {
-    return true
+    return true;
   }
 
-  const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left]
+  const [shorter, longer] =
+    left.length <= right.length ? [left, right] : [right, left];
 
-  return longer.endsWith(` ${shorter}`)
+  return longer.endsWith(` ${shorter}`);
 }
 ```
 
@@ -309,11 +326,23 @@ The i18n pass in July raised a question with three bad answers and one good one.
 So each document indexes both, with localized fields weighted ten points under their English counterparts:
 
 ```ts title="src/lib/search/query-suggest.ts"
-addField(fieldMap, 'title', item.title, 420)
+addField(fieldMap, "title", item.title, 420);
 
 if (localized) {
-  addLocalizedField(fieldMap, 'title', `registryData.${item.id}.title`, locale, 410)
-  addLocalizedField(fieldMap, 'description', `registryData.${item.id}.description`, locale, 70)
+  addLocalizedField(
+    fieldMap,
+    "title",
+    `registryData.${item.id}.title`,
+    locale,
+    410,
+  );
+  addLocalizedField(
+    fieldMap,
+    "description",
+    `registryData.${item.id}.description`,
+    locale,
+    70,
+  );
 }
 ```
 
@@ -356,7 +385,7 @@ export default function OverviewScreen() {
       <QuickActionsSection />
       <ServiceDirectoryCard />
     </>
-  )
+  );
 }
 ```
 
@@ -383,15 +412,15 @@ Only Parking ships as a real iOS home-screen widget, `systemSmall`, through `exp
 
 ```tsx
 const ParkingWidgetView = (props: ParkingWidgetSnapshot) => {
-  'widget'
+  "widget";
   // Almost no imports work here. Logic stays inlined.
   // ...
-}
+};
 
 const ParkingWidget = createWidget<ParkingWidgetSnapshot>(
-  'ParkingWidget',
+  "ParkingWidget",
   ParkingWidgetView,
-)
+);
 ```
 
 The JS app does not run inside the widget. iOS fetches and parses garage HTML with cheerio, caches for fifteen minutes, then writes a snapshot into an App Group timeline:
@@ -399,7 +428,7 @@ The JS app does not run inside the widget. iOS fetches and parses garage HTML wi
 ```ts
 ParkingWidget.updateSnapshot(
   filterParkingSnapshotBySelection(snapshot, selectedGarageIds),
-)
+);
 ```
 
 Sync runs on launch, when the app becomes active, and when widget preferences change. Open the app once, and the home-screen tile can show garage codes and open-space counts without launching React again.

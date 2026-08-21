@@ -7,6 +7,10 @@ import { Post } from "@/components/post";
 import { Text } from "@/components/ui/text";
 import { blog, getNeighbours } from "@/lib/source";
 
+// Duplicated from `__root.tsx`, following the same note in `rss[.]xml.tsx`:
+// hoisting the three copies into a shared module is still a separate sweep.
+const SITE_URL = "https://oliverpan.vercel.app";
+
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPost,
   head: ({ params }) => {
@@ -14,6 +18,20 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!page) return {};
 
     const title = `${page.data.title} | Oliver Pan`;
+    // og:image has to be absolute — scrapers do not resolve it against the
+    // page URL. Width and height are the sizes `source.ts` requires of the
+    // field, and are sent so the first unfurl renders a large card instead of
+    // falling back to a thumbnail while the image is still being fetched.
+    const image = page.data.image
+      ? [
+          { content: `${SITE_URL}${page.data.image}`, property: "og:image" },
+          { content: "1200", property: "og:image:width" },
+          { content: "630", property: "og:image:height" },
+          { content: page.data.title, property: "og:image:alt" },
+          { content: `${SITE_URL}${page.data.image}`, name: "twitter:image" },
+        ]
+      : [];
+
     return {
       meta: [
         { title },
@@ -21,6 +39,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { content: title, property: "og:title" },
         { content: page.data.description, property: "og:description" },
         { content: "article", property: "og:type" },
+        ...image,
       ],
     };
   },

@@ -13,6 +13,15 @@ const blogCollection = defineCollections({
     // The `.or(z.date())` branch is load-bearing: YAML turns an unquoted
     // `date: 2024-05-16` into a JS Date rather than a string.
     date: z.iso.date().or(z.date()),
+    /**
+     * Social share card, as a root-relative path under `public/`.
+     *
+     * Must be 1200x630 — `blog.$slug.tsx` declares those dimensions to the
+     * scrapers — and must be PNG or JPEG. Not AVIF: the rest of the blog's
+     * images are AVIF, but no major unfurler (Slack, iMessage, X, LinkedIn,
+     * Facebook) decodes it, so a share card in AVIF silently renders nothing.
+     */
+    image: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),
 });

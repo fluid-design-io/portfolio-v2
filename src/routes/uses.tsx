@@ -6,6 +6,7 @@ import { PageLayout } from "@/components/layout/page-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
+import { SITE_URL } from "@/lib/site";
 
 const TITLE = "Software I use, gadgets I love, and other things I recommend.";
 const DESCRIPTION =
@@ -19,7 +20,9 @@ export const Route = createFileRoute("/uses")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: "Uses | Oliver Pan" },
       { property: "og:description", content: DESCRIPTION },
+      { content: `${SITE_URL}/uses`, property: "og:url" },
     ],
+    links: [{ href: `${SITE_URL}/uses`, rel: "canonical" }],
   }),
 });
 

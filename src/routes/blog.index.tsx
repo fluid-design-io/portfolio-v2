@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PageLayout } from "@/components/layout/page-layout";
 import { Post } from "@/components/post";
+import { SITE_URL } from "@/lib/site";
 import { posts } from "@/lib/source";
 
 const TITLE = "Writing on web development, networking, and experience design";
@@ -16,7 +17,9 @@ export const Route = createFileRoute("/blog/")({
       { content: DESCRIPTION, name: "description" },
       { content: "Blog | Oliver Pan", property: "og:title" },
       { content: DESCRIPTION, property: "og:description" },
+      { content: `${SITE_URL}/blog`, property: "og:url" },
     ],
+    links: [{ href: `${SITE_URL}/blog`, rel: "canonical" }],
   }),
 });
 

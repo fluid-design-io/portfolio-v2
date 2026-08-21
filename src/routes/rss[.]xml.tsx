@@ -20,12 +20,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Feed } from "feed";
 
 import { toDate } from "@/lib/date";
+import { SITE_URL } from "@/lib/site";
 import { posts } from "@/lib/source";
 
-// Duplicated from `__root.tsx` on purpose: issue 17 scopes this ticket to a
-// single-line addition there, so hoisting these into a shared module is left to
-// the ticket 18 sweep.
-const SITE_URL = "https://oliverpan.vercel.app";
 const AUTHOR = "Oliver Pan";
 const TITLE = "Oliver Pan";
 const DESCRIPTION = "Developer, Designer, and Creator.";

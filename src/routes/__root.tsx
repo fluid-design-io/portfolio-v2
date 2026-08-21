@@ -13,10 +13,10 @@ import { Guidelines } from "@/components/layout/guidelines";
 import { Header } from "@/components/layout/header";
 import { SkipNav } from "@/components/layout/skip-nav";
 import { searchOptions } from "@/components/search";
+import { SITE_URL } from "@/lib/site";
 
 import appCss from "@/styles/app.css?url";
 
-const SITE_URL = "https://oliverpan.vercel.app";
 const TITLE = "Oliver Pan";
 const DESCRIPTION = "Developer, Designer, and Creator.";
 
@@ -46,7 +46,11 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "canonical", href: SITE_URL },
+      // No `canonical` here. TanStack dedupes `meta` by name/property but
+      // concatenates `links`, so a site-root canonical at this level cannot be
+      // overridden by a child — it is emitted alongside the child's, and two
+      // conflicting canonicals make crawlers discard the signal entirely.
+      // Routes declare their own; a page without one self-canonicalizes.
       { rel: "icon", href: "/favicon.png" },
       {
         rel: "alternate",

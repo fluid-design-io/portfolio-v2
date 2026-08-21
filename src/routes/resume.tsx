@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/description-list";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
+import { SITE_URL } from "@/lib/site";
 
 const TITLE = "Resumé";
 const DESCRIPTION = "Where I’ve been and what I’ve done.";
@@ -21,7 +22,9 @@ export const Route = createFileRoute("/resume")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: "Resumé | Oliver Pan" },
       { property: "og:description", content: DESCRIPTION },
+      { content: `${SITE_URL}/resume`, property: "og:url" },
     ],
+    links: [{ href: `${SITE_URL}/resume`, rel: "canonical" }],
   }),
 });
 

@@ -5,11 +5,8 @@ import { PageLayout } from "@/components/layout/page-layout";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { Post } from "@/components/post";
 import { Text } from "@/components/ui/text";
+import { SITE_URL } from "@/lib/site";
 import { blog, getNeighbours } from "@/lib/source";
-
-// Duplicated from `__root.tsx`, following the same note in `rss[.]xml.tsx`:
-// hoisting the three copies into a shared module is still a separate sweep.
-const SITE_URL = "https://oliverpan.vercel.app";
 
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPost,
@@ -18,6 +15,8 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!page) return {};
 
     const title = `${page.data.title} | Oliver Pan`;
+    // `page.url` is already `/blog/<slug>`, same as the RSS route uses.
+    const canonical = `${SITE_URL}${page.url}`;
     // og:image has to be absolute — scrapers do not resolve it against the
     // page URL. Width and height are the sizes `source.ts` requires of the
     // field, and are sent so the first unfurl renders a large card instead of
@@ -39,8 +38,13 @@ export const Route = createFileRoute("/blog/$slug")({
         { content: title, property: "og:title" },
         { content: page.data.description, property: "og:description" },
         { content: "article", property: "og:type" },
+        // Both of these override the root's site-root values. Without them a
+        // post tells crawlers and scrapers that it *is* the home page, which
+        // collapses every post into one URL for indexing and share counts.
+        { content: canonical, property: "og:url" },
         ...image,
       ],
+      links: [{ href: canonical, rel: "canonical" }],
     };
   },
   // The lookup is synchronous and module-scoped, so this exists only to turn an

@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageLayout } from "@/components/layout/page-layout";
 import { ProjectList } from "@/components/projects/project-list";
 import { projects } from "@/components/projects/projects.data";
+import { SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
   component: Projects,
@@ -14,6 +15,9 @@ export const Route = createFileRoute("/")({
         content: "Things I've made trying to put my dent in the universe.",
       },
     ],
+    // The site root canonical used to live in `__root.tsx`, where it applied to
+    // every route. It is correct for this page only.
+    links: [{ rel: "canonical", href: SITE_URL }],
   }),
 });
 

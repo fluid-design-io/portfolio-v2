@@ -2,10 +2,10 @@ import cardwareScreenshot from "./screenshots/cardware.avif";
 import codeArtistScreenshot from "./screenshots/code-artist.avif";
 import dragNConvertScreenshot from "./screenshots/drag-n-convert.webp";
 import fluidColorsScreenshot from "./screenshots/fluid-colors.avif";
-import fluidUIScreenshot from "./screenshots/fluid-ui.avif";
-import imageConverterScreenshot from "./screenshots/image-converter.avif";
 import imageVisionScreenshot from "./screenshots/image-vision.avif";
+import matchaLabScreenshot from "./screenshots/matcha-lab.avif";
 import nwuiThemeGenScreenshot from "./screenshots/nwui-theme-gen.avif";
+import utCompanionScreenshot from "./screenshots/ut-companion.avif";
 import visionUingScreenshot from "./screenshots/vision-ui.avif";
 
 export type Project = {
@@ -55,11 +55,14 @@ export const projects: Project[] = [
   },
   {
     description:
-      "Beautiful React UI that are responsive, supports dark mode and a11y with elegant transitions.",
-    link: { href: "https://fluid-design.io", label: "fluid-design.io" },
-    logo: "/assets/images/fluid-design.svg",
-    name: "Fluid UI",
-    screenshot: fluidUIScreenshot,
+      "Nine matcha drinks, one at a time. An installable iPad web app built as a single non-scrolling screen.",
+    link: {
+      href: "https://matcha-lab.uing.dev/",
+      label: "matcha-lab.uing.dev",
+    },
+    logo: "/assets/images/matcha-lab.webp",
+    name: "Matcha Lab",
+    screenshot: matchaLabScreenshot,
   },
   {
     description:
@@ -74,14 +77,14 @@ export const projects: Project[] = [
   },
   {
     description:
-      "Modern image processing tools built with TypeScript and Sharp, Mac & VSCode.",
+      "A campus companion for UT Austin. Widgets, quick actions, and a curated directory of campus services.",
     link: {
-      href: "https://github.com/fluid-design-io/image-converter",
-      label: "github.com",
+      href: "https://apps.apple.com/us/app/ut-companion/id6761080156",
+      label: "apps.apple.com",
     },
-    logo: "/assets/images/image-converter.png",
-    name: "Image Converter",
-    screenshot: imageConverterScreenshot,
+    logo: "/assets/images/ut-companion.webp",
+    name: "UT Companion",
+    screenshot: utCompanionScreenshot,
   },
   {
     description:

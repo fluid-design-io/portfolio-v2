@@ -59,7 +59,10 @@ export default defineConfig({
       sitemap: { host: "https://oliverpan.vercel.app" },
     }),
     // Bare nitro() is correct: the `vercel` preset auto-detects from the
-    // VERCEL env var on CI, so no vercel.json is needed.
+    // VERCEL env var on CI, so nothing here has to name a preset. The
+    // vercel.json at the root is unrelated to output format — it exists only
+    // to pin `framework: null` and the build command over the project's stale
+    // Next.js preset, left from when this repo was a Turborepo.
     nitro(),
     viteReact(),
     // The React Compiler runs here, not through the React plugin:

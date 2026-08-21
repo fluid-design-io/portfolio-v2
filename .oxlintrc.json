@@ -24,6 +24,7 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
+    "react/rule-suppression": "error",
     "react-hooks/exhaustive-deps": "error",
     "react/hooks": "off",
     "react/exhaustive-effect-dependencies": "off",

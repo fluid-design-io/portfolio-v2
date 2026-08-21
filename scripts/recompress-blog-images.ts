@@ -32,9 +32,16 @@ for await (const rel of glob.scan(ROOT)) {
   const original = file.size;
   const meta = await file.image().metadata();
 
+  // Always resize, even when the image is already within the cap: Bun 1.4.0's
+  // AVIF encoder emits files Chrome refuses to decode when either dimension is
+  // odd, so both are rounded down to an even number here.
+  const w = Math.min(meta.width, MAX_WIDTH);
+  const h = Math.round((meta.height * w) / meta.width);
+  const evenW = w - (w % 2);
+  const evenH = h - (h % 2);
+
   // Re-open per operation: the image handle is consumed by the encode.
-  let img = Bun.file(src).image();
-  if (meta.width > MAX_WIDTH) img = img.resize(MAX_WIDTH);
+  const img = Bun.file(src).image().resize(evenW, evenH);
   const bytes = await img.avif({ quality: QUALITY }).bytes();
 
   if (!dry) await Bun.write(dest, bytes);

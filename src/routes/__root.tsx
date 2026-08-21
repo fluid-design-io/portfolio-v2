@@ -11,6 +11,7 @@ import { Footer } from "@/components/layout/footer";
 import { Guidelines } from "@/components/layout/guidelines";
 import { Header } from "@/components/layout/header";
 import { SkipNav } from "@/components/layout/skip-nav";
+import { searchOptions } from "@/components/search";
 
 import appCss from "@/styles/app.css?url";
 
@@ -60,9 +61,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* Search is wired in ticket 16. Until then the dialog would open onto
-            a route that does not exist, so it stays off. */}
-        <RootProvider search={{ enabled: false }}>
+        <RootProvider search={searchOptions}>
           <SkipNav />
           <Guidelines />
           <Header />

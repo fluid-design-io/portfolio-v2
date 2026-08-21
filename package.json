@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
+    "dev": "bun run build:search && vite dev",
+    "build": "bun run build:search && vite build",
+    "build:search": "node scripts/build-search-index.mjs",
     "start": "node .output/server/index.mjs",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

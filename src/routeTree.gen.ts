@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as UsesRouteImport } from './routes/uses'
+import { Route as VideoProtoRouteImport } from './routes/video-proto'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as VideoProtoIndexRouteImport } from './routes/video-proto.index'
+import { Route as VideoProtoAwayRouteImport } from './routes/video-proto.away'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +33,11 @@ const UsesRoute = UsesRouteImport.update({
   path: '/uses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VideoProtoRoute = VideoProtoRouteImport.update({
+  id: '/video-proto',
+  path: '/video-proto',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -40,41 +48,84 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VideoProtoIndexRoute = VideoProtoIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => VideoProtoRoute,
+} as any)
+const VideoProtoAwayRoute = VideoProtoAwayRouteImport.update({
+  id: '/away',
+  path: '/away',
+  getParentRoute: () => VideoProtoRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
+  '/video-proto': typeof VideoProtoRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/video-proto/away': typeof VideoProtoAwayRoute
   '/blog/': typeof BlogIndexRoute
+  '/video-proto/': typeof VideoProtoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/video-proto/away': typeof VideoProtoAwayRoute
   '/blog': typeof BlogIndexRoute
+  '/video-proto': typeof VideoProtoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
+  '/video-proto': typeof VideoProtoRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/video-proto/away': typeof VideoProtoAwayRoute
   '/blog/': typeof BlogIndexRoute
+  '/video-proto/': typeof VideoProtoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/resume' | '/uses' | '/blog/$slug' | '/blog/'
+  fullPaths:
+    | '/'
+    | '/resume'
+    | '/uses'
+    | '/video-proto'
+    | '/blog/$slug'
+    | '/video-proto/away'
+    | '/blog/'
+    | '/video-proto/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/resume' | '/uses' | '/blog/$slug' | '/blog'
-  id: '__root__' | '/' | '/resume' | '/uses' | '/blog/$slug' | '/blog/'
+  to:
+    | '/'
+    | '/resume'
+    | '/uses'
+    | '/blog/$slug'
+    | '/video-proto/away'
+    | '/blog'
+    | '/video-proto'
+  id:
+    | '__root__'
+    | '/'
+    | '/resume'
+    | '/uses'
+    | '/video-proto'
+    | '/blog/$slug'
+    | '/video-proto/away'
+    | '/blog/'
+    | '/video-proto/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ResumeRoute: typeof ResumeRoute
   UsesRoute: typeof UsesRoute
+  VideoProtoRoute: typeof VideoProtoRouteWithChildren
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
@@ -102,6 +153,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/video-proto': {
+      id: '/video-proto'
+      path: '/video-proto'
+      fullPath: '/video-proto'
+      preLoaderRoute: typeof VideoProtoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -116,13 +174,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/video-proto/': {
+      id: '/video-proto/'
+      path: '/'
+      fullPath: '/video-proto/'
+      preLoaderRoute: typeof VideoProtoIndexRouteImport
+      parentRoute: typeof VideoProtoRoute
+    }
+    '/video-proto/away': {
+      id: '/video-proto/away'
+      path: '/away'
+      fullPath: '/video-proto/away'
+      preLoaderRoute: typeof VideoProtoAwayRouteImport
+      parentRoute: typeof VideoProtoRoute
+    }
   }
 }
+
+interface VideoProtoRouteChildren {
+  VideoProtoAwayRoute: typeof VideoProtoAwayRoute
+  VideoProtoIndexRoute: typeof VideoProtoIndexRoute
+}
+
+const VideoProtoRouteChildren: VideoProtoRouteChildren = {
+  VideoProtoAwayRoute: VideoProtoAwayRoute,
+  VideoProtoIndexRoute: VideoProtoIndexRoute,
+}
+
+const VideoProtoRouteWithChildren = VideoProtoRoute._addFileChildren(
+  VideoProtoRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ResumeRoute: ResumeRoute,
   UsesRoute: UsesRoute,
+  VideoProtoRoute: VideoProtoRouteWithChildren,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
 }

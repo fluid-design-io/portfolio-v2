@@ -17,7 +17,8 @@ const LONG_DATE = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
 });
 
-function toDate(value: PostDate): Date {
+/** The parsed form, for consumers that need a `Date` rather than a string. */
+export function toDate(value: PostDate): Date {
   return value instanceof Date ? value : new Date(value);
 }
 

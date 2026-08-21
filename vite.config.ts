@@ -40,6 +40,21 @@ export default defineConfig({
     }),
     tailwindcss(),
     tanstackStart({
+      // `/blog/` and `/blog` are the same page, and both were landing in the
+      // sitemap: `/blog/` is the route id that `autoStaticPathsDiscovery`
+      // enumerates for `blog.index.tsx`, while `/blog` is the href the nav
+      // actually links to, which `crawlLinks` then finds. Both prerender to the
+      // same `blog/index.html`, so this drops the one nothing links to.
+      //
+      // A declared page is the only lever available: `sitemap` takes just
+      // `{ enabled, outputPath, host }` with no global exclude list, and
+      // `prerender.filter` cannot help either — `prerender.js` pushes crawled
+      // pages onto `startConfig.pages` (line 67) *before* it consults the
+      // filter (line 69), so a filtered page still reaches the sitemap while
+      // losing its prerendered HTML. Declaring the path instead seeds it into
+      // the map ahead of discovery, which merges only paths it does not
+      // already have.
+      pages: [{ path: "/blog/", sitemap: { exclude: true } }],
       prerender: { enabled: true },
       sitemap: { host: "https://oliverpan.vercel.app" },
     }),

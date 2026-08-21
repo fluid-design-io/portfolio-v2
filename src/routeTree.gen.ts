@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as UsesRouteImport } from './routes/uses'
 import { Route as VideoProtoRouteImport } from './routes/video-proto'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -26,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsesRoute = UsesRouteImport.update({
@@ -62,6 +68,7 @@ const VideoProtoAwayRoute = VideoProtoAwayRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/uses': typeof UsesRoute
   '/video-proto': typeof VideoProtoRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/uses': typeof UsesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/video-proto/away': typeof VideoProtoAwayRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/uses': typeof UsesRoute
   '/video-proto': typeof VideoProtoRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/resume'
+    | '/rss.xml'
     | '/uses'
     | '/video-proto'
     | '/blog/$slug'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/resume'
+    | '/rss.xml'
     | '/uses'
     | '/blog/$slug'
     | '/video-proto/away'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/resume'
+    | '/rss.xml'
     | '/uses'
     | '/video-proto'
     | '/blog/$slug'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ResumeRoute: typeof ResumeRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   UsesRoute: typeof UsesRoute
   VideoProtoRoute: typeof VideoProtoRouteWithChildren
   BlogSlugRoute: typeof BlogSlugRoute
@@ -144,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/resume'
       fullPath: '/resume'
       preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/uses': {
@@ -208,6 +228,7 @@ const VideoProtoRouteWithChildren = VideoProtoRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ResumeRoute: ResumeRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   UsesRoute: UsesRoute,
   VideoProtoRoute: VideoProtoRouteWithChildren,
   BlogSlugRoute: BlogSlugRoute,

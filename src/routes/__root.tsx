@@ -46,6 +46,12 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "canonical", href: SITE_URL },
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: `${TITLE} — Blog`,
+        href: `${SITE_URL}/rss.xml`,
+      },
     ],
   }),
   shellComponent: RootShell,

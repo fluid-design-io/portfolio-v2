@@ -52,6 +52,8 @@ export function BackgroundVideo() {
 
     const target = isHome ? HOME_TIME : AWAY_TIME;
     let raf = 0;
+    let vfc = 0;
+    let timer = 0;
     let cancelled = false;
 
     const freeze = () => {
@@ -71,14 +73,58 @@ export function BackgroundVideo() {
       canvas.style.visibility = "hidden";
     };
 
-    // Land exactly on the target frame, then freeze once the seek has decoded.
+    const onSeekedFallback = () => {
+      // Two frames' grace so the seeked frame reaches the compositor before
+      // drawImage samples it.
+      raf = requestAnimationFrame(() => {
+        raf = requestAnimationFrame(freeze);
+      });
+    };
+
+    /**
+     * Land exactly on the target frame, then freeze. `seeked` alone is not a
+     * safe freeze signal: iOS Safari fires it before the decoded frame has
+     * been presented, so drawImage would copy the stale pre-seek frame — the
+     * "rewinds, then snaps back" bug. Where available, wait for
+     * requestVideoFrameCallback to report a presented frame whose mediaTime
+     * is the target; a timeout backstops the rare case where no new frame is
+     * ever presented (e.g. we were already resting on it).
+     */
     const settle = () => {
       video.pause();
-      if (Math.abs(video.currentTime - target) > 1 / 60) {
-        video.currentTime = target;
-        video.addEventListener("seeked", freeze, { once: true });
+      if (typeof video.requestVideoFrameCallback === "function") {
+        const tick = (_now: number, meta: { mediaTime: number }) => {
+          if (cancelled) return;
+          if (Math.abs(meta.mediaTime - target) <= 1 / 24) {
+            clearTimeout(timer);
+            freeze();
+          } else {
+            vfc = video.requestVideoFrameCallback(tick);
+          }
+        };
+        vfc = video.requestVideoFrameCallback(tick);
+        timer = window.setTimeout(() => {
+          video.cancelVideoFrameCallback(vfc);
+          freeze();
+        }, 400);
       } else {
-        freeze();
+        video.addEventListener("seeked", onSeekedFallback, { once: true });
+      }
+      // Always re-assert the target, even when currentTime already reads as
+      // it: during a scrub currentTime reports the pending seek's time, not
+      // the presented frame, and the assignment is what forces a fresh
+      // decode + presentation for the callback above to observe.
+      video.currentTime = target;
+    };
+
+    // Backstop for the rAF stop-check: browsers suspend rAF in hidden or
+    // backgrounded tabs while the video plays on, which would sail straight
+    // past the target. timeupdate keeps firing (~4/s) in that state.
+    const onTimeUpdate = () => {
+      if (video.currentTime >= target) {
+        video.removeEventListener("timeupdate", onTimeUpdate);
+        cancelAnimationFrame(raf);
+        settle();
       }
     };
 
@@ -86,15 +132,18 @@ export function BackgroundVideo() {
       unfreeze();
       const step = () => {
         if (video.currentTime >= target) {
+          video.removeEventListener("timeupdate", onTimeUpdate);
           settle();
           return;
         }
         raf = requestAnimationFrame(step);
       };
       raf = requestAnimationFrame(step);
+      video.addEventListener("timeupdate", onTimeUpdate);
       // Autoplay refused (e.g. Low Power Mode): cut straight to the frame.
       video.play().catch(() => {
         cancelAnimationFrame(raf);
+        video.removeEventListener("timeupdate", onTimeUpdate);
         if (!cancelled) settle();
       });
     };
@@ -122,9 +171,23 @@ export function BackgroundVideo() {
       raf = requestAnimationFrame(step);
     };
 
+    // rAF is suspended in hidden tabs, so both animated legs would stall
+    // mid-flight. Nobody can see the animation then anyway: cut straight to
+    // the resting frame (settle's timeout backstop fires even while hidden).
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        video.removeEventListener("timeupdate", onTimeUpdate);
+        settle();
+      }
+    };
+
     const start = () => {
       if (cancelled) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (
+        document.hidden ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
         settle();
       } else if (video.currentTime < target) {
         playForward();
@@ -134,6 +197,8 @@ export function BackgroundVideo() {
         settle();
       }
     };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     // Seeking before metadata arrives is undefined behaviour; wait it out.
     if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
@@ -145,8 +210,13 @@ export function BackgroundVideo() {
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      if (typeof video.cancelVideoFrameCallback === "function")
+        video.cancelVideoFrameCallback(vfc);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       video.removeEventListener("loadedmetadata", start);
-      video.removeEventListener("seeked", freeze);
+      video.removeEventListener("seeked", onSeekedFallback);
+      video.removeEventListener("timeupdate", onTimeUpdate);
       video.pause();
     };
   }, [isHome]);

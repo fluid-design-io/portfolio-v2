@@ -18,18 +18,16 @@ const VIDEO_SRC =
  * scrubbed by route.
  *
  * - Plays to 7.8s on first load, then pauses. That frame is the foreground.
- * - Leaving `homePath` plays forward from 7.8s to 15s, then pauses.
- * - Returning to `homePath` walks `currentTime` backwards by hand at
+ * - Leaving `/` plays forward from 7.8s to 15s, then pauses.
+ * - Returning to `/` walks `currentTime` backwards by hand at
  *   FRAME_DURATION per rAF until it reaches 7.8s.
  *
- * `homePath` exists only so the prototype route can drive this without
- * mounting it in `__root.tsx`. Production mounts it with the default.
+ * The `homePath` prop is gone with ticket 07's prototype routes; the home
+ * path is a constant now, and `__root.tsx` is the only mount point.
  */
-export function BackgroundVideo(props: { homePath?: string }) {
-  // NOT `({ homePath = "/" })`. A default value inside a destructured props
-  // parameter makes React Compiler 1.0 bail on the whole component, silently.
-  // See the ticket 07 Answer.
-  const homePath = props.homePath ?? "/";
+const HOME_PATH = "/";
+
+export function BackgroundVideo() {
   const pathname = useLocation({ select: (location) => location.pathname });
   const videoRef = useRef<HTMLVideoElement>(null);
   const initialPlayDoneRef = useRef(false);
@@ -61,7 +59,7 @@ export function BackgroundVideo(props: { homePath?: string }) {
     // Start playing when route changes (if initial animation is done)
     if (initialPlayDoneRef.current) {
       if (
-        pathname === homePath &&
+        pathname === HOME_PATH &&
         video.currentTime > VIDEO_CONSTANTS.TRANSITION_TIME
       ) {
         playInReverse();
@@ -80,7 +78,7 @@ export function BackgroundVideo(props: { homePath?: string }) {
       }
 
       if (initialPlayDoneRef.current) {
-        if (pathname === homePath) {
+        if (pathname === HOME_PATH) {
           if (video.currentTime > VIDEO_CONSTANTS.TRANSITION_TIME) {
             cancelAnimationFrame(reverseAnimationFrame);
             playInReverse();
@@ -101,7 +99,7 @@ export function BackgroundVideo(props: { homePath?: string }) {
       video.removeEventListener("timeupdate", handleTimeUpdate);
       cancelAnimationFrame(reverseAnimationFrame);
     };
-  }, [pathname, homePath]);
+  }, [pathname]);
 
   return (
     <div className="fixed inset-0 z-[-1] flex h-dvh w-full items-center justify-center bg-black">

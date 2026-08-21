@@ -10,8 +10,8 @@ import { Step, Steps } from "fumadocs-ui/components/steps";
 
 <video
   controls
-  title='MacOS Notch Cursor Interaction'
-  src='https://github.com/user-attachments/assets/73a092f6-e059-492f-95cc-fa73277d1841'
+  title="MacOS Notch Cursor Interaction"
+  src="https://github.com/user-attachments/assets/73a092f6-e059-492f-95cc-fa73277d1841"
 />
 
 ## Implementation Overview
@@ -73,7 +73,7 @@ The liquid-like cursor effect uses SVG filters:
 </Step>
 </Steps>
 
-<Callout type='info'>
+<Callout type="info">
   This project demonstrates how thoughtful UI interactions can improve both user
   experience and accessibility, while adding a touch of delight to everyday
   interactions.
@@ -114,7 +114,7 @@ This hook:
 ```typescript title="use-element-distance.tsx"
 const useElementDistance = (
   targetRef: RefObject<any>,
-  parentRef: RefObject<HTMLElement>
+  parentRef: RefObject<HTMLElement>,
 ) => {
   const [distance, setDistance] = useState<{
     x: number;
@@ -134,7 +134,7 @@ This hook:
 - Updates on window resize
 - Provides dimensional information for precise animations
 
-<Callout type='warning'>
+<Callout type="warning">
   Remember to provide refs to both hooks for proper functionality. The hooks are
   designed to work together but can be used independently if needed.
 </Callout>

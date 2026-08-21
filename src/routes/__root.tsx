@@ -11,6 +11,7 @@ import { Footer } from "@/components/layout/footer";
 import { Guidelines } from "@/components/layout/guidelines";
 import { Header } from "@/components/layout/header";
 import { SkipNav } from "@/components/layout/skip-nav";
+import { searchOptions } from "@/components/search";
 
 import appCss from "@/styles/app.css?url";
 
@@ -60,16 +61,13 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* Search is wired in ticket 16. Until then the dialog would open onto
-            a route that does not exist, so it stays off.
-
-            next-themes is off because this site is dark only. Left on,
+        {/* next-themes is off because this site is dark only. Left on,
             RootProvider injects a blocking script that sets
             `document.documentElement.style.colorScheme` before hydration,
             which React then reports as a mismatch against the SSR'd <html>
             on every route. It also binds a `d` hotkey to toggle a theme that
             does not exist. */}
-        <RootProvider search={{ enabled: false }} theme={{ enabled: false }}>
+        <RootProvider search={searchOptions} theme={{ enabled: false }}>
           <SkipNav />
           <Guidelines />
           <Header />

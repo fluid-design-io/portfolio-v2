@@ -10,33 +10,60 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VideoProtoRouteImport } from './routes/video-proto'
+import { Route as VideoProtoIndexRouteImport } from './routes/video-proto.index'
+import { Route as VideoProtoAwayRouteImport } from './routes/video-proto.away'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VideoProtoRoute = VideoProtoRouteImport.update({
+  id: '/video-proto',
+  path: '/video-proto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideoProtoIndexRoute = VideoProtoIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => VideoProtoRoute,
+} as any)
+const VideoProtoAwayRoute = VideoProtoAwayRouteImport.update({
+  id: '/away',
+  path: '/away',
+  getParentRoute: () => VideoProtoRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/video-proto': typeof VideoProtoRouteWithChildren
+  '/video-proto/away': typeof VideoProtoAwayRoute
+  '/video-proto/': typeof VideoProtoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/video-proto/away': typeof VideoProtoAwayRoute
+  '/video-proto': typeof VideoProtoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/video-proto': typeof VideoProtoRouteWithChildren
+  '/video-proto/away': typeof VideoProtoAwayRoute
+  '/video-proto/': typeof VideoProtoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/video-proto' | '/video-proto/away' | '/video-proto/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/video-proto/away' | '/video-proto'
+  id: '__root__' | '/' | '/video-proto' | '/video-proto/away' | '/video-proto/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  VideoProtoRoute: typeof VideoProtoRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +75,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/video-proto': {
+      id: '/video-proto'
+      path: '/video-proto'
+      fullPath: '/video-proto'
+      preLoaderRoute: typeof VideoProtoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/video-proto/': {
+      id: '/video-proto/'
+      path: '/'
+      fullPath: '/video-proto/'
+      preLoaderRoute: typeof VideoProtoIndexRouteImport
+      parentRoute: typeof VideoProtoRoute
+    }
+    '/video-proto/away': {
+      id: '/video-proto/away'
+      path: '/away'
+      fullPath: '/video-proto/away'
+      preLoaderRoute: typeof VideoProtoAwayRouteImport
+      parentRoute: typeof VideoProtoRoute
+    }
   }
 }
 
+interface VideoProtoRouteChildren {
+  VideoProtoAwayRoute: typeof VideoProtoAwayRoute
+  VideoProtoIndexRoute: typeof VideoProtoIndexRoute
+}
+
+const VideoProtoRouteChildren: VideoProtoRouteChildren = {
+  VideoProtoAwayRoute: VideoProtoAwayRoute,
+  VideoProtoIndexRoute: VideoProtoIndexRoute,
+}
+
+const VideoProtoRouteWithChildren = VideoProtoRoute._addFileChildren(
+  VideoProtoRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  VideoProtoRoute: VideoProtoRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

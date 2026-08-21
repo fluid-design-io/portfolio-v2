@@ -6,8 +6,12 @@ type HeadingProps = {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
 } & ComponentPropsWithoutRef<"h1">;
 
-export function Heading({ className, level = 1, ...props }: HeadingProps) {
-  const Element = `h${level}` as const;
+// No destructuring defaults anywhere in this file, parameter or body.
+// babel-plugin-react-compiler@1.0.0 silently bails on an AssignmentPattern
+// in a destructure and compiles nothing; `?? ` in the body is the form that
+// survives. See scripts/check-react-compiler.mjs.
+export function Heading({ className, level, ...props }: HeadingProps) {
+  const Element = `h${level ?? 1}` as const;
 
   return (
     <Element
@@ -20,8 +24,8 @@ export function Heading({ className, level = 1, ...props }: HeadingProps) {
   );
 }
 
-export function Subheading({ className, level = 2, ...props }: HeadingProps) {
-  const Element = `h${level}` as const;
+export function Subheading({ className, level, ...props }: HeadingProps) {
+  const Element = `h${level ?? 2}` as const;
 
   return (
     <Element

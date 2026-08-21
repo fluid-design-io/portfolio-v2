@@ -22,6 +22,7 @@
  */
 import { mkdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { createFromSource } from "fumadocs-core/search/server";
 import { fumadocsMdx } from "fumadocs-mdx/vite";
@@ -42,7 +43,21 @@ const server = await createServer({
     // remark option in that config affects.
     fumadocsMdx({ macro: { include: ["src/**/*.ts", "src/**/*.tsx"] } }),
   ],
-  resolve: { tsconfigPaths: true },
+  resolve: {
+    tsconfigPaths: true,
+    // `configFile: false` above means nothing from vite.config.ts is inherited,
+    // and `tsconfigPaths` only covers files the tsconfig includes — `["src"]`.
+    // A post that imports `@/…` (the Dynamic Island one does, for its live
+    // `Frame` and for the two `?raw` source blocks) would otherwise fail to
+    // compile here and be indexed by frontmatter only. Mirrors the alias in
+    // vite.config.ts; a regex, not a bare "@", so `@tanstack/*` is untouched.
+    alias: [
+      {
+        find: /^@\//,
+        replacement: fileURLToPath(new URL("../src/", import.meta.url)),
+      },
+    ],
+  },
 });
 
 /** Posts whose frontmatter is indexed but whose body could not be compiled. */

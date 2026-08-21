@@ -6,14 +6,17 @@ description: "A deep dive into recreating Apple's Dynamic Island using React, Fr
 tags: ["react", "framer-motion", "animation", "ios", "typescript", "svg"]
 ---
 
+import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
+
 import { Frame } from "@/components/posts/building-ios-dynamic-island/Frame";
-import IframeEmbed from "@/components/posts/Iframe";
+import componentsSource from "@/components/posts/building-ios-dynamic-island/Components.tsx?raw";
+import frameSource from "@/components/posts/building-ios-dynamic-island/Frame.tsx?raw";
 
 The Dynamic Island is one of Apple's most innovative UI elements in recent years, seamlessly blending hardware constraints with software elegance. In this post, I'll walk you through how I recreated this interactive UI component using React, Framer Motion, and pure CSS.
 
-<IframeEmbed
-  src='https://www.youtube.com/embed/uJ6Bt0X3FjE'
-  title='Fluid Color Palettes Website in Action'
+<Embed
+  src="https://www.youtube.com/embed/uJ6Bt0X3FjE"
+  title="iOS Dynamic Island clone in action"
 />
 
 ## The iPhone Frame
@@ -22,29 +25,16 @@ First, let's look at how I built the iPhone frame using pure CSS and React. The 
 
 <Tabs items={["Preview", "Frame", "Components"]}>
 
-<Tab value='Preview' data-vision-os-ui>
+<Tab value="Preview">
   <Frame />
 </Tab>
 
 <Tab value="Frame">
-
-```json doc-gen:file
-{
-  "file": "./components/posts/building-ios-dynamic-island/Frame.tsx",
-  "codeblock": true
-}
-```
-
+  <DynamicCodeBlock code={frameSource} lang="tsx" />
 </Tab>
+
 <Tab value="Components">
-
-```json doc-gen:file
-{
-  "file": "./components/posts/building-ios-dynamic-island/Components.tsx",
-  "codeblock": true
-}
-```
-
+  <DynamicCodeBlock code={componentsSource} lang="tsx" />
 </Tab>
 </Tabs>
 

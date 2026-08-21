@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -52,5 +54,17 @@ export default defineConfig({
   resolve: {
     // Makes the tsconfig `@/*` -> `./src/*` alias work at bundle time.
     tsconfigPaths: true,
+    // …but only for files the tsconfig covers, and `include` is `["src"]`.
+    // Posts live in `content/`, so an MDX file importing `@/components/...`
+    // fell through to Node and died with ERR_MODULE_NOT_FOUND, taking the whole
+    // app down — `source.ts` globs every post eagerly, and the route tree pulls
+    // `source.ts` into every route. This alias covers `content/` too.
+    // Ticket 21 needs it: the Dynamic Island post imports its own `Frame`.
+    alias: [
+      {
+        find: /^@\//,
+        replacement: fileURLToPath(new URL("./src/", import.meta.url)),
+      },
+    ],
   },
 });

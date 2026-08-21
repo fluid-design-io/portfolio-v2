@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+// PLACEHOLDER — ticket 12 replaces this with the projects grid.
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
   return (
-    <main className="flex min-h-dvh items-center justify-center">
-      <p className="text-sm text-muted-foreground">
-        TanStack Start is running.
+    <div className="mx-auto max-w-7xl px-6 py-32 sm:px-8">
+      <p className="font-mono text-sm text-muted-foreground">
+        Projects grid — ticket 12.
       </p>
-    </main>
+    </div>
   );
 }

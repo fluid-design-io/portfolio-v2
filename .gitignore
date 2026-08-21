@@ -45,3 +45,6 @@ old/
 .nitro
 .output
 *.timestamp-*.mjs
+
+# Subagent git worktrees
+.claude/worktrees/

@@ -1,11 +1,55 @@
 @import "tailwindcss";
 
-/* Dark only. No light theme, no next-themes toggle — see map.md. */
+/* Self-hosted, replacing next/font. Kaisei is subset to Latin — it is a
+   large CJK-capable face and we only ever set English headings in it. */
+@import "@fontsource-variable/geist/index.css";
+@import "@fontsource-variable/geist-mono/index.css";
+@import "@fontsource/kaisei-tokumin/latin-400.css";
+@import "@fontsource/kaisei-tokumin/latin-700.css";
+
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/* Tailwind cannot see class names inside a dependency's compiled JS. */
+@source "../../node_modules/fumadocs-ui/dist/**/*.js";
+
+/* Dark only. No light theme, no next-themes toggle — see map.md.
+   The old tree carried every colour twice, as raw `240 10% 3.9%` channels in
+   :root plus an `hsl(var(--x))` wrapper in @theme. Tailwind 4 needs only the
+   token, so ported CSS should reach for `var(--color-border)` directly. */
 @theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans--font-feature-settings: "cv11";
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+  --font-kaisei: "Kaisei Tokumin", ui-serif, Georgia, serif;
+
   --color-background: hsl(240 10% 3.9%);
   --color-foreground: hsl(0 0% 98%);
+
+  --color-card: hsl(240 10% 3.9%);
+  --color-card-foreground: hsl(0 0% 98%);
+
+  --color-popover: hsl(240 10% 3.9%);
+  --color-popover-foreground: hsl(0 0% 98%);
+
+  --color-primary: hsl(0 0% 98%);
+  --color-primary-foreground: hsl(240 5.9% 10%);
+
+  --color-secondary: hsl(240 3.7% 15.9%);
+  --color-secondary-foreground: hsl(0 0% 98%);
+
+  --color-muted: hsl(240 3.7% 15.9%);
   --color-muted-foreground: hsl(240 3.8% 46.1%);
+
+  --color-accent: hsl(240 3.7% 15.9%);
+  --color-accent-foreground: hsl(0 0% 98%);
+
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+
   --color-border: hsl(240 3.7% 15.9%);
+  --color-input: hsl(240 3.7% 15.9%);
+  --color-ring: hsl(240 4.9% 83.9%);
 
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
@@ -13,6 +57,7 @@
 }
 
 @layer base {
+  /* Tailwind 4 defaults the border colour to currentColor. */
   *,
   ::after,
   ::before,
@@ -26,6 +71,72 @@
   }
 
   body {
-    @apply border-border bg-background text-foreground;
+    @apply border-border bg-background font-sans text-foreground antialiased;
   }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-kaisei;
+  }
+
+  article iframe {
+    @apply h-96 w-full overflow-hidden rounded-md border-0 md:h-[32rem];
+  }
+
+  article img {
+    @apply h-auto w-full rounded-md;
+  }
+}
+
+/* A hairline rule that fades out at both ends. Used by the blog index, the
+   page header, and section dividers. */
+.dashed-border {
+  height: 1px;
+  z-index: -1;
+  content: "";
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-border),
+    var(--color-border) 4px,
+    transparent 4px,
+    transparent 10px
+  );
+}
+.dashed-border::before,
+.dashed-border::after {
+  content: "";
+  width: 4rem;
+  position: absolute;
+  height: 1px;
+  z-index: 1;
+}
+.dashed-border::before {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-background) 0,
+    transparent 100%
+  );
+}
+.dashed-border::after {
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-background) 100%
+  );
+}
+
+/* Skip-to-content, visually hidden until focused. */
+.skip-main-wrap {
+  @apply absolute inset-x-0 z-[-999] h-1 w-1 overflow-hidden opacity-0 transition-opacity duration-500;
+}
+.skip-main-wrap:focus,
+.skip-main-wrap:focus-visible,
+.skip-main-wrap:focus-within {
+  @apply top-4 z-[999] mx-auto h-auto w-full max-w-lg overflow-visible opacity-100 outline-none;
+}
+.skip-main-wrap .skip-main {
+  @apply w-full rounded-lg border-4 border-border bg-background px-2 py-4 text-foreground shadow-lg shadow-primary/40 outline-none;
 }

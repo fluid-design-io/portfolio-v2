@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 
-import { PostDate } from "@/components/blog/post-date";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/cn";
 import type { Blog } from "@/lib/source";
+
+import { PostDate } from "./post.date";
 
 /**
  * One cell of the blog index grid.

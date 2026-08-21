@@ -120,13 +120,19 @@ const education: Entry[] = [
 
 function Resume() {
   return (
-    <PageLayout description={DESCRIPTION} title={TITLE}>
-      <DescriptionList className="px-6">
-        {[...roles, ...education].map((entry) => (
-          <Entry entry={entry} key={entry.name} />
-        ))}
-      </DescriptionList>
-    </PageLayout>
+    <>
+      <PageLayout.Header>
+        <PageLayout.Title>{TITLE}</PageLayout.Title>
+        <PageLayout.Description>{DESCRIPTION}</PageLayout.Description>
+      </PageLayout.Header>
+      <PageLayout.Content>
+        <DescriptionList className="px-6">
+          {[...roles, ...education].map((entry) => (
+            <Entry entry={entry} key={entry.name} />
+          ))}
+        </DescriptionList>
+      </PageLayout.Content>
+    </>
   );
 }
 

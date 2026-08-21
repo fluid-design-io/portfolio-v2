@@ -1,10 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 
-import { PostDate } from "@/components/blog/post-date";
-import { PostNav } from "@/components/blog/post-nav";
 import { ArrowLeft } from "@/components/icons";
 import { PageLayout } from "@/components/layout/page-layout";
 import { mdxComponents } from "@/components/mdx/mdx-components";
+import { Post } from "@/components/post";
 import { Text } from "@/components/ui/text";
 import { blog, getNeighbours } from "@/lib/source";
 
@@ -56,29 +55,44 @@ function BlogPost() {
   const { next, previous } = getNeighbours(page.url);
 
   return (
-    <PageLayout description={page.data.description} title={page.data.title}>
-      <BackToIndex />
-      <article className="mx-auto prose max-w-[65ch]">
-        <PostDate className="not-prose" date={page.data.date} />
-        <Mdx components={mdxComponents} />
-      </article>
-      <div className="mx-auto mt-16 max-w-[65ch]">
-        <PostNav next={next} previous={previous} />
-      </div>
-    </PageLayout>
+    <>
+      <PageLayout.Header>
+        <PageLayout.Title>{page.data.title}</PageLayout.Title>
+        {page.data.description ? (
+          <PageLayout.Description>
+            {page.data.description}
+          </PageLayout.Description>
+        ) : null}
+      </PageLayout.Header>
+      <PageLayout.Content>
+        <BackToIndex />
+        <article className="mx-auto prose max-w-[65ch]">
+          <Post.Date className="not-prose" date={page.data.date} />
+          <Mdx components={mdxComponents} />
+        </article>
+        <div className="mx-auto mt-16 max-w-[65ch]">
+          <Post.Nav next={next} previous={previous} />
+        </div>
+      </PageLayout.Content>
+    </>
   );
 }
 
 function PostNotFound() {
   return (
-    <PageLayout
-      description="That post does not exist. It may have been renamed."
-      title="Post not found"
-    >
-      <BackToIndex />
-      <Text>
-        Try the <Link to="/blog">list of everything published</Link>.
-      </Text>
-    </PageLayout>
+    <>
+      <PageLayout.Header>
+        <PageLayout.Title>Post not found</PageLayout.Title>
+        <PageLayout.Description>
+          That post does not exist. It may have been renamed.
+        </PageLayout.Description>
+      </PageLayout.Header>
+      <PageLayout.Content>
+        <BackToIndex />
+        <Text>
+          Try the <Link to="/blog">list of everything published</Link>.
+        </Text>
+      </PageLayout.Content>
+    </>
   );
 }

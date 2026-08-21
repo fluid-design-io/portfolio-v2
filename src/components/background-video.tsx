@@ -1,116 +1,176 @@
-import { useLocation } from "@tanstack/react-router";
+import { useMatchRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 
-// Video timing constants
-const VIDEO_CONSTANTS = {
-  FPS: 24,
-  FRAME_DURATION: 1 / 24 / 7.2,
-  FOREGROUND_TIME: 7.8, // Time when foreground content appears
-  TRANSITION_TIME: 7.8, // Time for route transition animations
-  END_TIME: 15, // Final frame of the video
-} as const;
+/**
+ * Both encodes are keyint=4 on purpose: the reverse scrub is a storm of
+ * backward seeks, and each seek decodes from the previous keyframe. A
+ * keyframe every 4 frames keeps that to a few ms even on software decoders
+ * (a sparse-keyframe export froze Safari and Firefox for seconds). The H.264
+ * file is the `<source>` fallback for browsers without HEVC decode.
+ */
+const VIDEO_SRC_HEVC = "/assets/background.hevc.mp4";
+const VIDEO_SRC_H264 = "/assets/background.h264.mp4";
 
-const VIDEO_SRC =
-  "https://utfs.io/f/WKXGgxQVQnWkA0WCYFsuPTbE04ZksNL3ci6rFQoICadqUXen";
+/** Resting frame behind the home page. */
+const HOME_TIME = 7.8;
+/** Resting frame behind every other page (the video's final frame). */
+const AWAY_TIME = 15;
+/**
+ * Seconds of video consumed per real second when scrubbing backwards. There is
+ * no native reverse playback, so the reverse leg seeks frame by frame. 4.8x
+ * rewinds the 7.2s transition in ~1.5s; the old stepper's ~0.35x pace made
+ * returning home take twenty seconds.
+ */
+const REVERSE_RATE = 4.8;
 
 /**
  * The site's signature background. Not a video that plays: a 15s timeline
- * scrubbed by route.
+ * whose resting frame is decided by the route.
  *
- * - Plays to 7.8s on first load, then pauses. That frame is the foreground.
- * - Leaving `/` plays forward from 7.8s to 15s, then pauses.
- * - Returning to `/` walks `currentTime` backwards by hand at
- *   FRAME_DURATION per rAF until it reaches 7.8s.
+ * - On load it plays from 0 to the current route's resting frame.
+ * - Leaving `/` plays forward to the final frame; returning scrubs backwards.
+ * - The animation is one rAF loop driven by elapsed time, not `timeupdate`
+ *   (which only fires a few times a second and made the old stop points land
+ *   anywhere within ~250ms of the mark).
  *
- * The `homePath` prop is gone with ticket 07's prototype routes; the home
- * path is a constant now, and `__root.tsx` is the only mount point.
+ * Whenever the timeline is at rest, the frame is copied to a canvas and the
+ * `<video>` is hidden. A fixed full-viewport video surface under the page
+ * forces the compositor to blend every scrolled frame against a live video
+ * layer, which is what made WebKit scrolling crawl and smear paint over the
+ * code blocks; scrolling over a static canvas is free.
  */
-const HOME_PATH = "/";
-
 export function BackgroundVideo() {
-  const pathname = useLocation({ select: (location) => location.pathname });
+  const matchRoute = useMatchRoute();
+  const isHome = Boolean(matchRoute({ to: "/" }));
   const videoRef = useRef<HTMLVideoElement>(null);
-  const initialPlayDoneRef = useRef(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-    let reverseAnimationFrame = 0;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
 
-    // play() rejects with AbortError whenever a pause() or a seek interrupts
-    // it, which the scrub does constantly. Swallow it.
-    const play = () => {
-      video.play().catch(() => {});
+    const target = isHome ? HOME_TIME : AWAY_TIME;
+    let raf = 0;
+    let cancelled = false;
+
+    const freeze = () => {
+      if (cancelled || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA)
+        return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+      canvas.style.visibility = "visible";
+      video.style.visibility = "hidden";
     };
 
-    const playInReverse = () => {
-      if (!video.paused) video.pause();
-      const nextTime = video.currentTime - VIDEO_CONSTANTS.FRAME_DURATION;
+    const unfreeze = () => {
+      video.style.visibility = "visible";
+      canvas.style.visibility = "hidden";
+    };
 
-      if (nextTime > VIDEO_CONSTANTS.FOREGROUND_TIME) {
-        video.currentTime = nextTime;
-        reverseAnimationFrame = requestAnimationFrame(playInReverse);
+    // Land exactly on the target frame, then freeze once the seek has decoded.
+    const settle = () => {
+      video.pause();
+      if (Math.abs(video.currentTime - target) > 1 / 60) {
+        video.currentTime = target;
+        video.addEventListener("seeked", freeze, { once: true });
       } else {
-        video.currentTime = VIDEO_CONSTANTS.FOREGROUND_TIME;
-        video.pause();
+        freeze();
       }
     };
 
-    // Start playing when route changes (if initial animation is done)
-    if (initialPlayDoneRef.current) {
-      if (
-        pathname === HOME_PATH &&
-        video.currentTime > VIDEO_CONSTANTS.TRANSITION_TIME
-      ) {
-        playInReverse();
+    const playForward = () => {
+      unfreeze();
+      const step = () => {
+        if (video.currentTime >= target) {
+          settle();
+          return;
+        }
+        raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+      // Autoplay refused (e.g. Low Power Mode): cut straight to the frame.
+      video.play().catch(() => {
+        cancelAnimationFrame(raf);
+        if (!cancelled) settle();
+      });
+    };
+
+    const playBackward = () => {
+      unfreeze();
+      video.pause();
+      let last = performance.now();
+      const step = (now: number) => {
+        // A seek is still decoding; hold the clock so pace degrades to
+        // whatever the decoder manages instead of skipping ahead.
+        if (video.seeking) {
+          last = now;
+        } else {
+          const next = video.currentTime - ((now - last) / 1000) * REVERSE_RATE;
+          last = now;
+          if (next <= target) {
+            settle();
+            return;
+          }
+          video.currentTime = next;
+        }
+        raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const start = () => {
+      if (cancelled) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        settle();
+      } else if (video.currentTime < target) {
+        playForward();
+      } else if (video.currentTime > target) {
+        playBackward();
       } else {
-        play();
+        settle();
       }
+    };
+
+    // Seeking before metadata arrives is undefined behaviour; wait it out.
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      start();
+    } else {
+      video.addEventListener("loadedmetadata", start, { once: true });
     }
 
-    const handleTimeUpdate = () => {
-      if (
-        !initialPlayDoneRef.current &&
-        video.currentTime >= VIDEO_CONSTANTS.FOREGROUND_TIME
-      ) {
-        initialPlayDoneRef.current = true;
-        video.pause();
-      }
-
-      if (initialPlayDoneRef.current) {
-        if (pathname === HOME_PATH) {
-          if (video.currentTime > VIDEO_CONSTANTS.TRANSITION_TIME) {
-            cancelAnimationFrame(reverseAnimationFrame);
-            playInReverse();
-          }
-        } else {
-          if (video.currentTime < VIDEO_CONSTANTS.TRANSITION_TIME) {
-            video.currentTime = VIDEO_CONSTANTS.TRANSITION_TIME;
-            play();
-          } else if (video.currentTime >= VIDEO_CONSTANTS.END_TIME) {
-            video.pause();
-          }
-        }
-      }
-    };
-
-    video.addEventListener("timeupdate", handleTimeUpdate);
     return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      cancelAnimationFrame(reverseAnimationFrame);
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      video.removeEventListener("loadedmetadata", start);
+      video.removeEventListener("seeked", freeze);
+      video.pause();
     };
-  }, [pathname]);
+  }, [isHome]);
 
   return (
     <div className="fixed inset-0 z-[-1] flex h-dvh w-full items-center justify-center bg-black">
-      <video
-        ref={videoRef}
-        src={VIDEO_SRC}
-        autoPlay
-        muted
-        playsInline
-        className="aspect-[750/512] max-h-[512px] w-full max-w-[750px] object-cover"
-      />
+      <div className="relative aspect-[750/512] max-h-[512px] w-full max-w-[750px]">
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          preload="auto"
+          className="size-full object-cover"
+        >
+          <source src={VIDEO_SRC_HEVC} type='video/mp4; codecs="hvc1"' />
+          <source src={VIDEO_SRC_H264} type="video/mp4" />
+        </video>
+        <canvas
+          ref={canvasRef}
+          aria-hidden
+          style={{ visibility: "hidden" }}
+          className="absolute inset-0 size-full"
+        />
+      </div>
     </div>
   );
 }

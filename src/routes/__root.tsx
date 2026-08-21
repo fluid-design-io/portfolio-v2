@@ -61,8 +61,15 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         {/* Search is wired in ticket 16. Until then the dialog would open onto
-            a route that does not exist, so it stays off. */}
-        <RootProvider search={{ enabled: false }}>
+            a route that does not exist, so it stays off.
+
+            next-themes is off because this site is dark only. Left on,
+            RootProvider injects a blocking script that sets
+            `document.documentElement.style.colorScheme` before hydration,
+            which React then reports as a mismatch against the SSR'd <html>
+            on every route. It also binds a `d` hotkey to toggle a theme that
+            does not exist. */}
+        <RootProvider search={{ enabled: false }} theme={{ enabled: false }}>
           <SkipNav />
           <Guidelines />
           <Header />

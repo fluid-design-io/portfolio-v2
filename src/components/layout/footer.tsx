@@ -10,7 +10,7 @@ import { Link } from "@tanstack/react-router";
 export function Footer() {
   return (
     <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
-      <footer className="flex w-full items-center justify-between border-t px-6 py-5 sm:px-8">
+      <footer className="relative z-10 flex w-full items-center justify-between border-t px-6 py-5 sm:px-8">
         <Link
           to="/resume"
           className="font-mono text-xs text-foreground/75 transition hover:text-lime-400 md:text-sm"

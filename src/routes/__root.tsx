@@ -7,6 +7,7 @@ import {
 import { RootProvider } from "fumadocs-ui/provider/tanstack";
 import type { ReactNode } from "react";
 
+import { BackgroundVideo } from "@/components/background-video";
 import { Footer } from "@/components/layout/footer";
 import { Guidelines } from "@/components/layout/guidelines";
 import { Header } from "@/components/layout/header";
@@ -78,6 +79,7 @@ function RootShell({ children }: { children: ReactNode }) {
           <Guidelines />
           <Header />
           <main id="main">{children}</main>
+          <BackgroundVideo />
           <Footer />
         </RootProvider>
         <Scripts />

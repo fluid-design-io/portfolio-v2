@@ -19,6 +19,20 @@ export default defineConfig({
           // remarkInstall is built in now as remarkNpm, and is on by default.
           // This only carries over the old persisted-tab id.
           remarkNpmOptions: { persist: { id: "install-script-plugin" } },
+          // Posts reference images as absolute public paths
+          // (`![](/assets/blog/x/cover.jpg)`). remarkImage defaults to
+          // useImport:true, which rewrites those to relative imports of
+          // `../../public/...` — and Vite refuses to bundle anything out of
+          // publicDir, so the build fails with UNRESOLVED_IMPORT. Leaving
+          // them as plain URLs is also what the map wants: the images are
+          // recompressed offline in ticket 08 and served statically, with no
+          // runtime image service.
+          // `onError: "ignore"` degrades per-image rather than failing the
+          // build. task-analysis.webp is a valid but VP8X-container WebP that
+          // fumadocs' size probe cannot parse; images that do parse still get
+          // their dimensions. Sizing is governed by `article img` in CSS
+          // anyway, not by the attributes.
+          remarkImageOptions: { useImport: false, onError: "ignore" },
         },
       },
     }),

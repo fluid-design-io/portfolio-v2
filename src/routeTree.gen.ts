@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as BundleprobeRouteImport } from './routes/bundleprobe'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as UsesRouteImport } from './routes/uses'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BundleprobeRoute = BundleprobeRouteImport.update({
+  id: '/bundleprobe',
+  path: '/bundleprobe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResumeRoute = ResumeRouteImport.update({
@@ -38,12 +44,14 @@ const UsesRoute = UsesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
+  '/bundleprobe': typeof BundleprobeRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
+  '/bundleprobe': typeof BundleprobeRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
+  '/bundleprobe': typeof BundleprobeRoute
   '/resume': typeof ResumeRoute
   '/uses': typeof UsesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blog' | '/resume' | '/uses'
+  fullPaths: '/' | '/blog' | '/bundleprobe' | '/resume' | '/uses'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blog' | '/resume' | '/uses'
-  id: '__root__' | '/' | '/blog' | '/resume' | '/uses'
+  to: '/' | '/blog' | '/bundleprobe' | '/resume' | '/uses'
+  id: '__root__' | '/' | '/blog' | '/bundleprobe' | '/resume' | '/uses'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlogRoute: typeof BlogRoute
+  BundleprobeRoute: typeof BundleprobeRoute
   ResumeRoute: typeof ResumeRoute
   UsesRoute: typeof UsesRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bundleprobe': {
+      id: '/bundleprobe'
+      path: '/bundleprobe'
+      fullPath: '/bundleprobe'
+      preLoaderRoute: typeof BundleprobeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resume': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlogRoute: BlogRoute,
+  BundleprobeRoute: BundleprobeRoute,
   ResumeRoute: ResumeRoute,
   UsesRoute: UsesRoute,
 }

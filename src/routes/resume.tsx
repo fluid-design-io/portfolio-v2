@@ -68,7 +68,7 @@ type Entry = {
 
 const roles: Entry[] = [
   {
-    end: present,
+    end: "2026",
     logo: "/assets/images/image-vision.svg",
     name: "Image Vision",
     role: "CEO",

@@ -1,0 +1,331 @@
+---
+author: Oliver Pan
+date: "2026-10-11"
+title: Building Payload Toolkit
+description: "A CLI for installing Payload blocks became a web app, and then a slow 3D factory that runs the same commands. Notes on how the idea changed while I worked with AI agents."
+image: /assets/blog/building-payload-toolkit/opengraph-image.png
+tags:
+  ["payload-cms", "shadcn", "cli", "heroui", "react-three-fiber", "ai-agents"]
+---
+
+Payload Toolkit is a command line tool that installs blocks and features into a [Payload](https://payloadcms.com) project from shadcn registries. It has a web app on top, where you pick blocks from a catalog and press Install. And behind a Factory switch there is a 3D factory that does the same job slowly. A robot arm picks your blocks out of a cabinet, a conveyor carries them around the floor, and each part gets seated on a circuit board that stands for your app. At the end you get the same command you would have typed.
+
+<figure className="my-6 rounded-lg border bg-card/50 p-2">
+  <video
+    aria-label="The Payload Toolkit workspace: picking blocks from the card grid, switching to the Factory view, a robot arm and conveyor carrying the blocks to a circuit board, and the Install button copying the finished command"
+    className="!my-0 w-full rounded"
+    controls
+    playsInline
+    poster="/assets/blog/building-payload-toolkit/demo-poster.avif"
+    preload="metadata"
+    src="/assets/blog/building-payload-toolkit/demo.mp4"
+  />
+  <figcaption className="mt-2 mb-1 px-1 text-sm/5 text-muted-foreground">
+    Thirty seconds of the toolkit. Pick blocks in the grid, switch to Factory,
+    watch the line seat them on the board, and copy the command at the end.
+  </figcaption>
+</figure>
+
+It is still alpha, and the factory is still an experiment. These are notes on how the idea moved, in the order it moved. What I asked for, what came back, what was wrong with it, and what I asked for next. Most of the interesting decisions were about what to throw away.
+
+Codex and Claude Code did most of the building. By the end I was usually talking to one coordinator agent that handed work to five or more others at once.
+
+## It started as a reply to an issue
+
+Before the toolkit there was a starter template, [payload-better-auth-starter](https://github.com/fluid-design-io/payload-better-auth-starter). Payload, Next.js, Better Auth, a blog, forms and a few custom blocks, all in one repository. People used it, so people also hit its problems. About a fifth of its commits are dependency bumps, and at least two of those updates broke things for the people using it.
+
+Then someone opened an issue proposing a pricing block from Payload Components, a block registry with its own installer. My reply on August 1 is the first time I wrote the idea down.
+
+> Instead of maintaining a single opinionated template, we could offer a minimal core with optional features such as authentication, Drizzle or MongoDB, form blocks with tanstack-form, custom UI components, and Payload Components blocks like this one.
+
+I did not build it then. A week later I used Codex to rebuild the starter's layout and motion components as small composable pieces, with a plan to ship them as a package. Near the end of that session I added one requirement that outlived the package.
+
+> Please also mention each component comes with a .md file mostly for agents to understand and use
+
+The package never shipped. The Markdown file did, in another form. Every bundled feature in the toolkit carries a versioned `GUIDE.md` that a coding agent reads to wire the feature into your project.
+
+In September I asked Codex to port those same components into another Payload site I work on. The migration plan it came back with touched 37 files. That plan is when the idea stopped being abstract. I was the installer. Every time I reused my own blocks, I did by hand what a CLI should do.
+
+## A shadcn for Payload
+
+The shape I wanted was shadcn's. shadcn does not give you a dependency. It copies source into your project, and from then on the code is yours. I wanted that for Payload, plus two things. New projects should start from Payload's own official template, and blocks should come from any shadcn-format registry, not only mine.
+
+```sh
+payload-toolkit init acme --framework next --database postgres --package-manager pnpm
+payload-toolkit add forms --cwd ./existing-app --claude
+payload-toolkit add @payload-components/hero-split
+```
+
+A few rules stayed from the start. The toolkit never owns your code after install, never overwrites a file you edited, and never commits in your project. When a feature needs wiring into your real config, it does not guess at your repository's shape. It hands the source and its guide to the coding agent you already use, or prints a prompt you can paste.
+
+I asked for two architectures, not one. Two agents each sketched a design against the same brief and rubric, and a third judged both. The design with two verbs, `init` and `add`, beat the one with a separate planner, 25 to 22 out of 30, because the planner layer had no second caller. I kept the winner and borrowed two rules from the loser.
+
+The part I am happiest with is the verification matrix. Every claim the CLI makes about a framework, database, operating system or package manager gets its own CI job. Next.js and TanStack Start each run against Postgres and MongoDB, with extra installer runs on macOS, Windows, npm and Bun. Every cell installs the packed CLI into a throwaway project, opens the admin, submits a form and checks that the submission reached the database. A cell that cannot run is reported as blocked, and blocked never counts as a pass.
+
+<Figure
+  alt="Two dark terminal windows showing payload-toolkit help text with the init, add and registries commands and the add command's options, next to a grid of cards for the verification matrix: next and tanstack against postgres and mongodb, then macos-latest and windows-latest, then npm and bun"
+  caption="The CLI's help text next to the matrix it is verified against. Each card is a CI job that uploads its own evidence."
+  src="/assets/blog/building-payload-toolkit/cli-and-matrix.avif"
+/>
+
+It paid for itself on the first afternoon. Windows CI failed, and five fixes landed in under half an hour for bugs that would never have shown up on my Mac. All 79 Payload Components blocks were also installed one at a time into fresh projects, and 78 passed a real browser check. The one that failed is broken upstream, so it is documented, not patched.
+
+The chat logs from the weeks I designed the CLI did not survive on my machine, so this section comes from commits, pull requests and the design notes the agents left in the repository.
+
+{/* Confirm: no local transcripts cover late September to October 7. Keep or cut this paragraph. */}
+
+## Why not a GUI
+
+A CLI with this many flags is a form you fill in from memory. Framework, database, package manager, features, blocks from several registries, which agent. Once the CLI worked, the obvious question was why I was asking people to type a form.
+
+So the next step was a web app whose only job is to build that command. I used HeroUI, because HeroUI v3 is built on React Aria, so focus handling, keyboard support and screen reader labels come with the components. The first version came together in an afternoon. A landing page, and a workspace with a searchable grid of 84 registry items and a Your setup panel that turns your picks into a `payload-toolkit init` command or an agent prompt.
+
+<Figure
+  alt="The workspace page in light and dark side by side: a left sidebar listing 84 items in categories such as Content, Hero and Pricing, a grid of cards with website section previews, and a pill-shaped Install button floating at the bottom"
+  caption="The workspace. A catalog of blocks from several registries, each with a rendered preview, and one Install button."
+  src="/assets/blog/building-payload-toolkit/workspace.avif"
+/>
+
+Every block got a real preview, rendered headlessly in each theme its registry ships. A grid of blocks without previews is a list of names, and nobody picks a hero section by its name.
+
+## A hero figure drawn in hairlines
+
+The landing page needed one image that said what the tool does without a screenshot. I have a personal skill for Hairline figures, small isometric line drawings with a little animation, built in code. I asked for several, and each figure went to its own subagent.
+
+Six came back. A robot arm placing a block into a socket. A pick-and-place arm seating a chip on a circuit board. A claw machine where registries are the prize pit. A tool tray with a wrench lifting out of foam. A cryptex. A block tower. I cut the cryptex and the block tower, kept four, and put the robot arm on the landing page after one more pass, so the block seats into the socket instead of hovering near it.
+
+{/* Add why the cryptex and block tower were cut. The record only says they were removed at your request. */}
+
+<Figure
+  alt="Top row, the Payload Toolkit landing page in light and dark: a thin-line isometric robot arm above the title and a Start Building button. Bottom row, four line drawings in bordered frames: a robot arm over a plate with sockets, a claw machine full of capsules, a pick-and-place arm over a circuit board, and a tool tray with a wrench lifting out of its foam cut-out"
+  caption="The landing hero, and the four hairline studies that were kept. The robot arm, the agent hand-off, won the hero spot."
+  src="/assets/blog/building-payload-toolkit/hairline-figures.avif"
+/>
+
+I did not know it yet, but two of those drawings were the start of the factory. The claw machine and the arm placing parts on a board both come back later in 3D.
+
+## Six minutes on a gradient
+
+The next day went to motion. The floating bar at the bottom of the workspace morphs into the install card, and a registry card grows into its detail view. Each had to read as one object changing shape, and getting there was a long list of small corrections. The detail view's corner snapped at the start of every open. The morph assumed a 16 pixel radius, but the theme scales radii, so now it measures the real radius and animates between the two numbers. The frost on the bar and the page dimmer behind it were retuned twice between 10:17 and 10:23 at night, because each change looked right alone and wrong next to the other.
+
+None of this shows in a screenshot. Every one of these fixes started the same way. I watched an animation, said in one sentence what felt wrong, and the agent found the number behind it.
+
+## Everything looked the same
+
+By Friday night the web app was good. It was fast, accessible and tidy, and it looked like every other tool I use.
+
+That bothered me more than I expected. Almost every product I touch is built to get me through a task faster. Fewer clicks, less waiting. The workspace was the same. It exists so that installing blocks takes less time than typing a command. That is a fine goal, but I started to wonder why setting up a project could not be slow on purpose. Something you spend time with and watch move, as if you were playing a game, but wired to the same CLI, so at the end you have done exactly the same task. Just slower, and with some joy in it.
+
+That question is where the rest of the project went.
+
+## Eight metaphors overnight
+
+I did not know what "slow and enjoyable" looked like, so the first move was to not decide. The lab started as eight different metaphors for the same flow, built side by side. Each rendered the same registry and ended with the same copyable command.
+
+An exploded layer stack. A claw machine that prints the command on a prize ticket. An assembly line with a parts cabinet, a belt, an arm and a board. Record crates, a retro console with cartridges, a constellation of features, a tilted tower of page sections and a mechanical keyboard.
+
+<Figure
+  alt="A two-by-four contact sheet of numbered 3D scenes: glowing tiles over stacked layers labeled Next.js, PostgreSQL and pnpm; a claw machine holding colored capsules; a wireframe robot arm beside a conveyor and receipt printer; record crates; a retro computer on a dock; a star map orbiting a planet; a tilted tower of page sections; a mechanical keyboard with colored keycaps"
+  caption="The first eight concepts, all for the same task. The assembly line, number three, is the one everything later grew from."
+  src="/assets/blog/building-payload-toolkit/lab-concepts.avif"
+/>
+
+The assembly line won, and you can see it in the code. The next concepts copy its slot layout line for line.
+
+{/* Add why the assembly line won over the other seven. The record does not say. */}
+
+That round ran overnight with two coordinating agents, and it is where I first saw parallel agents break. One agent rewrote a shared requests file in full and erased a request the other had left there. A better instruction would not have stopped it. Giving each agent files that only it could write did, and every parallel run after that used the same rule.
+
+By morning there were 23 concepts. They all went into an archive folder, and one idea survived as the fab line.
+
+## A factory with slots
+
+The fab line turned the best ideas from the variants into stations. A parts cabinet, a pick table, a transport, an arm, the app board, a chip close-up, plus a theme and effects. The key decision was to make every station a slot. A slot is a list of interchangeable variants, picked by a URL parameter, and the layout reflows from each variant's footprint. Want a pneumatic tube instead of a conveyor? Change one parameter.
+
+Slots also made parallel work safe. Phase one built the core and the entry point, then froze them. Phase two gave each agent exactly one station folder. An agent that needed a change outside its folder could not make it. It had to write a request in an append-only file, describe its workaround, and wait for the folder's owner to answer. That file reads like a small team's issue tracker.
+
+The workspace got a Grid and Factory switch that embeds the same scene. That switch is what makes the factory more than a demo. It reads the same setup as the grid and builds the same command.
+
+<Figure
+  alt="Three screenshots: the workspace card grid; the same sidebar and search with a blue-line isometric factory in place of the grid, showing a parts cabinet, pick table, conveyor loop, rail arm and app board with lettered callouts; and a tall phone screenshot of the factory from above"
+  caption="Grid or Factory. Same catalog, same setup, same Install button at the end."
+  src="/assets/blog/building-payload-toolkit/grid-to-factory.avif"
+/>
+
+## Feel arrives as small complaints
+
+The session I have a full record of started on Saturday morning with a numbered list of nine things. A few were bugs. Most were about feel.
+
+> The conveyor belt can wrap around the campus, so the animation is longer and more enjoyable.
+
+That sentence is the project in one line. In the workspace, shorter is better. Here I was asking for longer. The agent added a hook so a transport can route itself around the other stations, and the ride went to about 13 seconds.
+
+> The camera panning and gesture feels off, the x-axis constraint paired with only up/down angle doesn't feel quite right. Can you redo it? Perhaps make it simpler?
+
+The camera became map-style. Drag pans the floor, two fingers orbit, and scroll zooms toward the cursor. The next day I noticed the cabinet stop looked no closer than the pick table stop. Every camera stop had a minimum width of 13 units, and the cabinet is about 7 wide, so each stop now gets its own minimum.
+
+Then the sound. "For the conveyor belt sound, it sounds bad, make it lighter or different kind of sound." The old hum was a low sawtooth drone. The new one is filtered noise that ticks like rollers. The agent said it could not listen to it, measured the new sound at about half the loudness of the old one, and left the judgment to me.
+
+A strip of station thumbnails became a row of icons after I said I did not understand what it was for. Later, when a second bar ended up stacked on it, I asked for one vertical column, "so there are no stacked toolbars". The labels got the same treatment that night. I asked for them smaller and without the "SEE FIG." descriptions, and the agent also fixed a conveyor label that was cut off at the edge of the screen.
+
+<Figure
+  alt="Two near-identical close-ups of a parts cabinet and pick table in blue line art. On the left, large callouts read Cabinet and Pick table and a Conveyor label is clipped at the right edge. On the right, smaller callouts for Cabinet, Pick table and Conveyor sit inside the frame with thin leader lines ending on the objects"
+  caption="Labels before and after. Smaller, anchored to what they name, and never clipped."
+  src="/assets/blog/building-payload-toolkit/labels-before-after.avif"
+/>
+
+## Show me before you build it
+
+The settings went through several versions, and the turning point was the time I stopped the agent from building.
+
+First it was two side panels, then one, saved in the browser. A review agent found five real bugs in that merge before I saw it.
+
+Then I wanted something else and was not sure what.
+
+> I was thinking to show the setting as a sheet or drawer instead, snaps about 1/3 of the view with items scrolled horizontally. [...] Instead of changing right away, maybe let's visualize via the widget tool? Unless you are clear with what to change?
+
+The agent drew a clickable mockup in the chat with two layouts and asked six questions. I answered, and it drew a second one. My reply started with "Chips + one strip." and asked for a horizontal scroll picker where the centered item is active, like the camera mode selector on an iPhone.
+
+While it built, the agent decided against HeroUI Pro's sheet component, because it mounts as a modal that hides the live scene from assistive technology, and built a small sheet with Motion instead. I agreed, and I would not have caught that myself.
+
+When the sheet covered the bottom third of the scene, I asked for the scene to shift up, with a second question attached. "What's the blast radius if we're going to make this change?" The answer came before any code. About 20 lines in two files, and a list of what else moves, including picking and zoom to cursor.
+
+## Too short and too direct
+
+The conveyor had become the slow, satisfying ride I wanted. The other four transports had not.
+
+> They are currently too short and too direct. Unlike the Conveyor belt. Be wacky and bold, they can have different height, variable speed, dynamic effects that shake or affect the entire scene.
+
+Before handing this to four agents, the coordinator did something I would not have thought to ask for. It first added the two shared pieces every transport would need, one hook for variable speed and one for scene shake, so four agents would not all edit the same core files. Then each transport went to its own agent, in its own file.
+
+<Figure
+  alt="Six light blueprint-style screenshots of the same isometric factory, with a different link from the pick table to the board in each: a belt conveyor, a looping translucent tube, a roller-coaster monorail with a helix, a fleet of small wheeled shuttles, a raised maglev track, and a settings sheet listing the five transports"
+  caption="Five transports for the same part. Each is a variant in the transport slot, picked from the world settings sheet."
+  src="/assets/blog/building-payload-toolkit/transports.avif"
+/>
+
+They came back as rides. A monorail roller coaster runs about 18 seconds, a glass tube slams into its stop, a maglev launches with a sonic boom, and a fleet of little shuttles runs errands for 25 seconds.
+
+They also came back with a shared mistake. The speed hook only gave each transport a distance and a total length, so every agent rebuilt its own route by matching lengths. One matched wrong by a rounding difference, and maglev rides took 58 seconds while parts floated off their sleds. The fix went to one agent instead of four. The route now carries its own pacing, so nobody rebuilds it.
+
+## Slower swaps, and handing the choice to other people
+
+When you change your framework or database in the factory, the matching chip on the board gets swapped. It used to just drop in. I asked for something slower, two to three seconds, with "more realistic or wacky effects".
+
+Three agents each built an answer. Slapstick throws the old chip out and parachutes the new one in under a striped umbrella. Bench tech has a technician lift a retention lever and place the chip with a vacuum pen. Arcade uses a claw crane. The lead agent recommended slapstick. The coordinator watched the frames, pointed out a 0.9 second gap where the socket sat empty, and suggested a mix. The careful bench routine for the CPU, slapstick for the rest.
+
+<Figure
+  alt="Three rows of six frames each, close-ups of a blue line-art circuit board: in the first row a chip flies off and a red-and-white umbrella opens over the socket as the new chip lands; in the second a hinged frame swings up over the socket and back down; in the third a claw crane lifts the old chip away and a new one settles in"
+  caption="One chip swap, three ways: Slapstick, Bench tech and Arcade. The default is a mix of the first two."
+  src="/assets/blog/building-payload-toolkit/socket-swaps.avif"
+/>
+
+I liked the mix, but I did not want my taste to be the only option.
+
+> I like your mix idea, go for it, although can you turn this into mods? So that people can contribute or develop their own way of swapping these sockets?
+
+Mods had started the day before, from a question about whether someone could drop in a different look, which ended with "Be wacky." Instead of answering in theory, the agent built three working levels. Data mods are a JSON file of themes and routes that fits in a link. Code mods run their own code once you trust them. Layout mods swap the whole floor plan.
+
+So the swap became one more slot. World settings got a Swap category with Mix as the default, and any style a mod adds appears after the built-ins. Mix is only a list that borrows the bench animation for the CPU and the slapstick ones for the rest, so a contributor can copy a built-in and change one socket. The sample mod is a Teleporter that beams the old part out and the new one in.
+
+## A settings sheet with two pages
+
+The same message asked an agent to redesign the Mods tab, using app screenshots from Mobbin for reference. It came back with cards, a drop zone and a sample gallery, and most of my notes after using it were about what to take away. The warning paragraph in the review step "is too long, no one will read it," so it became one Run its code checkbox. Removing a mod lost its confirmation and gained an Undo. Installed mods moved into a nested list you can multi-select.
+
+Then the header. Mute and reset needed a home, and Mods sat at the end of a scrolling row of categories. I asked for clickable mockups again. The agent drew four and recommended putting the actions in the header. I picked two pages instead, with a World and Mods switch at the top. Choosing Mods snaps the sheet taller, and the code that watched the sheet's position is gone.
+
+<Figure
+  alt="Two crops of the World settings sheet in light blue line art. On the left, the World page: a World and Mods switch with a count of 3, reset, mute and close icons, a row of categories with Swap selected, and six swap style cards: Mix, Slapstick, Bench tech, Arcade, Drop and Teleporter. On the right, the Mods page with an Installed row and an Add a mod drop zone, under a nested sheet listing Disco, CCTV and Teleporter with toggles, two rows checked, and a floating bar with Enable, Disable and Remove"
+  caption="World settings as two pages. A mod's swap style appears after the built-ins, and installed mods live in a nested list you can select from."
+  src="/assets/blog/building-payload-toolkit/mods.avif"
+/>
+
+## Mods that bring their own buttons
+
+Disco lit only about a third of the line, and I asked whether it should be scaled up or multiplied. The agent built both. One ball big enough to cover the line hung so high that the top of the screen cut it off. The agent kept a row of smaller balls instead, spaced from the layout, for four extra draw calls in total.
+
+<Figure
+  alt="The fab line in dark blue line art with four grey mirror balls hanging in a row above it, each throwing colored spotlight cones in yellow, magenta, green and cyan down onto the cabinet, pick table, conveyor and board, with the left toolbar, search field and call sheet at the edges"
+  caption="The Disco mod after the change. Four mirror balls along the default line, spaced from the layout instead of placed by hand."
+  src="/assets/blog/building-payload-toolkit/disco.avif"
+/>
+
+For a CCTV mod I first wanted a camera button in the left toolbar. Then I wanted more.
+
+> I wonder if we can add an option for such kind of mods that wants an additional slot on the sidebar [...] so that this can be truly extendable and mods can have multiple variants if the user chooses?
+
+The agent kept the idea and changed one part. A mod lists its tools as data, a name, an icon and some variants, and the toolbar draws the buttons itself, so a broken mod cannot break the toolbar. I had offered a Hover Card or a Popover for the variants, and it argued for the Popover, because a Hover Card never opens on a touch screen.
+
+After that the notes were about feel again. A flash of static on every cut went first. Then the motion.
+
+> For the CCTV camera angle rotating, is it possible to remove the easing of the camera so that it feels like a real machine motor move in a linear motion?
+
+The cameras now pan at a constant speed, stop dead for a second at each end, and pan back.
+
+<Figure
+  alt="The workspace in light mode with the category sidebar on the left. The factory view fills the right side as a grainy green CCTV feed of the conveyor, with a REC dot, a CAM 03 Conveyor label and a timestamp. A popover beside the left toolbar lists Auto cycle, Follow part and CAM 01 to CAM 05 with small preview thumbnails, CAM 03 checked. At the top, a Grid and Factory switch and a round search button"
+  caption="A mod's own toolbar tool. CCTV adds a camera button whose variants open in a popover. Above it, the Grid and Factory switch and the factory's search folded into one round button."
+  src="/assets/blog/building-payload-toolkit/cctv.avif"
+/>
+
+## When the bug was my computer
+
+Late on Saturday, after I turned on the React Compiler, the dev server started reloading about seven times a second. The agent showed it happened with the compiler off too, so it was not the code. Something kept touching both `package.json` files. It guessed iCloud Drive syncing my Desktop folder, and said it had not verified that.
+
+> I turned off iCloud Drive syncing for this whole computer.
+
+The reloads stopped, and the agent checked that the file timestamps held still before calling it fixed. It is the habit I came to rely on most. The agent kept what it had checked separate from what it guessed, and said which was which.
+
+A real bug turned up on Sunday. A trackpad pinch zoomed the page and the 3D world at once, because the scene's scroll handler went through React and could not cancel the browser's zoom. The agent moved the listener onto the scene, and said it could not pinch a real trackpad, so the last check was mine.
+
+## Deleting most of it
+
+On Sunday afternoon I looked at how big the thing had become.
+
+> We've added about 80,000 lines for this workspace 3D. I wonder how much of it can be simplified or deduped and merge special cases.
+
+Four review agents read the code, one each for reuse, simplification, efficiency and altitude, meaning patches that should have been fixes in shared code. First the coordinator measured. About 56,600 of the lines were the archive of overnight concepts, and nothing live imported them.
+
+> Sure, delete the archive folder
+
+The first cleanup wave had one rule. Everything had to look the same, and agents checked it with before and after screenshots. Real waste went, such as a parked fleet of shuttles that sent 18.6KB to the GPU every frame for nothing. But the live code stayed about the same size, and the agents planned the deeper redesigns under the same rule. I loosened it.
+
+> I'd loosen the restriction on must look the same. The goal is to build an efficient yet extensible world and the less outlier or special cases we have the better.
+
+That turned a cleanup into a redesign. Thirteen slots now live in one table that World settings, the toolbar, mods, share links and loading all read. Anything that moves asks for frames through one `keepAnimating()` call. Chips draw in one batch, which took a busy board from 203 draw calls to 122. The camera became an ordered list of shots, and each station declares its own framing. Two old framing bugs got fixed on the way, a bottom margin that worked backwards and framing that ignored perspective. Neither fix was allowed under the first rule, because both change what you see.
+
+Last, I asked whether React's Activity API could keep the factory alive when you switch to Grid. It now mounts on your first visit and only hides after that, so the camera and the line mid-run are still there when you come back.
+
+The lab and workspace code ended at about 26,600 lines plus 2,000 of tests, down from about 84,000 a few days earlier. Most of what went was exploration I had made in order to throw away.
+
+## What I took from it
+
+These are the things I would tell myself before starting again.
+
+**Something concrete and slightly wrong beats a good description.** I could not have described the factory, but I could pick one out of eight. Six hairline figures became one. Twenty-three 3D concepts became one line. Whenever I was unsure, the cheapest move was two or three versions behind a switch, chosen by looking. The other half is deleting the rest. Two-thirds of the 84,000 lines were concepts I had already rejected, and shared hooks had to keep working for code nobody ran. Git keeps the losers anyway, so next time they go the day a winner is picked.
+
+{/* Inferred from the pattern in the record. The deleting half is inferred from the archive deletion. Confirm or cut. */}
+
+**My notes were about feel. Turning feel into numbers was the agent's job.** Lighter sound. Simpler camera. Longer ride. Slower swap. No stacked toolbars. Almost none of my messages named a file or a value. The agents came back with the numbers: half the loudness, 13 seconds, two to three seconds, a 13-unit camera stop that was wrong for a 7-unit cabinet.
+
+**The agents told me what they could not check, and that is where I stayed in the loop.** They could not hear the sound, feel a real trackpad, or tell whether a scene shake was fun or annoying, and they said so. Everything they could measure, they measured. The parts left over were the parts that needed a person.
+
+{/* Partly inferred. The agents' reports flag sound, shake and the trackpad pinch as unverified. Confirm the framing. */}
+
+**Parallel agents break at shared state, and the fix is structure.** The overnight run lost a request when one agent rewrote a shared file. The transports went wrong because four agents each rebuilt the same route from a hook that told them too little. What worked was ownership. One folder per agent, an append-only file for requests, and shared pieces added by the coordinator before fanning out.
+
+**Ask for a picture or a blast radius before the code.** The two most useful things I asked in the whole project were questions, not instructions. One asked to see the settings sheet as a mockup first. The other asked what else would move if the scene shifted up. Both were cheap to answer, and both saved a round of building the wrong thing.
+
+**Slow for the person using it means precise for the person building it.** A two-second chip swap has more ways to look wrong than an instant one. The workspace took an afternoon. The slow version took days, mostly on timing, sound and camera work that a fast tool never needs. Agents made that affordable, and I do not think I would have tried it alone.
+
+{/* Inferred. Confirm or cut. */}
+
+**"Must look the same" is a rule for a cleanup, not a redesign.** The first wave kept every pixel and left the live code the same size. Once I let the picture change, the special cases came out and two framing bugs got fixed.
+
+{/* Partly inferred. The loosened rule and its results are in the record. The framing is inferred. Confirm or cut. */}
+
+**Keep the record.** The transcripts from the week I designed the CLI and built the first concepts are gone, so I cannot say why the cryptex was cut or why the assembly line won. The weekend of factory work went in as one commit on Sunday night. Next time I would commit at the end of every round and keep a short decision log in the repository, so the reasons stay with the code.
+
+{/* Inferred from the gaps in the record. Confirm or cut. */}
+
+The toolkit still installs blocks the fast way, and that is still the right default. The factory is for when you have a few minutes and want to watch your project get built. It ends with the same command either way.

@@ -70,10 +70,6 @@ The part I am happiest with is the verification matrix. Every claim the CLI make
 
 It paid for itself on the first afternoon. Windows CI failed, and five fixes landed in under half an hour for bugs that would never have shown up on my Mac. All 79 Payload Components blocks were also installed one at a time into fresh projects, and 78 passed a real browser check. The one that failed is broken upstream, so it is documented, not patched.
 
-The chat logs from the weeks I designed the CLI did not survive on my machine, so this section comes from commits, pull requests and the design notes the agents left in the repository.
-
-{/* Confirm: no local transcripts cover late September to October 7. Keep or cut this paragraph. */}
-
 ## Why not a GUI
 
 A CLI with this many flags is a form you fill in from memory. Framework, database, package manager, features, blocks from several registries, which agent. Once the CLI worked, the obvious question was why I was asking people to type a form.
@@ -92,9 +88,7 @@ Every block got a real preview, rendered headlessly in each theme its registry s
 
 The landing page needed one image that said what the tool does without a screenshot. I have a personal skill for Hairline figures, small isometric line drawings with a little animation, built in code. I asked for several, and each figure went to its own subagent.
 
-Six came back. A robot arm placing a block into a socket. A pick-and-place arm seating a chip on a circuit board. A claw machine where registries are the prize pit. A tool tray with a wrench lifting out of foam. A cryptex. A block tower. I cut the cryptex and the block tower, kept four, and put the robot arm on the landing page after one more pass, so the block seats into the socket instead of hovering near it.
-
-{/* Add why the cryptex and block tower were cut. The record only says they were removed at your request. */}
+Six came back. A robot arm placing a block into a socket. A pick-and-place arm seating a chip on a circuit board. A claw machine where registries are the prize pit. A tool tray with a wrench lifting out of foam. A cryptex. A block tower. I cut the cryptex and the block tower, because neither one said "install a block into your app" at a glance the way the arm and the socket did. I kept four, and put the robot arm on the landing page after one more pass, so the block seats into the socket instead of hovering near it.
 
 <Figure
   alt="Top row, the Payload Toolkit landing page in light and dark: a thin-line isometric robot arm above the title and a Start Building button. Bottom row, four line drawings in bordered frames: a robot arm over a plate with sockets, a claw machine full of capsules, a pick-and-place arm over a circuit board, and a tool tray with a wrench lifting out of its foam cut-out"
@@ -130,9 +124,7 @@ An exploded layer stack. A claw machine that prints the command on a prize ticke
   src="/assets/blog/building-payload-toolkit/lab-concepts.avif"
 />
 
-The assembly line won, and you can see it in the code. The next concepts copy its slot layout line for line.
-
-{/* Add why the assembly line won over the other seven. The record does not say. */}
+The assembly line won because it was the only concept where each station matched a real step of an install. Pick the block, carry it, seat it in the app. It was also the easiest of the eight to make accessible, and the easiest for other people to extend later with mods, because a new idea plugs into one station instead of rewriting the whole scene. You can see the win in the code. The next concepts copy its slot layout line for line.
 
 That round ran overnight with two coordinating agents, and it is where I first saw parallel agents break. One agent rewrote a shared requests file in full and erased a request the other had left there. A better instruction would not have stopped it. Giving each agent files that only it could write did, and every parallel run after that used the same rule.
 
@@ -304,13 +296,7 @@ These are the things I would tell myself before starting again.
 
 **Something concrete and slightly wrong beats a good description.** I could not have described the factory, but I could pick one out of eight. Six hairline figures became one. Twenty-three 3D concepts became one line. Whenever I was unsure, the cheapest move was two or three versions behind a switch, chosen by looking. The other half is deleting the rest. Two-thirds of the 84,000 lines were concepts I had already rejected, and shared hooks had to keep working for code nobody ran. Git keeps the losers anyway, so next time they go the day a winner is picked.
 
-{/* Inferred from the pattern in the record. The deleting half is inferred from the archive deletion. Confirm or cut. */}
-
 **My notes were about feel. Turning feel into numbers was the agent's job.** Lighter sound. Simpler camera. Longer ride. Slower swap. No stacked toolbars. Almost none of my messages named a file or a value. The agents came back with the numbers: half the loudness, 13 seconds, two to three seconds, a 13-unit camera stop that was wrong for a 7-unit cabinet.
-
-**The agents told me what they could not check, and that is where I stayed in the loop.** They could not hear the sound, feel a real trackpad, or tell whether a scene shake was fun or annoying, and they said so. Everything they could measure, they measured. The parts left over were the parts that needed a person.
-
-{/* Partly inferred. The agents' reports flag sound, shake and the trackpad pinch as unverified. Confirm the framing. */}
 
 **Parallel agents break at shared state, and the fix is structure.** The overnight run lost a request when one agent rewrote a shared file. The transports went wrong because four agents each rebuilt the same route from a hook that told them too little. What worked was ownership. One folder per agent, an append-only file for requests, and shared pieces added by the coordinator before fanning out.
 
@@ -318,14 +304,6 @@ These are the things I would tell myself before starting again.
 
 **Slow for the person using it means precise for the person building it.** A two-second chip swap has more ways to look wrong than an instant one. The workspace took an afternoon. The slow version took days, mostly on timing, sound and camera work that a fast tool never needs. Agents made that affordable, and I do not think I would have tried it alone.
 
-{/* Inferred. Confirm or cut. */}
-
-**"Must look the same" is a rule for a cleanup, not a redesign.** The first wave kept every pixel and left the live code the same size. Once I let the picture change, the special cases came out and two framing bugs got fixed.
-
-{/* Partly inferred. The loosened rule and its results are in the record. The framing is inferred. Confirm or cut. */}
-
-**Keep the record.** The transcripts from the week I designed the CLI and built the first concepts are gone, so I cannot say why the cryptex was cut or why the assembly line won. The weekend of factory work went in as one commit on Sunday night. Next time I would commit at the end of every round and keep a short decision log in the repository, so the reasons stay with the code.
-
-{/* Inferred from the gaps in the record. Confirm or cut. */}
+**Keep the record.** The transcripts from the week I designed the CLI and built the first concepts are gone, so the reasons behind those early cuts in this post come from my memory, not from anything written down at the time. The weekend of factory work went in as one commit on Sunday night. Next time I would commit at the end of every round and keep a short decision log in the repository, so the reasons stay with the code.
 
 The toolkit still installs blocks the fast way, and that is still the right default. The factory is for when you have a few minutes and want to watch your project get built. It ends with the same command either way.

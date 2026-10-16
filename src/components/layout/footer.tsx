@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
+const year = new Date().getFullYear();
+
 /**
  * Plain footer: a link to /resume and a static copyright line.
  *
@@ -18,7 +20,7 @@ export function Footer() {
           Resume
         </Link>
         <p className="font-mono text-xs text-muted-foreground md:text-sm">
-          © {new Date().getFullYear()} Oliver Pan
+          © {year} Oliver Pan
         </p>
       </footer>
     </div>

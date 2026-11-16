@@ -59,11 +59,16 @@ export default defineConfig({
       sitemap: { host: "https://oliverpan.vercel.app" },
     }),
     // Bare nitro() is correct: the `vercel` preset auto-detects from the
-    // VERCEL env var on CI, so nothing here has to name a preset. The
-    // vercel.json at the root is unrelated to output format — it exists only
-    // to pin `framework: null` and the build command over the project's stale
-    // Next.js preset, left from when this repo was a Turborepo.
-    nitro(),
+    // VERCEL env var on CI, so nothing here has to name a preset. Redirects
+    // belong here, not in vercel.json: Nitro writes them into
+    // `.vercel/output/config.json` ahead of `handle: filesystem`, so they
+    // beat the prerendered HTML. Project-level vercel.json redirects lose
+    // to those static files (/, /blog/, …).
+    nitro({
+      routeRules: {
+        "/**": { redirect: { to: "https://uing.dev/**", status: 301 } },
+      },
+    }),
     viteReact(),
     // The React Compiler runs here, not through the React plugin:
     // @vitejs/plugin-react@6 dropped its `babel` option.

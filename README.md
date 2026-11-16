@@ -68,5 +68,5 @@ scripts/          one-off and build-time tools
 ## Deploying
 
 Vercel builds it with zero configuration: `bun.lock` selects Bun, and Nitro
-detects the `vercel` preset from the `VERCEL` env var. There is no
-`vercel.json`.
+detects the `vercel` preset from the `VERCEL` env var. `vercel.json`
+301-redirects every path to `https://uing.dev`.

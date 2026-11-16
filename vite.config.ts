@@ -54,16 +54,17 @@ export default defineConfig({
       // losing its prerendered HTML. Declaring the path instead seeds it into
       // the map ahead of discovery, which merges only paths it does not
       // already have.
-      pages: [{ path: "/blog/", sitemap: { exclude: true } }],
-      prerender: { enabled: true },
-      sitemap: { host: "https://oliverpan.vercel.app" },
+      // Site is a permanent redirect to uing.dev; prerender would crawl the
+      // routeRules 301 and fail the build ("Failed to fetch /blog/: Moved
+      // Permanently").
+      prerender: { enabled: false },
+      sitemap: { enabled: false },
     }),
     // Bare nitro() is correct: the `vercel` preset auto-detects from the
     // VERCEL env var on CI, so nothing here has to name a preset. Redirects
-    // belong here, not in vercel.json: Nitro writes them into
-    // `.vercel/output/config.json` ahead of `handle: filesystem`, so they
-    // beat the prerendered HTML. Project-level vercel.json redirects lose
-    // to those static files (/, /blog/, …).
+    // belong in routeRules so Nitro emits them into `.vercel/output/config.json`
+    // ahead of `handle: filesystem` (project-level vercel.json lost to
+    // prerendered HTML when prerender was on).
     nitro({
       routeRules: {
         "/**": { redirect: { to: "https://uing.dev/**", status: 301 } },

@@ -69,5 +69,5 @@ scripts/          one-off and build-time tools
 
 Vercel builds it with zero configuration: `bun.lock` selects Bun, and Nitro
 detects the `vercel` preset from the `VERCEL` env var. A Nitro `routeRules`
-301 redirects every path to `https://uing.dev` (emitted into the Vercel
-Build Output ahead of prerendered HTML).
+301 redirects every path to `https://uing.dev`. Prerender and the sitemap
+are off so the build does not crawl that redirect.
